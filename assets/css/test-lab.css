@@ -1,0 +1,128 @@
+.test-lab {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+}
+
+#testerResults {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 12px;
+    position: relative;
+    top: 0;
+    overflow: scroll;
+    height: 85%;
+    text-shadow: 0 -1px 0 #eee;
+    outline: none;
+}
+
+#testButton {
+    text-align: center;
+}
+
+/*
+ * Progress Bar
+ **********************************************************************************************************************/
+
+.progress {
+    height: 34px;
+    margin-bottom: 4px;
+}
+
+.progress-bar {
+
+}
+
+/*
+ * Tester Results
+ **********************************************************************************************************************/
+
+#testerResults a {
+    outline: none;
+}
+
+#testerResults .failed i,
+#testerResults .failed .test {
+    color: #ff0000;
+}
+
+#testerResults .passed i,
+#testerResults .passed .test {
+    color: #009900;
+}
+
+#testerResults .row.heading .toolbar {
+    font-family: sans-serif;
+}
+
+#testerResults .row.heading .toolbar .toolbar-item {
+    margin-left: 4px;
+    font-size: 12px;
+}
+
+#testerResults .row.heading {
+    margin-bottom: 4px;
+}
+
+#testerResults .tester-result {
+    background: #eee;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 20px;
+}
+
+/*
+ * Loading Indicator
+ **********************************************************************************************************************/
+
+#testerResults .loading-indicator {
+    font-size: 12px;
+}
+
+#testerResults .loading-indicator-container {
+    min-height: 20px;
+}
+
+#testerResults .loading-indicator > span {
+    background-size: 20px 20px;
+    right: 0;
+    left: auto;
+}
+
+#testerResults .loading-indicator-container .loading-indicator > div {
+    right: 0;
+    margin-right: 40px;
+}
+
+/*
+ * Popup Loading Indicator
+ **********************************************************************************************************************/
+
+.popup-backdrop .popup-loading-indicator {
+    width: 200px;
+    height: 200px;
+    margin-left: -100px;
+}
+
+.popup-backdrop .popup-loading-indicator:after {
+    margin-left: 75px;
+}
+
+.popup-backdrop .popup-loading-indicator .btn {
+    position: absolute;
+    width: 100px;
+    left: 50%;
+    margin-left: -50px;
+    text-align: center;
+    top: 150px;
+}
+
+.popup-backdrop .popup-loading-indicator div {
+    position: absolute;
+    width: 200px;
+    left: 50%;
+    margin-left: -100px;
+    text-align: center;
+    top: 110px;
+}

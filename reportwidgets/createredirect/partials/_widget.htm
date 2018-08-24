@@ -1,0 +1,11 @@
+<div class="report-widget">
+    <h3><?= e(trans('vdlp.redirect::lang.buttons.create_redirect')) ?></h3>
+    <?= Form::open() ?>
+        <?= $formWidget->render() ?>
+        <button type="submit"
+                data-request="<?= $this->getEventHandler('onSubmit') ?>"
+                class="btn btn-primary">
+            <?= e(trans('vdlp.redirect::lang.buttons.create_redirect')) ?>
+        </button>
+    <?= Form::close() ?>
+</div>

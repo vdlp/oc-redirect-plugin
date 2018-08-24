@@ -1,0 +1,16 @@
+<h3><?= e(trans('vdlp.redirect::lang.statistics.redirects_per_month')) ?></h3>
+<?php if ($redirectHitsPerMonth): ?>
+    <div class="control-status-list">
+        <ul>
+            <?php foreach ($redirectHitsPerMonth as $key => $record): ?>
+            <li>
+                <span class="status-icon info"><?= $key + 1 ?></span>
+                <span class="status-text"><?= date('F', mktime(0, 0, 0, (int) $record['month'])) ?> <?= $record['year'] ?></span>
+                <span class="status-label"><?= number_format($record['hits'], 0, null, '.') ?></span>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php else: ?>
+    <p class="help-block"><i class="oc-icon-meh-o"></i> <?= e(trans('vdlp.redirect::lang.statistics.no_data')) ?></p>
+<?php endif; ?>

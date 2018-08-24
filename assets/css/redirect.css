@@ -1,0 +1,23 @@
+.modal-content h3 {
+    color: #da5700;
+    margin-bottom: 8px;
+}
+
+#Form-field-Redirect-status_code-group .help-block.before-field {
+    margin-bottom: 0;
+    color: #2a3e51;
+}
+
+.status-code-info {
+    cursor: pointer;
+    margin-bottom: 10px;
+    color: #da5700;
+}
+
+tr.special td {
+    font-style: italic;
+}
+
+div.actions .btn {
+    text-align: center;
+}

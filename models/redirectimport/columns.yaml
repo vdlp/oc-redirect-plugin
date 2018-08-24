@@ -1,0 +1,25 @@
+columns:
+    id: ID
+    match_type: vdlp.redirect::lang.import_export.match_type
+    category_id: vdlp.redirect::lang.import_export.category_id
+    target_type: vdlp.redirect::lang.import_export.target_type
+    from_url: vdlp.redirect::lang.import_export.from_url
+    from_scheme: vdlp.redirect::lang.import_export.from_scheme
+    to_url: vdlp.redirect::lang.import_export.to_url
+    to_scheme: vdlp.redirect::lang.import_export.to_scheme
+    test_url: vdlp.redirect::lang.import_export.test_url
+    cms_page: vdlp.redirect::lang.import_export.cms_page
+    static_page: vdlp.redirect::lang.import_export.static_page
+    requirements: vdlp.redirect::lang.import_export.requirements
+    status_code: vdlp.redirect::lang.import_export.status_code
+    hits: vdlp.redirect::lang.import_export.hits
+    from_date: vdlp.redirect::lang.import_export.from_date
+    to_date: vdlp.redirect::lang.import_export.to_date
+    sort_order: vdlp.redirect::lang.import_export.sort_order
+    is_enabled: vdlp.redirect::lang.import_export.is_enabled
+    test_lab: vdlp.redirect::lang.import_export.test_lab
+    test_lab_path: vdlp.redirect::lang.import_export.test_lab_path
+    system: vdlp.redirect::lang.import_export.system
+    last_used_at: vdlp.redirect::lang.import_export.last_used_at
+    created_at: vdlp.redirect::lang.import_export.created_at
+    updated_at: vdlp.redirect::lang.import_export.updated_at

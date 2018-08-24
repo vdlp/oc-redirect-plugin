@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="report-widget redirect-hits-per-day">
+            <h3><?= e(trans('vdlp.redirect::lang.statistics.hits_per_day')) ?></h3>
+            <div id="visualization"></div>
+            <p class="help-block"><em><?= e(trans('vdlp.redirect::lang.statistics.click_on_chart')) ?></em></p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="report-widget" id="scoreBoard">
+            <?= $this->makePartial('loading-indicator') ?>
+            <script>$.request('onLoadScoreBoard')</script>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="report-widget general" id="redirectHitsPerMonth">
+            <?= $this->makePartial('loading-indicator') ?>
+            <script>$.request('onLoadRedirectHitsPerMonth')</script>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="report-widget general" id="topCrawlersThisMonth">
+            <?= $this->makePartial('loading-indicator') ?>
+            <script>$.request('onLoadTopCrawlersThisMonth')</script>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="report-widget general" id="topRedirectsThisMonth">
+            <?= $this->makePartial('loading-indicator') ?>
+            <script>$.request('onLoadTopRedirectsThisMonth')</script>
+        </div>
+    </div>
+</div>

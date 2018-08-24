@@ -1,0 +1,27 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: vdlp.redirect::lang.redirect.redirect
+
+# Model Form Field configuration
+form: $/vdlp/redirect/models/redirect/fields.yaml
+
+# Model Class name
+modelClass: Vdlp\Redirect\Models\Redirect
+
+# Default redirect location
+defaultRedirect: vdlp/redirect/redirects
+
+# Create page
+create:
+    title: vdlp.redirect::lang.title.create_redirect
+    redirect: vdlp/redirect/redirects/update/:id
+    redirectClose: vdlp/redirect/redirects
+
+# Update page
+update:
+    title: vdlp.redirect::lang.title.edit_redirect
+    redirect: vdlp/redirect/redirects
+    redirectClose: vdlp/redirect/redirects

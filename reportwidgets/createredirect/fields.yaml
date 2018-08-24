@@ -1,0 +1,20 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    from_url:
+        label: vdlp.redirect::lang.redirect.from_url
+        placeholder: vdlp.redirect::lang.redirect.from_url_placeholder
+        type: text
+        span: left
+        comment: vdlp.redirect::lang.redirect.from_url_comment
+        required: true
+        attributes:
+            autofocus: ''
+    to_url:
+        label: vdlp.redirect::lang.redirect.to_url
+        placeholder: vdlp.redirect::lang.redirect.to_url_placeholder
+        type: text
+        span: right
+        comment: vdlp.redirect::lang.redirect.to_url_comment

@@ -1,0 +1,17 @@
+# ===================================
+#  Reorder Behavior Config
+# ===================================
+
+# Reorder Title
+title: vdlp.redirect::lang.buttons.reorder_redirects
+
+# Attribute name
+nameFrom: from_url
+
+# Model Class name
+modelClass: Vdlp\Redirect\Models\Redirect
+
+# Toolbar widget configuration
+toolbar:
+    # Partial for toolbar buttons
+    buttons: reorder_toolbar

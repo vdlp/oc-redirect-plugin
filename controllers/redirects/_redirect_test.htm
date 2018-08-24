@@ -1,0 +1,64 @@
+<div class="form-group span-left">
+    <div class="row">
+        <div class="col-md-4">
+            <label class="control-label">
+                <?= trans('vdlp.redirect::lang.test.input_scheme') ?>
+            </label>
+            <?php $defaultScheme = \Request::getScheme() ?>
+            <div data-control="balloon-selector" class="control-balloon-selector">
+                <ul>
+                    <li data-value="http"<?= $defaultScheme === 'http' ? 'class="active"' : '' ?>>http</li>
+                    <li data-value="https"<?= $defaultScheme === 'https' ? 'class="active"' : '' ?>>https</li>
+                </ul>
+                <input type="hidden" name="test_scheme" value="<?= $defaultScheme ?>">
+            </div>
+        </div>
+        <div class="col-md-8">
+            <label class="control-label">
+                <?= trans('vdlp.redirect::lang.test.input_path') ?>
+            </label>
+            <input type="text"
+                   id="inputPath"
+                   class="form-control"
+                   name="Redirect[test_url]"
+                   value="<?= e($formModel->getAttribute('test_url')) ?>"
+                   placeholder="<?= e(trans('vdlp.redirect::lang.test.input_path_placeholder')) ?>">
+            <p class="help-block"><?= trans('vdlp.redirect::lang.test.input_path_comment') ?></p>
+        </div>
+    </div>
+</div>
+<div class="form-group span-right" id="testResult">
+    <?= $this->makePartial('redirect_test_result') ?>
+</div>
+<div class="form-group span-left">
+    <label class="control-label">
+        <?= trans('vdlp.redirect::lang.test.test_date') ?>
+    </label>
+    <div id="testDate"
+         class="field-datepicker"
+         data-control="datepicker"
+         data-min-date="2000-01-01 00:00:00"
+         data-max-date="2020-12-31 00:00:00">
+        <div class="input-with-icon right-align">
+            <i class="icon icon-calendar-o"></i>
+            <input type="text"
+                   name="test_date"
+                   value="<?= date('Y-m-d') ?>"
+                   class="form-control align-right"
+                   autocomplete="off">
+        </div>
+    </div>
+    <p class="help-block"><?= trans('vdlp.redirect::lang.test.test_date_comment') ?></p>
+    <div class="form-group">
+        <button type="submit"
+                data-request="onTest"
+                data-request-data="inputPath: $('#inputPath').val()"
+                data-hotkey="ctrl+t, cmd+t"
+                data-load-indicator="<?= e(trans('vdlp.redirect::lang.test.testing')) ?>"
+                onclick="$('#testResult').html('');var inputPath=$('#inputPath').focus();inputPath.val(inputPath.val())"
+                style="margin-top: 10px"
+                class="btn btn-success oc-icon-play" data-disposable="">
+            <?= trans('vdlp.redirect::lang.test.run_test') ?>
+        </button>
+    </div>
+</div>

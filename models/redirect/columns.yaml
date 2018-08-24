@@ -1,0 +1,43 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    from_url:
+        label: vdlp.redirect::lang.redirect.from_url
+        type: redirect_from_url
+        searchable: true
+    target_type:
+        label: vdlp.redirect::lang.redirect.target_type
+        type: redirect_target_type
+    status_code:
+        label: vdlp.redirect::lang.redirect.status_code
+        type: redirect_status_code
+    match_type:
+        label: vdlp.redirect::lang.redirect.match_type
+        type: redirect_match_type
+    category:
+        label: vdlp.redirect::lang.redirect.category
+        relation: category
+        select: name
+        default: '-'
+    hits:
+        label: vdlp.redirect::lang.redirect.hits
+        type: number
+    sparkline:
+        label: vdlp.redirect::lang.redirect.sparkline_30d
+        sortable: false
+        searchable: false
+        cssClass: column-button
+        type: partial
+    sort_order:
+        label: vdlp.redirect::lang.redirect.priority
+    is_enabled:
+        label: vdlp.redirect::lang.redirect.enabled
+        type: redirect_switch_color
+    system:
+        label: vdlp.redirect::lang.redirect.type
+        width: 16px
+        type: redirect_system
+        sortable: false
+        invisible: true

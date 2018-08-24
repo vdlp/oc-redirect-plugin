@@ -1,0 +1,214 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    status_code:
+        type: balloon-selector
+        required: true
+        span: full
+        default: 301
+        options:
+            301: vdlp.redirect::lang.redirect.permanent
+            302: vdlp.redirect::lang.redirect.temporary
+            303: vdlp.redirect::lang.redirect.see_other
+            404: vdlp.redirect::lang.redirect.not_found
+            410: vdlp.redirect::lang.redirect.gone
+        commentHtml: true
+        commentAbove: '<label>HTTP Status Code <span class="status-code-info icon-question-circle"data-control="popup" data-handler="onShowStatusCodeInfo" data-keyboard="true" data-size="huge"></span></label>'
+    match_type:
+        label: vdlp.redirect::lang.redirect.match_type
+        type: dropdown
+        required: true
+        span: right
+        options:
+            exact: vdlp.redirect::lang.redirect.exact
+            placeholders: vdlp.redirect::lang.redirect.placeholders
+    target_type:
+        label: vdlp.redirect::lang.redirect.target_type
+        required: true
+        type: dropdown
+        default: path_or_url
+        span: left
+        dependsOn: status_code
+    from_url:
+        label: vdlp.redirect::lang.redirect.from_url
+        placeholder: vdlp.redirect::lang.redirect.from_url_placeholder
+        type: text
+        span: left
+        comment: vdlp.redirect::lang.redirect.from_url_comment
+        required: true
+        attributes:
+            autofocus: ''
+    to_url:
+        label: vdlp.redirect::lang.redirect.to_url
+        placeholder: vdlp.redirect::lang.redirect.to_url_placeholder
+        type: text
+        span: right
+        comment: vdlp.redirect::lang.redirect.to_url_comment
+        dependsOn:
+            - target_type
+            - status_code
+    cms_page:
+        label: vdlp.redirect::lang.redirect.target_type_cms_page
+        span: right
+        type: dropdown
+        dependsOn:
+            - target_type
+            - status_code
+    static_page:
+        label: vdlp.redirect::lang.redirect.target_type_static_page
+        span: right
+        type: dropdown
+        dependsOn:
+            - target_type
+            - status_code
+
+tabs:
+    defaultTab: vdlp.redirect::lang.tab.tab_general
+    fields:
+        #
+        # General
+        #
+        category:
+            label: vdlp.redirect::lang.redirect.category
+            span: left
+            nameFrom: name
+            type: relation
+        sort_order:
+            label: vdlp.redirect::lang.redirect.priority
+            type: text
+            span: right
+            context: update
+        is_enabled:
+            label: vdlp.redirect::lang.redirect.enabled
+            comment: vdlp.redirect::lang.redirect.enabled_comment
+            span: left
+            type: switch
+            default: true
+        #
+        # Requirements
+        #
+        section_requirements:
+            tab: vdlp.redirect::lang.tab.tab_requirements
+            type: section
+            commentAbove: vdlp.redirect::lang.redirect.requirements_comment
+            trigger:
+                action: show
+                field: match_type
+                condition: value[placeholders]
+        requirements:
+            tab: vdlp.redirect::lang.tab.tab_requirements
+            type: repeater
+            span: full
+            prompt: vdlp.redirect::lang.redirect.requirements_prompt
+            trigger:
+                action: show
+                field: match_type
+                condition: value[placeholders]
+            form:
+                fields:
+                    placeholder:
+                        label: vdlp.redirect::lang.redirect.placeholder
+                        comment: vdlp.redirect::lang.redirect.placeholder_comment
+                        type: text
+                        span: left
+                        required: true
+                    requirement:
+                        label: vdlp.redirect::lang.redirect.requirement
+                        comment: vdlp.redirect::lang.redirect.requirement_comment
+                        type: text
+                        span: right
+                        required: true
+                    replacement:
+                        label: vdlp.redirect::lang.redirect.replacement
+                        comment: vdlp.redirect::lang.redirect.replacement_comment
+                        span: left
+                        required: false
+        #
+        # Test
+        #
+        section_test:
+            tab: vdlp.redirect::lang.tab.tab_test
+            type: section
+            commentAbove: vdlp.redirect::lang.test.test_comment
+        test_url:
+            tab: vdlp.redirect::lang.tab.tab_test
+            type: text
+            hidden: true
+        test:
+            tab: vdlp.redirect::lang.tab.tab_test
+            type: partial
+            path: redirect_test
+        #
+        # Scheduling
+        #
+        section_scheduling:
+            tab: vdlp.redirect::lang.tab.tab_scheduling
+            type: section
+            commentAbove: vdlp.redirect::lang.scheduling.scheduling_comment
+        from_date:
+            tab: vdlp.redirect::lang.tab.tab_scheduling
+            label: vdlp.redirect::lang.scheduling.from_date
+            comment: vdlp.redirect::lang.scheduling.from_date_comment
+            type: datepicker
+            mode: date
+            span: left
+        to_date:
+            tab: vdlp.redirect::lang.tab.tab_scheduling
+            label: vdlp.redirect::lang.scheduling.to_date
+            comment: vdlp.redirect::lang.scheduling.to_date_comment
+            type: datepicker
+            mode: date
+            span: right
+        #
+        # TestLab
+        #
+        section_test_lab:
+            tab: vdlp.redirect::lang.tab.tab_test_lab
+            type: section
+            commentAbove: vdlp.redirect::lang.test_lab.section_test_lab_comment
+        test_lab:
+            tab: vdlp.redirect::lang.tab.tab_test_lab
+            label: vdlp.redirect::lang.test_lab.test_lab_label
+            comment: vdlp.redirect::lang.test_lab.test_lab_enable
+            type: switch
+            span: left
+        test_lab_path:
+            tab: vdlp.redirect::lang.tab.tab_test_lab
+            label: vdlp.redirect::lang.test_lab.test_lab_path_label
+            comment: vdlp.redirect::lang.test_lab.test_lab_path_comment
+            type: text
+            span: left
+            trigger:
+                action: show
+                field: match_type
+                condition: value[placeholders]
+        #
+        # Advanced
+        #
+        from_scheme:
+            tab: vdlp.redirect::lang.tab.tab_advanced
+            label: vdlp.redirect::lang.redirect.from_scheme
+            comment: vdlp.redirect::lang.redirect.from_scheme_comment
+            commentHtml: true
+            type: balloon-selector
+            span: left
+            default: auto
+            options:
+                http: http
+                https: https
+                auto: vdlp.redirect::lang.redirect.scheme_auto
+        to_scheme:
+            tab: vdlp.redirect::lang.tab.tab_advanced
+            label: vdlp.redirect::lang.redirect.to_scheme
+            comment: vdlp.redirect::lang.redirect.to_scheme_comment
+            commentHtml: true
+            type: balloon-selector
+            span: right
+            default: auto
+            options:
+                http: http
+                https: https
+                auto: vdlp.redirect::lang.redirect.scheme_auto
+            dependsOn: status_code

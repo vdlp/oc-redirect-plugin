@@ -1,0 +1,19 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+title: system::lang.request_log.menu_label
+list: $/vdlp/redirect/controllers/redirects/request-log/columns.yaml
+modelClass: System\Models\RequestLog
+noRecordsMessage: backend::lang.list.no_records
+recordsPerPage: 10
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: count
+    direction: desc
+
+toolbar:
+    buttons: request-log/list_toolbar
+    search:
+        prompt: backend::lang.list.search_prompt

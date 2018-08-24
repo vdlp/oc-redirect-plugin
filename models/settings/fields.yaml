@@ -1,0 +1,33 @@
+# ===================================
+#  Settings Form Field Definitions
+# ===================================
+
+fields:
+    redirect_settings_section:
+        label: vdlp.redirect::lang.settings.menu_label
+        comment: vdlp.redirect::lang.settings.menu_description
+        type: section
+    logging_enabled:
+        label: vdlp.redirect::lang.settings.logging_enabled_label
+        comment: vdlp.redirect::lang.settings.logging_enabled_comment
+        span: full
+        type: switch
+        default: true
+    statistics_enabled:
+        label: vdlp.redirect::lang.settings.statistics_enabled_label
+        comment: vdlp.redirect::lang.settings.statistics_enabled_comment
+        span: full
+        type: switch
+        default: true
+    test_lab_enabled:
+        label: vdlp.redirect::lang.settings.test_lab_enabled_label
+        comment: vdlp.redirect::lang.settings.test_lab_enabled_comment
+        span: full
+        type: switch
+        default: true
+    caching_enabled:
+        label: vdlp.redirect::lang.settings.caching_enabled_label
+        comment: vdlp.redirect::lang.settings.caching_enabled_comment
+        span: full
+        type: switch
+        default: false

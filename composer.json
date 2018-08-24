@@ -1,0 +1,21 @@
+{
+    "name": "vdlp/oc-redirect-plugin",
+    "description": "Advanced redirect plugin for October CMS",
+    "type": "october-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Van der Let & Partners",
+            "email": "octobercms@vdlp.nl"
+        },
+        {
+            "name": "Alwin Drenth",
+            "email": "adrenth@gmail.com"
+        }
+    ],
+    "require": {
+        "jaybizzle/crawler-detect": "^1.2",
+        "symfony/stopwatch": "^3.2",
+        "davaxi/sparkline": "^1.1"
+    }
+}

@@ -1,0 +1,3 @@
+1.0.0:
+    - "Transfer vendor ownership. Adrenth.Redirect -> Vdlp.Redirect"
+    - 20180718_0001_create_tables.php

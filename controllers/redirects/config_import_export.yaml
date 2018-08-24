@@ -1,0 +1,15 @@
+# ===================================
+#  Import/Export Behavior Config
+# ===================================
+
+import:
+    title: vdlp.redirect::lang.title.import
+    modelClass: Vdlp\Redirect\Models\RedirectImport
+    list: $/vdlp/redirect/models/redirectimport/columns.yaml
+    redirect: vdlp/redirect/redirects
+export:
+    title: vdlp.redirect::lang.title.export
+    modelClass: Vdlp\Redirect\Models\RedirectExport
+    list: $/vdlp/redirect/models/redirectexport/columns.yaml
+    redirect: vdlp/redirect/redirects
+    filename: redirects.csv

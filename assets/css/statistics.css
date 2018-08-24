@@ -1,0 +1,45 @@
+.row {
+    margin-bottom: 30px;
+}
+
+.row .report-widget {
+    -webkit-box-shadow: 3px 3px 11px 0 rgba(217, 217, 217, 1);
+    -moz-box-shadow: 3px 3px 11px 0 rgba(217, 217, 217, 1);
+    box-shadow: 3px 3px 11px 0 rgba(217, 217, 217, 1);
+    position: relative;
+    min-height: 155px;
+}
+
+.row .report-widget h3 {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #cae1e2;
+    margin-bottom: 15px;
+}
+
+.report-widget.redirect-hits-per-day {
+    min-height: 375px;
+}
+
+.report-widget.current-active-redirects {
+    min-height: 375px;
+}
+
+.report-widget.general {
+    min-height: 400px;
+}
+
+.report-widget div[data-control=toolbar] {
+    height: 125px;
+}
+
+.report-widget .loading-indicator-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.report-widget .loading-indicator {
+    background: transparent;
+}

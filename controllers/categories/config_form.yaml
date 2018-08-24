@@ -1,0 +1,27 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: vdlp.redirect::lang.redirect.category
+
+# Model Form Field configuration
+form: $/vdlp/redirect/models/category/fields.yaml
+
+# Model Class name
+modelClass: Vdlp\Redirect\Models\Category
+
+# Default redirect location
+defaultRedirect: vdlp/redirect/categories
+
+# Create page
+create:
+    title: vdlp.redirect::lang.title.create_category
+    redirect: vdlp/redirect/categories/update/:id
+    redirectClose: vdlp/redirect/categories
+
+# Update page
+update:
+    title: vdlp.redirect::lang.title.edit_category
+    redirect: vdlp/redirect/categories
+    redirectClose: vdlp/redirect/categories

@@ -1,0 +1,15 @@
+# ===================================
+# Filter Scope Definitions
+# ===================================
+
+scopes:
+    date_time:
+        label: vdlp.redirect::lang.redirect.date
+        type: date
+        conditions: date_time >= ':filtered'
+    status_code:
+        label: vdlp.redirect::lang.redirect.status_code
+        type: group
+        modelClass: Vdlp\Redirect\Models\Redirect
+        options: filterStatusCodeOptions
+        conditions: status_code in (:filtered)

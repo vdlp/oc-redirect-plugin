@@ -1,0 +1,15 @@
+<?php if ($match === false): ?>
+    <div class="form-group">
+        <label style="color: red"><?= trans('vdlp.redirect::lang.test.no_match_label') ?></label>
+        <div class="form-control oc-icon-thumbs-down">
+            <?= trans('vdlp.redirect::lang.test.no_match') ?>
+        </div>
+    </div>
+<?php elseif ($match !== null): ?>
+    <div class="form-group">
+        <label style="color: green"><?= trans('vdlp.redirect::lang.test.match_success_label') ?></label>
+        <div class="form-control oc-icon-thumbs-up">
+            <?= $url ?> <sup>(<?= $match->getStatusCode() ?>)</sup>
+        </div>
+    </div>
+<?php endif; ?>

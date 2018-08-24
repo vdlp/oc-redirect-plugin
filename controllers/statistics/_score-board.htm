@@ -1,0 +1,36 @@
+<div class="scoreboard">
+    <div data-control="toolbar">
+        <div class="scoreboard-item control-chart"
+             data-control="chart-pie"
+             data-center-text="<?= number_format($totalActiveRedirects, 0, '', '.') ?>"
+             data-size="120">
+            <ul>
+                <?php foreach ($activeRedirects as $group => $activeRedirect): ?>
+                <li><?= trans('vdlp.redirect::lang.redirect.' . \Vdlp\Redirect\Models\Redirect::$statusCodes[$group]) ?>
+                    <span><?= count($activeRedirect) ?></span></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <div class="scoreboard-item title-value">
+            <h4><?= e(trans('vdlp.redirect::lang.statistics.requests_redirected')) ?></h4>
+            <p><?= number_format($totalRedirectsServed, 0, '', '.') ?></p>
+            <p class="description"><?= e(trans('vdlp.redirect::lang.statistics.all_time')) ?></p>
+        </div>
+        <div class="scoreboard-item title-value">
+            <h4><?= e(trans('vdlp.redirect::lang.statistics.active_redirects')) ?></h4>
+            <p><?= number_format($totalActiveRedirects, 0, '', '.') ?></p>
+        </div>
+        <div class="scoreboard-item title-value">
+            <h4><?= e(trans('vdlp.redirect::lang.statistics.redirects_this_month')) ?></h4>
+            <p><?= number_format($totalThisMonth, 0, '', '.') ?></p>
+            <p class="description "><?= e(trans('vdlp.redirect::lang.statistics.previous_month')) ?>: <?= number_format($totalLastMonth, 0, '', '.') ?></p>
+        </div>
+        <?php if ($latestClient): ?>
+        <div class="scoreboard-item title-value">
+            <h4><?= e(trans('vdlp.redirect::lang.statistics.latest_redirected_requests')) ?></h4>
+            <p class="<?= $latestClient->crawler ? 'oc-icon-google' : 'oc-icon-user' ?>"><?= $latestClient->redirect->from_url ?></p>
+            <p class="description"><?= $latestClient->timestamp ?></p>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>

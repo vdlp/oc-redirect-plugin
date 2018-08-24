@@ -1,0 +1,36 @@
+scopes:
+    system:
+        label: vdlp.redirect::lang.list.switch_system
+        type: switch
+        conditions:
+            - system <> true
+            - system = true
+    is_enabled:
+        label: vdlp.redirect::lang.list.switch_is_enabled
+        type: switch
+        conditions:
+            - is_enabled <> true
+            - is_enabled = true
+    match_type:
+        label: vdlp.redirect::lang.redirect.match_type
+        type: group
+        modelClass: Vdlp\Redirect\Models\Redirect
+        options: filterMatchTypeOptions
+        conditions: match_type in (:filtered)
+    target_type:
+        label: vdlp.redirect::lang.redirect.target_type
+        type: group
+        modelClass: Vdlp\Redirect\Models\Redirect
+        options: filterTargetTypeOptions
+        conditions: target_type in (:filtered)
+    status_code:
+        label: vdlp.redirect::lang.redirect.status_code
+        type: group
+        modelClass: Vdlp\Redirect\Models\Redirect
+        options: filterStatusCodeOptions
+        conditions: status_code in (:filtered)
+    category:
+        label: vdlp.redirect::lang.redirect.category
+        modelClass: Vdlp\Redirect\Models\Category
+        conditions: category_id in (:filtered)
+        nameFrom: name

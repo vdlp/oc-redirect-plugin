@@ -1,0 +1,46 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+# Model List Column configuration
+list: $/vdlp/redirect/models/redirectlog/columns.yaml
+
+filter: config_filter.yaml
+
+# Model Class name
+modelClass: Vdlp\Redirect\Models\RedirectLog
+
+# List Title
+title: vdlp.redirect::lang.title.view_redirect_log
+
+# Link URL for each record
+recordUrl: vdlp/redirect/redirects/update/:redirect_id
+
+# Message to display if the list is empty
+noRecordsMessage: backend::lang.list.no_records
+
+# Records to display per page
+recordsPerPage: 20
+
+# Displays the list column set up button
+showSetup: true
+
+# Displays the sorting link on each column
+showSorting: true
+
+# Default sorting column
+defaultSort:
+    column: date_time
+    direction: desc
+
+# Display checkboxes next to each record
+showCheckboxes: true
+
+# Toolbar widget configuration
+toolbar:
+    # Partial for toolbar buttons
+    buttons: list_toolbar
+
+    # Search widget configuration
+    search:
+        prompt: backend::lang.list.search_prompt

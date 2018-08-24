@@ -1,0 +1,22 @@
+<div class="report-widget">
+    <h3><?= e(trans('vdlp.redirect::lang.statistics.top_redirects_this_month', ['top' => 10])) ?></h3>
+    <?php if ($topTenRedirectsThisMonth): ?>
+    <div class="control-status-list">
+        <ul>
+            <?php foreach ($topTenRedirectsThisMonth as $key => $record): ?>
+            <li>
+                <span class="status-icon info"><?= $key + 1 ?></span>
+                <span class="status-text">
+                    <a href="<?= Backend::url('vdlp/redirect/redirects/update/' . $record['redirect_id']) ?>">
+                        <?= $record['from_url'] ?>
+                    </a>
+                </span>
+                <span class="status-label"><?= number_format($record['hits'], 0, null, '.') ?></span>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php else: ?>
+    <p class="help-block"><i class="oc-icon-meh-o"></i> <?= e(trans('vdlp.redirect::lang.statistics.no_data')) ?></p>
+    <?php endif; ?>
+</div>
