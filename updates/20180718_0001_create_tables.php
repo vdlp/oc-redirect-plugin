@@ -95,7 +95,7 @@ class CreateTables extends Migration
             $table->index(['redirect_id', 'month', 'year'], 'redirect_my');
 
             // Foreign keys
-            $table->foreign('redirect_id', 'redirect_client')
+            $table->foreign('redirect_id', 'vdlp_redirect_client')
                 ->references('id')
                 ->on('vdlp_redirect_redirects')
                 ->onDelete('cascade');
@@ -116,7 +116,7 @@ class CreateTables extends Migration
             $table->index(['redirect_id', 'day', 'month', 'year'], 'redirect_log_dmy');
             $table->index(['redirect_id', 'month', 'year'], 'redirect_log_my');
 
-            $table->foreign('redirect_id', 'redirect_log')
+            $table->foreign('redirect_id', 'vdlp_redirect_log')
                 ->references('id')
                 ->on('vdlp_redirect_redirects')
                 ->onDelete('cascade');
