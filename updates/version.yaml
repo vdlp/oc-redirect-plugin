@@ -1,3 +1,4 @@
 1.0.0:
     - "Transfer vendor ownership. Adrenth.Redirect -> Vdlp.Redirect"
     - 20180718_0001_create_tables.php
+    - 20180831_0002_upgrade_from_adrenth_redirect.php
