@@ -1,5 +1,7 @@
 # Vdlp.Redirect
 
+> **IMPORTANT**: This plugin was formerly known as `Adrenth.Redirect`. The plugin has been renamed to `Vdlp.Redirect`. Please install this plugin which automatically migrates data and settings from `Adrenth.Redirect`. The current version of `Adrenth.Redirect` will stay available for users which have it installed, but will be hidden from the October CMS marketplace. Upgrade to `Vdlp.Redirect` as soon as possible. 
+
 ## The #1 Redirect plugin for October CMS
 
 This is the best Redirect-plugin for October CMS. With this plugin installed you can manage redirects directly from October CMS' beautiful interface. Many webmasters and SEO specialists use redirects to optimise their website for search engines. This plugin allows you to manage such redirects with a nice and user-friendly interface.
