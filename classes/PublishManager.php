@@ -20,17 +20,6 @@ class PublishManager
 {
     use Singleton;
 
-    /** @var string */
-    private $redirectsFile;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function init()//: void
-    {
-        $this->redirectsFile = storage_path('app/redirects.csv');
-    }
-
     /**
      * Publish applicable redirects.
      *
@@ -38,10 +27,6 @@ class PublishManager
      */
     public function publish(): int
     {
-        if (file_exists($this->redirectsFile)) {
-            unlink($this->redirectsFile);
-        }
-
         $columns = [
             'id',
             'match_type',
@@ -64,12 +49,33 @@ class PublishManager
             ->orderBy('sort_order')
             ->get($columns);
 
+        if (CacheManager::cachingEnabledAndSupported()) {
+            $this->publishToCache($redirects->toArray());
+        } else {
+            $this->publishToFilesystem($columns, $redirects->toArray());
+        }
+
+        return $redirects->count();
+    }
+
+    /**
+     * @param array $columns
+     * @param array $redirects
+     */
+    private function publishToFilesystem(array $columns, array $redirects)
+    {
+        $redirectsFile = storage_path('app/redirects.csv');
+
+        if (file_exists($redirectsFile)) {
+            unlink($redirectsFile);
+        }
+
         try {
-            $writer = Writer::createFromPath($this->redirectsFile, 'w+');
+            $writer = Writer::createFromPath($redirectsFile, 'w+');
             $writer->insertOne($columns);
 
-            foreach ($redirects->toArray() as $row) {
-                if (array_key_exists('requirements', $row)) {
+            foreach ($redirects as $row) {
+                if (isset($row['requirements'])) {
                     $row['requirements'] = json_encode($row['requirements']);
                 }
 
@@ -78,7 +84,22 @@ class PublishManager
         } catch (Exception $e) {
             Log::critical($e);
         }
+    }
 
-        return $redirects->count();
+    /**
+     * @param array $redirects
+     */
+    private function publishToCache(array $redirects)
+    {
+        foreach ($redirects as &$redirect) {
+            if (isset($redirect['requirements'])) {
+                $redirect['requirements'] = json_encode($redirect['requirements']);
+            }
+
+        }
+
+        unset($redirect);
+
+        CacheManager::instance()->putRedirectRules($redirects);
     }
 }

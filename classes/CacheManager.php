@@ -95,6 +95,23 @@ class CacheManager
     }
 
     /**
+     * @param array $redirectRules
+     * @return void
+     */
+    public function putRedirectRules(array $redirectRules)
+    {
+        $this->cache->forever('Vdlp.Redirect.Rules', $redirectRules);
+    }
+
+    /**
+     * @return array
+     */
+    public function getRedirectRules(): array
+    {
+        return (array) $this->cache->get('Vdlp.Redirect.Rules', []);
+    }
+
+    /**
      * Put matched rule or FALSE to cache.
      *
      * @param string $cacheKey

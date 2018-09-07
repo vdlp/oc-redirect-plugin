@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use Vdlp\Redirect\Classes\Contracts\Tester;
-use Vdlp\Redirect\Classes\Exceptions\RulesPathNotReadable;
 use Cms;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Vdlp\Redirect\Classes\Contracts\Tester;
 
 /**
  * Class Tester
@@ -119,11 +118,10 @@ abstract class TesterBase implements Tester
 
     /**
      * @return RedirectManager
-     * @throws RulesPathNotReadable
      */
     protected function getRedirectManager(): RedirectManager
     {
-        $manager = RedirectManager::createWithDefaultRulesPath();
+        $manager = new RedirectManager();
 
         return $manager->setLoggingEnabled(false)
             ->setStatisticsEnabled(false);

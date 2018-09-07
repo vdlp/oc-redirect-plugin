@@ -16,12 +16,14 @@ use Log;
  */
 class RedirectMiddleware
 {
+
     /**
      * Run the request filter.
      *
      * @param Request $request
      * @param Closure $next
      * @return mixed
+     * @throws \Cms\Classes\CmsException
      */
     public function handle($request, Closure $next)
     {
@@ -31,12 +33,7 @@ class RedirectMiddleware
         }
 
         // Create the redirect manager if redirect rules are readable.
-        try {
-            $manager = RedirectManager::createWithDefaultRulesPath();
-        } catch (RulesPathNotReadable $e) {
-            return $next($request);
-        }
-
+        $manager = new RedirectManager();
         $manager->setLoggingEnabled(Settings::isLoggingEnabled())
             ->setStatisticsEnabled(Settings::isStatisticsEnabled());
 
