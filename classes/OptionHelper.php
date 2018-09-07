@@ -63,11 +63,16 @@ class OptionHelper
             return $options;
         }
 
+        /** @noinspection PhpUndefinedClassInspection */
         $pages = \RainLab\Pages\Classes\Page::listInTheme(Theme::getActiveTheme());
 
+        /** @noinspection PhpUndefinedClassInspection */
         /** @var \RainLab\Pages\Classes\Page $page */
         foreach ($pages as $page) {
+            /** @noinspection PhpUndefinedFieldInspection */
             if (array_key_exists('title', $page->viewBag)) {
+                /** @noinspection PhpUndefinedMethodInspection */
+                /** @noinspection PhpUndefinedFieldInspection */
                 $options[$page->getBaseFileName()] = $page->viewBag['title'];
             }
         }

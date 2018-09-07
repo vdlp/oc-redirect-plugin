@@ -242,13 +242,13 @@ class RedirectManager
                 // Refs: https://github.com/vdlp/redirect/issues/21
                 if (is_string($toUrl)
                     && $toUrl[0] !== '/'
-                    && substr($toUrl, 0, 7) !== 'http://'
-                    && substr($toUrl, 0, 8) !== 'https://'
+                    && strpos($toUrl, 'http://') !== 0
+                    && strpos($toUrl, 'https://') !== 0
                 ) {
                     $toUrl = $this->basePath . '/' . $toUrl;
                 }
 
-                if ($toUrl[0] === '/') {
+                if (strpos($toUrl, '/') === 0) {
                     $toUrl = Cms::url($toUrl);
                 }
 
@@ -290,6 +290,7 @@ class RedirectManager
     /**
      * @param RedirectRule $rule
      * @return string
+     * @throws Cms\Classes\CmsException
      */
     private function redirectToCmsPage(RedirectRule $rule): string
     {
@@ -313,6 +314,7 @@ class RedirectManager
     {
         if (class_exists('\RainLab\Pages\Classes\Page')) {
             /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+            /** @noinspection PhpUndefinedClassInspection */
             return \RainLab\Pages\Classes\Page::url($rule->getStaticPage());
         }
 
