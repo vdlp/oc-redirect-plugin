@@ -102,6 +102,8 @@ return [
             . 'Redirects will not be cached.',
         'general_confirm' => 'Are you sure you want to do this?',
         'sparkline_30d' => 'Hits (30d)',
+        'has_hits' => 'Has hits',
+        'minimum_hits' => 'Minimum # hits',
     ],
     'list' => [
         'no_records' => 'There are no redirects in this view.',
