@@ -102,6 +102,8 @@ return [
             . 'Redirects zullen niet worden gecached.',
         'general_confirm' => 'Weet je het zeker?',
         'sparkline_30d' => 'Treffers (30d)',
+        'has_hits' => 'Heeft treffers',
+        'minimum_hits' => 'Minimum treffers',
     ],
     'list' => [
         'no_records' => 'Er zijn geen redirects in dit beeld.',
