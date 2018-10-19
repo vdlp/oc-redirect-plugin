@@ -3,3 +3,4 @@
     - 20180718_0001_create_tables.php
     - 20180831_0002_upgrade_from_adrenth_redirect.php
 1.1.0: "Redirect rules are now being cached (if caching enabled) -- See: https://github.com/vdlp/oc-redirect-plugin/issues/1"
+1.2.0: "Add extra filters to the Redirects overview -- See: https://github.com/vdlp/oc-redirect-plugin/pull/5"

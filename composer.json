@@ -2,7 +2,7 @@
     "name": "vdlp/oc-redirect-plugin",
     "description": "Advanced redirect plugin for October CMS",
     "type": "october-plugin",
-    "license": "MIT",
+    "license": "GPL-2.0",
     "authors": [
         {
             "name": "Van der Let & Partners",

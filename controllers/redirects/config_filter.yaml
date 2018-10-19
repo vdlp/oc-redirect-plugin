@@ -34,3 +34,13 @@ scopes:
         modelClass: Vdlp\Redirect\Models\Category
         conditions: category_id in (:filtered)
         nameFrom: name
+    hits:
+        label: vdlp.redirect::lang.redirect.has_hits
+        type: switch
+        conditions:
+            - hits = 0
+            - hits <> 0
+    minimum_hits:
+        label: vdlp.redirect::lang.redirect.minimum_hits
+        type: number
+        conditions: hits >= ':filtered'

@@ -103,6 +103,8 @@ return [
             . 'Redirects will not be cached.',
         'general_confirm' => 'Are you sure you want to do this?', // TODO
         'sparkline_30d' => 'Hits (30d)', // TODO
+        'has_hits' => 'Has hits', // TODO
+        'minimum_hits' => 'Minimum # hits', // TODO
     ],
     'list' => [
         'no_records' => 'No hay redirecciones en esta vista.',
