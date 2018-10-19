@@ -40,7 +40,7 @@ return [
         'from_scheme_comment' => 'Force match on scheme. If HTTP is selected <u>http://domain.com/path</u> will '
             . 'match and <u>https://domain.com/path</u> does not match.',
         'to_url' => 'Target Path or URL',
-        'to_url_placeholder' => '/absolute/path, relative/path or http://target.url', // changed since 2.0.6
+        'to_url_placeholder' => '/absolute/path, relative/path or http://target.url',
         'to_url_comment' => 'The target path or URL to redirect to.',
         'to_url_required_if' => 'The target path or URL is required',
         'to_scheme' => 'Target scheme',
@@ -77,7 +77,7 @@ return [
         'gone' => '410 - Gone',
         'enabled' => 'Enabled',
         'none' => 'none',
-        'enabled_comment' => 'Flick this switch to enable this redirect.',
+        'enabled_comment' => 'Check this box to enable the redirect.',
         'priority' => 'Priority',
         'hits' => '# Hits',
         'return_to_redirects' => 'Return to redirects list',
@@ -89,7 +89,7 @@ return [
         'user_tip' => 'User generated redirect',
         'type' => 'Type',
         'last_used_at' => 'Last Used At',
-        'and_delete_log_item' => 'And delete selected log items', // since 2.0.3,
+        'and_delete_log_item' => 'And delete selected log items',
         'category' => 'Category',
         'categories' => 'Categories',
         'name' => 'Name',
@@ -104,6 +104,8 @@ return [
         'sparkline_30d' => 'Hits (30d)',
         'has_hits' => 'Has hits',
         'minimum_hits' => 'Minimum # hits',
+        'ignore_query_parameters' => 'Ignore query parameters (recommended).',
+        'ignore_query_parameters_comment' => 'The engine will ignore all query parameters from the Source Path.',
     ],
     'list' => [
         'no_records' => 'There are no redirects in this view.',
@@ -202,10 +204,10 @@ return [
         'test_lab' => 'TestLab (beta)',
     ],
     'buttons' => [
-        'add' => 'Add', // since 2.0.3
-        'from_request_log' => 'From Request log', // since 2.0.3
-        'new_redirect' => 'New redirect', // changed since 2.0.3
-        'create_redirects' => 'Create redirects', // since 2.0.3
+        'add' => 'Add',
+        'from_request_log' => 'From Request log',
+        'new_redirect' => 'New redirect',
+        'create_redirects' => 'Create redirects',
         'create_redirect' => 'Create redirect',
         'create_and_new' => 'Create and new',
         'delete' => 'Delete',
@@ -235,7 +237,7 @@ return [
         'tab_advanced' => 'Advanced',
     ],
     'flash' => [
-        'success_created_redirects' => 'Successfully created :count redirects', // since 2.0.3
+        'success_created_redirects' => 'Successfully created :count redirects',
         'static_page_redirect_not_supported' => 'This redirect cannot be modified. Plugin RainLab.Pages is required.',
         'truncate_success' => 'Successfully deleted all records',
         'delete_selected_success' => 'Successfully deleted selected records',
@@ -263,6 +265,7 @@ return [
         'to_date' => 'Scheduled date to [to_date] (YYYY-MM-DD or empty)',
         'sort_order' => 'Priority [sort_order]',
         'is_enabled' => 'Enabled [is_enabled] (1 = enable redirect, 0 = disable redirect [default])',
+        'ignore_query_parameters' => 'Ignore Query Parameters [ignore_query_parameters] (1 = ignore query parameters, 0 = include query parameters [default])',
         'test_lab' => 'Test Lab [test_lab] (1 = enable Test Lab, 0 = disable TestLab [default])',
         'test_lab_path' => 'Test Lab path [test_lab_path] (required if match_type = placeholders)',
         'system' => 'System [system] (1 = system generated redirect, 0 = user generated redirect [default])',

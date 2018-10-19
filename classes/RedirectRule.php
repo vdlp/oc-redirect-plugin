@@ -7,7 +7,6 @@ namespace Vdlp\Redirect\Classes;
 use Throwable;
 use Vdlp\Redirect\Models\Redirect;
 use Carbon\Carbon;
-use InvalidArgumentException;
 
 /**
  * Class RedirectRule
@@ -58,12 +57,16 @@ class RedirectRule
     /** @var array */
     private $placeholderMatches;
 
+    /** @var bool */
+    private $ignoreQueryParameters;
+
     /**
      * @param array $attributes
-     * @throws InvalidArgumentException
      */
     public function __construct(array $attributes)
     {
+        $this->ignoreQueryParameters = false;
+
         foreach ($attributes as $key => $value) {
             $property = camel_case($key);
 
@@ -92,7 +95,7 @@ class RedirectRule
 
         $this->requirements = json_decode((string) $this->requirements, true);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
+        if (json_last_error() !== JSON_ERROR_NONE) {
             $this->requirements = [];
         }
     }
@@ -100,7 +103,6 @@ class RedirectRule
     /**
      * @param Redirect $model
      * @return RedirectRule
-     * @throws InvalidArgumentException
      */
     public static function createWithModel(Redirect $model): RedirectRule
     {
@@ -246,5 +248,13 @@ class RedirectRule
     {
         $this->placeholderMatches = $placeholderMatches;
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIgnoreQueryParameters(): bool
+    {
+        return (bool) $this->ignoreQueryParameters;
     }
 }

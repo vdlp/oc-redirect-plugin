@@ -148,6 +148,16 @@ class Redirect extends Model
     /**
      * {@inheritdoc}
      */
+    protected $casts = [
+        'ignore_query_parameters' => 'boolean',
+        'is_enabled' => 'boolean',
+        'test_lab' => 'boolean',
+        'system' => 'boolean',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     public $hasMany = [
         'clients' => Client::class,
     ];

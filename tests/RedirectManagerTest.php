@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Vdlp\Redirect\Tests;
 
 use Vdlp\Redirect\Classes\RedirectManager;
@@ -18,6 +20,12 @@ use PluginTestCase;
  */
 class RedirectManagerTest extends PluginTestCase
 {
+    /**
+     * @throws Cms\Classes\CmsException
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
     public function testExactRedirect()
     {
         $redirect = new Redirect([
@@ -34,10 +42,7 @@ class RedirectManagerTest extends PluginTestCase
         self::assertTrue($redirect->save());
 
         $rule = RedirectRule::createWithModel($redirect);
-        self::assertInstanceOf(RedirectRule::class, $rule);
-
         $manager = RedirectManager::createWithRule($rule);
-        self::assertInstanceOf(RedirectManager::class, $manager);
 
         $test = '/this-should-be-source';
         $result = $manager->match($test, Redirect::SCHEME_HTTPS);
@@ -49,6 +54,87 @@ class RedirectManagerTest extends PluginTestCase
         self::assertEquals(false, $manager->match($test, Redirect::SCHEME_HTTPS));
     }
 
+    /**
+     * @throws Cms\Classes\CmsException
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
+    public function testRedirectWithIgnoreQueryParametersEnabled()
+    {
+        $redirect = new Redirect([
+            'match_type' => Redirect::TYPE_EXACT,
+            'target_type' => Redirect::TARGET_TYPE_PATH_URL,
+            'from_url' => '/this-should-be-source',
+            'from_scheme' => Redirect::SCHEME_AUTO,
+            'to_url' => '/this-should-be-target',
+            'to_scheme' => Redirect::SCHEME_AUTO,
+            'ignore_query_parameters' => true,
+            'requirements' => null,
+            'status_code' => 302,
+        ]);
+
+        self::assertTrue($redirect->save());
+
+        $rule = RedirectRule::createWithModel($redirect);
+        $manager = RedirectManager::createWithRule($rule);
+
+        $test = '/this-should-be-source?foo=bar';
+        $result = $manager->match($test, Redirect::SCHEME_HTTPS);
+
+        self::assertInstanceOf(RedirectRule::class, $result);
+        self::assertEquals(Cms::url('/this-should-be-target'), $manager->getLocation($result));
+
+        $test = '/this-should-be-source';
+        $result = $manager->match($test, Redirect::SCHEME_HTTPS);
+
+        self::assertInstanceOf(RedirectRule::class, $result);
+        self::assertEquals(Cms::url('/this-should-be-target'), $manager->getLocation($result));
+    }
+
+    /**
+     * @throws Cms\Classes\CmsException
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
+    public function testRedirectWithIgnoreQueryParametersDisabled()
+    {
+        $redirect = new Redirect([
+            'match_type' => Redirect::TYPE_EXACT,
+            'target_type' => Redirect::TARGET_TYPE_PATH_URL,
+            'from_url' => '/this-should-be-source',
+            'from_scheme' => Redirect::SCHEME_AUTO,
+            'to_url' => '/this-should-be-target',
+            'to_scheme' => Redirect::SCHEME_AUTO,
+            'ignore_query_parameters' => false,
+            'requirements' => null,
+            'status_code' => 302,
+        ]);
+
+        self::assertTrue($redirect->save());
+
+        $rule = RedirectRule::createWithModel($redirect);
+        $manager = RedirectManager::createWithRule($rule);
+
+        $test = '/this-should-be-source?foo=bar';
+        $result = $manager->match($test, Redirect::SCHEME_HTTPS);
+
+        self::assertFalse($result);
+
+        $test = '/this-should-be-source';
+        $result = $manager->match($test, Redirect::SCHEME_HTTPS);
+
+        self::assertInstanceOf(RedirectRule::class, $result);
+        self::assertEquals(Cms::url('/this-should-be-target'), $manager->getLocation($result));
+    }
+
+    /**
+     * @throws Cms\Classes\CmsException
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
     public function testPlaceholderRedirect()
     {
         $redirect = new Redirect([
@@ -81,10 +167,7 @@ class RedirectManagerTest extends PluginTestCase
         self::assertTrue($redirect->save());
 
         $rule = RedirectRule::createWithModel($redirect);
-        self::assertInstanceOf(RedirectRule::class, $rule);
-
         $manager = RedirectManager::createWithRule($rule);
-        self::assertInstanceOf(RedirectManager::class, $manager);
 
         $test = '/blog.php?cat=octobercms&section=test&id=1337';
         self::assertFalse($manager->match($test, Redirect::SCHEME_HTTPS));
@@ -106,6 +189,12 @@ class RedirectManagerTest extends PluginTestCase
         self::assertFalse($manager->match($test, Redirect::SCHEME_HTTPS));
     }
 
+    /**
+     * @throws Cms\Classes\CmsException
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
     public function testTargetCmsPageRedirect()
     {
         $page = Page::load(Theme::getActiveTheme(), 'vdlp-redirect-testpage');
@@ -134,10 +223,7 @@ class RedirectManagerTest extends PluginTestCase
         self::assertTrue($redirect->save());
 
         $rule = RedirectRule::createWithModel($redirect);
-        self::assertInstanceOf(RedirectRule::class, $rule);
-
         $manager = RedirectManager::createWithRule($rule);
-        self::assertInstanceOf(RedirectManager::class, $manager);
 
         $result = $manager->match('/this-should-be-source', Redirect::SCHEME_HTTPS);
 
@@ -147,6 +233,11 @@ class RedirectManagerTest extends PluginTestCase
         self::assertTrue($page->delete());
     }
 
+    /**
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
     public function testScheduledRedirectPeriod()
     {
         $redirect = new Redirect([
@@ -165,10 +256,7 @@ class RedirectManagerTest extends PluginTestCase
         self::assertTrue($redirect->save());
 
         $rule = RedirectRule::createWithModel($redirect);
-        self::assertInstanceOf(RedirectRule::class, $rule);
-
         $manager = RedirectManager::createWithRule($rule);
-        self::assertInstanceOf(RedirectManager::class, $manager);
 
         // Test date between `from_date` and `end_date`
         self::assertInstanceOf(
@@ -204,6 +292,11 @@ class RedirectManagerTest extends PluginTestCase
         );
     }
 
+    /**
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
     public function testScheduledRedirectOnlyFromDate()
     {
         $redirect = new Redirect([
@@ -223,10 +316,7 @@ class RedirectManagerTest extends PluginTestCase
         self::assertTrue($redirect->save());
 
         $rule = RedirectRule::createWithModel($redirect);
-        self::assertInstanceOf(RedirectRule::class, $rule);
-
         $manager = RedirectManager::createWithRule($rule);
-        self::assertInstanceOf(RedirectManager::class, $manager);
 
         // Test date equals `from_date`
         self::assertInstanceOf(
@@ -249,6 +339,11 @@ class RedirectManagerTest extends PluginTestCase
         );
     }
 
+    /**
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit_Framework_Exception
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
     public function testScheduledRedirectOnlyToDate()
     {
         $redirect = new Redirect([
@@ -268,10 +363,7 @@ class RedirectManagerTest extends PluginTestCase
         self::assertTrue($redirect->save());
 
         $rule = RedirectRule::createWithModel($redirect);
-        self::assertInstanceOf(RedirectRule::class, $rule);
-
         $manager = RedirectManager::createWithRule($rule);
-        self::assertInstanceOf(RedirectManager::class, $manager);
 
         // Test date equals `to_date`
         self::assertInstanceOf(
@@ -294,6 +386,9 @@ class RedirectManagerTest extends PluginTestCase
         );
     }
 
+    /**
+     * @throws Cms\Classes\CmsException
+     */
     public function testRelativeRedirect()
     {
         $redirect = new Redirect([
@@ -325,6 +420,9 @@ class RedirectManagerTest extends PluginTestCase
         self::assertEquals(Cms::url('/subdirectory/sub/sub/relative/path/to'), $manager->getLocation($rule));
     }
 
+    /**
+     * @throws Cms\Classes\CmsException
+     */
     public function testAbsoluteRedirect()
     {
         $redirect = new Redirect([
@@ -355,6 +453,11 @@ class RedirectManagerTest extends PluginTestCase
         self::assertEquals(Cms::url('/absolute/path/to'), $manager->getLocation($rule));
     }
 
+    /**
+     * @throws Cms\Classes\CmsException
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
     public function testSchemeHttpToHttpsRedirect()
     {
         $redirect = new Redirect([
@@ -400,6 +503,11 @@ class RedirectManagerTest extends PluginTestCase
         self::assertEquals($expectedTargetUrl, $actualTargetUrl);
     }
 
+    /**
+     * @throws Cms\Classes\CmsException
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
     public function testSchemeHttpsToHttpRedirect()
     {
         $redirect = new Redirect([
@@ -442,6 +550,11 @@ class RedirectManagerTest extends PluginTestCase
         self::assertEquals($expectedTargetUrl, $actualTargetUrl);
     }
 
+    /**
+     * @throws Cms\Classes\CmsException
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
     public function testSchemeAutoToAutoRedirect()
     {
         $redirect = new Redirect([
