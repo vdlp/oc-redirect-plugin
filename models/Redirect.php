@@ -148,6 +148,16 @@ class Redirect extends Model
     /**
      * {@inheritdoc}
      */
+    protected $casts = [
+        'ignore_query_parameters' => 'boolean',
+        'is_enabled' => 'boolean',
+        'test_lab' => 'boolean',
+        'system' => 'boolean',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     public $hasMany = [
         'clients' => Client::class,
     ];
@@ -284,6 +294,22 @@ class Redirect extends Model
         }
 
         return new Carbon($value);
+    }
+
+    /**
+     * Dropdown options for Match Type.
+     *
+     * @return array
+     */
+    public function getMatchTypeOptions(): array
+    {
+        $options = [];
+
+        foreach (self::$types as $value) {
+            $options[$value] = trans("vdlp.redirect::lang.redirect.$value");
+        }
+
+        return $options;
     }
 
     /**

@@ -4,3 +4,6 @@
     - 20180831_0002_upgrade_from_adrenth_redirect.php
 1.1.0: "Redirect rules are now being cached (if caching enabled) -- See: https://github.com/vdlp/oc-redirect-plugin/issues/1"
 1.2.0: "Add extra filters to the Redirects overview -- See: https://github.com/vdlp/oc-redirect-plugin/pull/5"
+1.3.0:
+    - "Add support for ignoring query parameters -- See: https://github.com/vdlp/oc-redirect-plugin/issues/6"
+    - 20181019_0003_add_ignore_query_parameters_to_redirects_table.php

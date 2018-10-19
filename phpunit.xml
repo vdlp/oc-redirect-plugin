@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="../../../tests/bootstrap.php"
@@ -8,9 +7,7 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="true"
-         syntaxCheck="true"
->
+         stopOnFailure="true">
     <testsuites>
         <testsuite name="Plugin Unit Test Suite">
             <directory>./tests</directory>

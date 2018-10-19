@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Vdlp\Redirect\Tests;
 
 use Vdlp\Redirect\Classes\OptionHelper;
@@ -13,6 +15,10 @@ use PluginTestCase;
  */
 class OptionHelperTest extends PluginTestCase
 {
+
+    /**
+     * @throws \PHPUnit_Framework_Exception
+     */
     public function testTargetTypeOptions()
     {
         self::assertCount(1, OptionHelper::getTargetTypeOptions(404));

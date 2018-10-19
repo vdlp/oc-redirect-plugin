@@ -21,9 +21,6 @@ fields:
         type: dropdown
         required: true
         span: right
-        options:
-            exact: vdlp.redirect::lang.redirect.exact
-            placeholders: vdlp.redirect::lang.redirect.placeholders
     target_type:
         label: vdlp.redirect::lang.redirect.target_type
         required: true
@@ -70,22 +67,30 @@ tabs:
         #
         # General
         #
+
+        is_enabled:
+            label: vdlp.redirect::lang.redirect.enabled
+            comment: vdlp.redirect::lang.redirect.enabled_comment
+            span: left
+            type: checkbox
+            default: true
         category:
             label: vdlp.redirect::lang.redirect.category
-            span: left
+            span: right
             nameFrom: name
             type: relation
+        ignore_query_parameters:
+            label: vdlp.redirect::lang.redirect.ignore_query_parameters
+            type: checkbox
+            span: left
+            default: false
+            comment: vdlp.redirect::lang.redirect.ignore_query_parameters_comment
         sort_order:
             label: vdlp.redirect::lang.redirect.priority
             type: text
             span: right
             context: update
-        is_enabled:
-            label: vdlp.redirect::lang.redirect.enabled
-            comment: vdlp.redirect::lang.redirect.enabled_comment
-            span: left
-            type: switch
-            default: true
+
         #
         # Requirements
         #

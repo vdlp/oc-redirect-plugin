@@ -8,7 +8,6 @@ use Illuminate\Contracts\Logging\Log;
 use Illuminate\Database\DatabaseManager;
 use October\Rain\Database\Updates\Migration;
 use Throwable;
-use Vdlp\Redirect\Models;
 
 /** @noinspection AutoloadingIssuesInspection */
 

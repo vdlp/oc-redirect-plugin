@@ -77,7 +77,7 @@ return [
         'gone' => '410 - Gone (Verwijderd)',
         'enabled' => 'Aangezet',
         'none' => 'geen',
-        'enabled_comment' => 'Schuif om deze redirect aan te zetten.',
+        'enabled_comment' => 'Vink aan om deze redirect aan te zetten.',
         'priority' => 'Prioriteit',
         'hits' => 'Treffers',
         'return_to_redirects' => 'Ga terug naar de redirects lijst.',

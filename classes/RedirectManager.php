@@ -349,12 +349,17 @@ class RedirectManager
             return false;
         }
 
-        // Perform exact match if applicable
+        // Strip query parameters from request path.
+        if ($rule->isIgnoreQueryParameters()) {
+            $requestPath = parse_url($requestPath, PHP_URL_PATH);
+        }
+
+        // Perform exact match if applicable.
         if ($rule->isExactMatchType()) {
             return $this->matchExact($rule, $requestPath);
         }
 
-        // Perform placeholders match if applicable
+        // Perform placeholders match if applicable.
         if ($rule->isPlaceholdersMatchType()) {
             return $this->matchPlaceholders($rule, $requestPath);
         }
@@ -542,7 +547,6 @@ class RedirectManager
 
     /**
      * @return array
-     * @throws InvalidArgumentException
      */
     private function readRulesFromCache(): array
     {
