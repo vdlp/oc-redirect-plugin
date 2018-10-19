@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
+use Throwable;
 use Vdlp\Redirect\Models\Redirect;
 use Carbon\Carbon;
 use InvalidArgumentException;
@@ -76,7 +77,7 @@ class RedirectRule
                 'Y-m-d H:i:s',
                 substr($this->fromDate, 0, 10) . ' 00:00:00'
             );
-        } catch (InvalidArgumentException $e) {
+        } catch (Throwable $e) {
             $this->fromDate = null;
         }
 
@@ -85,7 +86,7 @@ class RedirectRule
                 'Y-m-d H:i:s',
                 substr($this->toDate, 0, 10) . ' 00:00:00'
             );
-        } catch (InvalidArgumentException $e) {
+        } catch (Throwable $e) {
             $this->toDate = null;
         }
 

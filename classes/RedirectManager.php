@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
-use Vdlp\Redirect\Classes\Exceptions\RulesPathNotReadable;
-use Vdlp\Redirect\Models\Client;
-use Vdlp\Redirect\Models\Redirect;
-use Vdlp\Redirect\Models\RedirectLog;
-use BadMethodCallException;
 use Carbon\Carbon;
 use Cms;
 use Cms\Classes\Controller;
@@ -25,17 +19,21 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Throwable;
+use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
+use Vdlp\Redirect\Classes\Exceptions\RulesPathNotReadable;
+use Vdlp\Redirect\Models\Client;
+use Vdlp\Redirect\Models\Redirect;
+use Vdlp\Redirect\Models\RedirectLog;
 
 /**
  * Class RedirectManager
  *
+ * @SuppressWarnings(PHPMD.ExitExpression)
  * @package Vdlp\Redirect\Classes
  */
 class RedirectManager
 {
-    /** @var string */
-    private $redirectRulesPath;
-
     /** @var RedirectRule[] */
     private $redirectRules;
 
@@ -67,40 +65,10 @@ class RedirectManager
     /**
      * Constructs a RedirectManager instance.
      */
-    protected function __construct()
+    public function __construct()
     {
         $this->matchDate = Carbon::now();
         $this->basePath = Request::getBasePath();
-    }
-
-    /**
-     * Creates an instance of the RedirectManager with the default rules path.
-     *
-     * @return RedirectManager
-     * @throws RulesPathNotReadable
-     */
-    public static function createWithDefaultRulesPath(): RedirectManager
-    {
-        $rulesPath = storage_path('app/redirects.csv');
-
-        if (!file_exists($rulesPath) || !is_readable($rulesPath)) {
-            throw RulesPathNotReadable::withPath($rulesPath);
-        }
-
-        return self::createWithRulesPath($rulesPath);
-    }
-
-    /**
-     * Create an instance of the RedirectManager with a specific rules path.
-     *
-     * @param string $redirectRulesPath
-     * @return RedirectManager
-     */
-    public static function createWithRulesPath(string $redirectRulesPath): RedirectManager
-    {
-        $instance = new self();
-        $instance->redirectRulesPath = $redirectRulesPath;
-        return $instance;
     }
 
     /**
@@ -177,7 +145,9 @@ class RedirectManager
         $this->loadRedirectRules();
 
         foreach ($this->redirectRules as $rule) {
-            if ($matchedRule = $this->matchesRule($rule, $requestPath, $scheme)) {
+            $matchedRule = $this->matchesRule($rule, $requestPath, $scheme);
+
+            if ($matchedRule) {
                 return $matchedRule;
             }
         }
@@ -192,7 +162,6 @@ class RedirectManager
      * @param string $scheme 'http' or 'https'
      * @return RedirectRule|false|mixed
      * @throws InvalidScheme
-     * @throws BadMethodCallException
      */
     public function matchCached(string $requestPath, string $scheme)
     {
@@ -224,6 +193,7 @@ class RedirectManager
      * @param RedirectRule $rule
      * @param string $requestUri
      * @return void
+     * @throws Cms\Classes\CmsException
      */
     public function redirectWithRule(RedirectRule $rule, string $requestUri)//: void
     {
@@ -257,6 +227,7 @@ class RedirectManager
      *
      * @param RedirectRule $rule
      * @return bool|string
+     * @throws Cms\Classes\CmsException
      */
     public function getLocation(RedirectRule $rule)
     {
@@ -271,13 +242,13 @@ class RedirectManager
                 // Refs: https://github.com/vdlp/redirect/issues/21
                 if (is_string($toUrl)
                     && $toUrl[0] !== '/'
-                    && substr($toUrl, 0, 7) !== 'http://'
-                    && substr($toUrl, 0, 8) !== 'https://'
+                    && strpos($toUrl, 'http://') !== 0
+                    && strpos($toUrl, 'https://') !== 0
                 ) {
                     $toUrl = $this->basePath . '/' . $toUrl;
                 }
 
-                if ($toUrl[0] === '/') {
+                if (strpos($toUrl, '/') === 0) {
                     $toUrl = Cms::url($toUrl);
                 }
 
@@ -319,6 +290,7 @@ class RedirectManager
     /**
      * @param RedirectRule $rule
      * @return string
+     * @throws Cms\Classes\CmsException
      */
     private function redirectToCmsPage(RedirectRule $rule): string
     {
@@ -342,6 +314,7 @@ class RedirectManager
     {
         if (class_exists('\RainLab\Pages\Classes\Page')) {
             /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+            /** @noinspection PhpUndefinedClassInspection */
             return \RainLab\Pages\Classes\Page::url($rule->getStaticPage());
         }
 
@@ -522,25 +495,70 @@ class RedirectManager
         $rules = [];
 
         try {
-            /** @var Reader $reader */
-            $reader = Reader::createFromPath($this->redirectRulesPath);
-
-            // WARNING: this is deprecated method in league/csv:8.0, when league/csv is upgraded to version 9 we should
-            // follow the instructions on this page: http://csv.thephpleague.com/upgrading/9.0/
-            $results = $reader->fetchAssoc(0);
-
-            foreach ($results as $row) {
-                $rule = new RedirectRule($row);
-
-                if ($this->matchesPeriod($rule)) {
-                    $rules[] = $rule;
-                }
+            if (CacheManager::cachingEnabledAndSupported()) {
+                $rules = $this->readRulesFromCache();
+            } else {
+                $rules = $this->readRulesFromFilesystem();
             }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Log::error($e);
         }
 
         $this->redirectRules = $rules;
+    }
+
+    /**
+     * @return array
+     * @throws InvalidArgumentException
+     * @throws RulesPathNotReadable
+     */
+    private function readRulesFromFilesystem(): array
+    {
+        $rules = [];
+
+        $rulesPath = storage_path('app/redirects.csv');
+
+        if (!file_exists($rulesPath) || !is_readable($rulesPath)) {
+            throw RulesPathNotReadable::withPath($rulesPath);
+        }
+
+        /** @var Reader $reader */
+        $reader = Reader::createFromPath($rulesPath);
+
+        // WARNING: this is deprecated method in league/csv:8.0, when league/csv is upgraded to version 9 we should
+        // follow the instructions on this page: http://csv.thephpleague.com/upgrading/9.0/
+        $results = $reader->fetchAssoc(0);
+
+        foreach ($results as $row) {
+            $rule = new RedirectRule($row);
+
+            if ($this->matchesPeriod($rule)) {
+                $rules[] = $rule;
+            }
+        }
+
+        return $rules;
+    }
+
+    /**
+     * @return array
+     * @throws InvalidArgumentException
+     */
+    private function readRulesFromCache(): array
+    {
+        $results = CacheManager::instance()->getRedirectRules();
+
+        $rules = [];
+
+        foreach ($results as $row) {
+            $rule = new RedirectRule($row);
+
+            if ($this->matchesPeriod($rule)) {
+                $rules[] = $rule;
+            }
+        }
+
+        return $rules;
     }
 
     /**
