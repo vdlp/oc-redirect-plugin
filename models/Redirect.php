@@ -287,6 +287,22 @@ class Redirect extends Model
     }
 
     /**
+     * Dropdown options for Match Type.
+     *
+     * @return array
+     */
+    public function getMatchTypeOptions(): array
+    {
+        $options = [];
+
+        foreach (self::$types as $value) {
+            $options[$value] = trans("vdlp.redirect::lang.redirect.$value");
+        }
+
+        return $options;
+    }
+
+    /**
      * @see OptionHelper::getTargetTypeOptions()
      * @return array
      */

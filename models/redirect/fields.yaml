@@ -21,9 +21,6 @@ fields:
         type: dropdown
         required: true
         span: right
-        options:
-            exact: vdlp.redirect::lang.redirect.exact
-            placeholders: vdlp.redirect::lang.redirect.placeholders
     target_type:
         label: vdlp.redirect::lang.redirect.target_type
         required: true
