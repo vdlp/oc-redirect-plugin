@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Vdlp\Redirect\Classes;
 
 use InvalidArgumentException;
@@ -11,6 +13,8 @@ use InvalidArgumentException;
  */
 class Sparkline extends \Davaxi\Sparkline
 {
+    /** @noinspection PhpMissingParentCallCommonInspection */
+
     /**
      * {@inheritdoc}
      * @throws InvalidArgumentException

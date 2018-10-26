@@ -6,14 +6,14 @@ namespace Vdlp\Redirect\Classes;
 
 use Cms;
 use Symfony\Component\Stopwatch\Stopwatch;
-use Vdlp\Redirect\Classes\Contracts\Tester;
+use Vdlp\Redirect\Classes\Contracts\TesterInterface;
 
 /**
  * Class Tester
  *
  * @package Vdlp\Redirect\Classes
  */
-abstract class TesterBase implements Tester
+abstract class TesterBase implements TesterInterface
 {
     /**
      * Maximum redirects to follow.
