@@ -21,3 +21,16 @@ tr.special td {
 div.actions .btn {
     text-align: center;
 }
+
+.sparkline {
+    width: 100px;
+    height: 30px;
+    background-size: 100px 30px;
+    background-repeat: no-repeat;
+}
+
+.sparkline img {
+    width: 100px;
+    height: 30px;
+    opacity: .8;
+}
