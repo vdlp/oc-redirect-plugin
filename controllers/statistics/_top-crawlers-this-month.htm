@@ -1,4 +1,4 @@
-<h3><?= e(trans('vdlp.redirect::lang.statistics.top_crawlers_this_month', ['top' => 10])) ?></h3>
+<h3><?= e(trans('vdlp.redirect::lang.statistics.top_crawlers_this_month', ['top' => 10])); ?></h3>
 <?php if ($topTenCrawlersThisMonth): ?>
     <div class="control-status-list">
         <ul>
@@ -6,11 +6,11 @@
             <li>
                 <span class="status-icon info"><?= $key + 1 ?></span>
                 <span class="status-text"><?= $record['crawler'] ?></span>
-                <span class="status-label"><?= number_format($record['hits'], 0, null, '.') ?></span>
+                <span class="status-label"><?= number_format($record['hits'], 0, null, '.'); ?></span>
             </li>
             <?php endforeach; ?>
         </ul>
     </div>
 <?php else: ?>
-    <p class="help-block"><i class="oc-icon-meh-o"></i> <?= e(trans('vdlp.redirect::lang.statistics.no_data')) ?></p>
+    <p class="help-block"><i class="oc-icon-meh-o"></i> <?= e(trans('vdlp.redirect::lang.statistics.no_data')); ?></p>
 <?php endif; ?>

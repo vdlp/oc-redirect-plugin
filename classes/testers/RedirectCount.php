@@ -39,7 +39,7 @@ class RedirectCount extends TesterBase
         curl_close($curlHandle);
 
         return new TesterResult(
-            $redirectCount === 1 || $redirectCount === 0 && $statusCode > 400,
+            $redirectCount === 1 || ($redirectCount === 0 && $statusCode > 400),
             trans('vdlp.redirect::lang.test_lab.redirects_followed', ['count' => $redirectCount, 'limit' => 10])
         );
     }

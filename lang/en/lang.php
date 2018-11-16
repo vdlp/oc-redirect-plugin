@@ -88,7 +88,6 @@ return [
         'system_tip' => 'System generated redirect',
         'user_tip' => 'User generated redirect',
         'type' => 'Type',
-        'last_used_at' => 'Last Used At',
         'and_delete_log_item' => 'And delete selected log items',
         'category' => 'Category',
         'categories' => 'Categories',
@@ -106,6 +105,7 @@ return [
         'minimum_hits' => 'Minimum # hits',
         'ignore_query_parameters' => 'Ignore query parameters (recommended).',
         'ignore_query_parameters_comment' => 'The engine will ignore all query parameters from the Source Path.',
+        'last_used_at' => 'Last hit',
     ],
     'list' => [
         'no_records' => 'There are no redirects in this view.',

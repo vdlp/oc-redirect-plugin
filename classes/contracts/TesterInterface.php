@@ -11,7 +11,7 @@ use Vdlp\Redirect\Classes\TesterResult;
  *
  * @package Vdlp\Redirect\Classes\Contracts
  */
-interface Tester
+interface TesterInterface
 {
     /**
      * Execute the test

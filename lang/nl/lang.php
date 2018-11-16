@@ -88,7 +88,7 @@ return [
         'system_tip' => 'Een redirect gegenereerd door het systeem',
         'user_tip' => 'Een door de gebruiker gegenereerde redirect',
         'type' => 'Type',
-        'last_used_at' => 'Voor het laatste gebruikt op',
+        'last_used_at' => 'Laatste treffer',
         'and_delete_log_item' => 'En verwijder geseletecteerd log items', // since 2.0.3,
         'category' => 'Categorie',
         'categories' => 'Categorieën',

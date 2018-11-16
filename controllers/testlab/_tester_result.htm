@@ -6,28 +6,28 @@
         <div class="loading-indicator-container">
             <div class="toolbar">
                 <a class="btn btn-outline-default btn-xs toolbar-item"
-                   href="<?= Backend::url('vdlp/redirect/redirects/update/' . $redirect->id) ?>">
-                    <i class="oc-icon-pencil"></i><?= e(trans('vdlp.redirect::lang.test_lab.edit')) ?>
+                   href="<?= Backend::url('vdlp/redirect/redirects/update/' . $redirect->id); ?>">
+                    <i class="oc-icon-pencil"></i><?= e(trans('vdlp.redirect::lang.test_lab.edit')); ?>
                 </a>
                 <a class="btn btn-outline-danger btn-xs toolbar-item"
                    data-request="onExclude"
                    data-request-data="id: <?= $redirect->id ?>"
-                   data-request-confirm="<?= e(trans('vdlp.redirect::lang.test_lab.exclude_confirm')) ?>"
-                   data-load-indicator="<?= e(trans('vdlp.redirect::lang.test_lab.exclude_indicator')) ?>"
+                   data-request-confirm="<?= e(trans('vdlp.redirect::lang.test_lab.exclude_confirm')); ?>"
+                   data-load-indicator="<?= e(trans('vdlp.redirect::lang.test_lab.exclude_indicator')); ?>"
                    href="javascript:">
-                    <i class="oc-icon-ban"></i><?= e(trans('vdlp.redirect::lang.test_lab.exclude')) ?>
+                    <i class="oc-icon-ban"></i><?= e(trans('vdlp.redirect::lang.test_lab.exclude')); ?>
                 </a>
                 <a class="btn btn-outline-success btn-xs toolbar-item"
                    data-request="onReRun"
                    data-request-data="id: <?= $redirect->id ?>"
-                   data-load-indicator="<?= e(trans('vdlp.redirect::lang.test_lab.re_run_indicator')) ?>"
+                   data-load-indicator="<?= e(trans('vdlp.redirect::lang.test_lab.re_run_indicator')); ?>"
                    href="javascript:">
-                    <i class="oc-icon-refresh"></i><?= e(trans('vdlp.redirect::lang.test_lab.re_run')) ?>
+                    <i class="oc-icon-refresh"></i><?= e(trans('vdlp.redirect::lang.test_lab.re_run')); ?>
                 </a>
             </div>
         </div>
     </div>
 </div>
 <div class="tester-result" id="testerResult<?= $redirect->id ?>">
-    <?= $this->makePartial('tester_result_items', $testResults) ?>
+    <?= $this->makePartial('tester_result_items', $testResults); ?>
 </div>

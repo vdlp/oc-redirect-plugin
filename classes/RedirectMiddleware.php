@@ -2,12 +2,11 @@
 
 namespace Vdlp\Redirect\Classes;
 
-use Vdlp\Redirect\Classes\Exceptions\RulesPathNotReadable;
+use Illuminate\Contracts\Logging\Log;
 use Vdlp\Redirect\Models\Settings;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
-use Log;
 
 /**
  * Class RedirectMiddleware
@@ -16,7 +15,6 @@ use Log;
  */
 class RedirectMiddleware
 {
-
     /**
      * Run the request filter.
      *
@@ -53,7 +51,8 @@ class RedirectMiddleware
                 $rule = $manager->match($requestUri, $request->getScheme());
             }
         } catch (Exception $e) {
-            Log::error("Could not perform redirect for $requestUri: " . $e->getMessage());
+            $logger = resolve(Log::class);
+            $logger->error("Could not perform redirect for $requestUri: " . $e->getMessage());
         }
 
         if ($rule) {

@@ -24,6 +24,9 @@ columns:
     hits:
         label: vdlp.redirect::lang.redirect.hits
         type: number
+    last_used_at:
+        label: vdlp.redirect::lang.redirect.last_used_at
+        type: datetime
     sparkline:
         label: vdlp.redirect::lang.redirect.sparkline_30d
         sortable: false
@@ -40,4 +43,12 @@ columns:
         width: 16px
         type: redirect_system
         sortable: false
+        invisible: true
+    updated_at:
+        label: vdlp.redirect::lang.redirect.modified_at
+        type: datetime
+        invisible: true
+    created_at:
+        label: vdlp.redirect::lang.redirect.created_at
+        type: datetime
         invisible: true

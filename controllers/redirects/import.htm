@@ -1,13 +1,13 @@
-<?php Block::put('breadcrumb') ?>
+<?php Block::put('breadcrumb'); ?>
     <ul>
-        <li><a href="<?= Backend::url('vdlp/redirect/redirects') ?>"><?= e(trans('vdlp.redirect::lang.navigation.menu_label')) ?></a></li>
-        <li><?= e($this->pageTitle) ?></li>
+        <li><a href="<?= Backend::url('vdlp/redirect/redirects'); ?>"><?= e(trans('vdlp.redirect::lang.navigation.menu_label')); ?></a></li>
+        <li><?= e($this->pageTitle); ?></li>
     </ul>
-<?php Block::endPut() ?>
+<?php Block::endPut(); ?>
 
-<?= Form::open(['class' => 'layout']) ?>
+<?= Form::open(['class' => 'layout']); ?>
     <div class="layout-row">
-        <?= $this->importRender() ?>
+        <?= $this->importRender(); ?>
     </div>
     <div class="form-buttons">
         <button
@@ -16,7 +16,7 @@
             data-handler="onImportLoadForm"
             data-keyboard="false"
             class="btn btn-primary">
-            <?= e(trans('vdlp.redirect::lang.buttons.import')) ?>
+            <?= e(trans('vdlp.redirect::lang.buttons.import')); ?>
         </button>
     </div>
-<?= Form::close() ?>
+<?= Form::close(); ?>
