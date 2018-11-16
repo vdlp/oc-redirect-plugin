@@ -7,3 +7,4 @@
 1.3.0:
     - "Add support for ignoring query parameters -- See: https://github.com/vdlp/oc-redirect-plugin/issues/6"
     - 20181019_0003_add_ignore_query_parameters_to_redirects_table.php
+1.4.0: "Code dusting and improvements to the redirect list view"
