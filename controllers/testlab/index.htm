@@ -1,4 +1,4 @@
-<?= Form::open(['class' => 'layout']) ?>
+<?= Form::open(['class' => 'layout']); ?>
 
 <input type="hidden" id="redirectCount" value="<?= $redirectCount ?>">
 
@@ -15,12 +15,12 @@
                  style="width:0">
             </div>
         </div>
-        <p id="progress" data-initial="<?= e(trans('vdlp.redirect::lang.test_lab.start_tests_description')) ?>">
-            <?= e(trans('vdlp.redirect::lang.test_lab.start_tests_description')) ?>
+        <p id="progress" data-initial="<?= e(trans('vdlp.redirect::lang.test_lab.start_tests_description')); ?>">
+            <?= e(trans('vdlp.redirect::lang.test_lab.start_tests_description')); ?>
         </p>
     </div>
     <div class="col-md-3 col-sm-4" id="testButtonWrapper">
-        <?= $this->makePartial('test_button', ['redirectCount' => $redirectCount]) ?>
+        <?= $this->makePartial('test_button', ['redirectCount' => $redirectCount]); ?>
     </div>
     <div class="clearfix"></div>
     <div class="col-md-12" id="testerResults"></div>
@@ -33,20 +33,20 @@
                     aria-hidden="true">&times;
             </button>
             <div class="content">
-                <p><?= e(trans('vdlp.redirect::lang.test_lab.no_redirects')) ?></p>
+                <p><?= e(trans('vdlp.redirect::lang.test_lab.no_redirects')); ?></p>
             </div>
         </div>
     </div>
     <?php endif; ?>
 </div>
 
-<?= Form::close() ?>
+<?= Form::close(); ?>
 
 <div id="loader" class="popup-backdrop fade in hidden">
     <div class="modal-content popup-loading-indicator">
-        <div><?= e(trans('vdlp.redirect::lang.test_lab.executing_tests')) ?></div>
+        <div><?= e(trans('vdlp.redirect::lang.test_lab.executing_tests')); ?></div>
         <button class="btn btn-danger" onclick="testerStop()">
-            <?= e(trans('vdlp.redirect::lang.buttons.stop')) ?>
+            <?= e(trans('vdlp.redirect::lang.buttons.stop')); ?>
         </button>
     </div>
 </div>
