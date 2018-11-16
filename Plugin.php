@@ -290,7 +290,7 @@ class Plugin extends PluginBase
                     case Redirect::TYPE_PLACEHOLDERS:
                         return e(trans('vdlp.redirect::lang.redirect.placeholders'));
                     default:
-                        return $value;
+                        return e($value);
                 }
             },
             'redirect_status_code' => function ($value) {
@@ -306,7 +306,7 @@ class Plugin extends PluginBase
                     case 410:
                         return e(trans('vdlp.redirect::lang.redirect.gone'));
                     default:
-                        return $value;
+                        return e($value);
                 }
             },
             'redirect_target_type' => function ($value) {
@@ -318,7 +318,7 @@ class Plugin extends PluginBase
                     case Redirect::TARGET_TYPE_STATIC_PAGE:
                         return e(trans('vdlp.redirect::lang.redirect.target_type_static_page'));
                     default:
-                        return $value;
+                        return e($value);
                 }
             },
             'redirect_from_url' => function ($value) {
@@ -326,10 +326,10 @@ class Plugin extends PluginBase
                 $textLength = strlen($value);
                 if ($textLength > $maxChars) {
                     return '<span title="' . e($value) . '">'
-                        . substr_replace($value, '...', $maxChars / 2, $textLength - $maxChars)
+                        . e(substr_replace($value, '...', $maxChars / 2, $textLength - $maxChars))
                         . '</span>';
                 }
-                return $value;
+                return e($value);
             },
             'redirect_system' => function ($value) {
                 return sprintf(
