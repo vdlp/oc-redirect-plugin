@@ -19,10 +19,12 @@ Route::group(['middleware' => ['web']], function () {
         $sparkline->setPadding('2 0 0 2');
         $sparkline->setExpire('+5 minutes');
         $sparkline->setData((new StatisticsHelper())->getRedirectHitsSparkline((int) $redirectId));
-        $sparkline->setLineThickness(3.5);
+        $sparkline->setLineThickness(3);
         $sparkline->setLineColorHex($primaryColor);
         $sparkline->setFillColorHex($primaryColor);
         $sparkline->deactivateBackgroundColor();
         $sparkline->display();
+
+        exit();
     });
 });

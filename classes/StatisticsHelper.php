@@ -122,18 +122,31 @@ class StatisticsHelper
      */
     public function getRedirectHitsSparkline(int $redirectId): array
     {
-        $startDate = Carbon::now()->subMonth();
+        $startDate = Carbon::now()->subDays(30);
 
         /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $result = Models\Client::selectRaw('COUNT(id) AS hits')
+        $result = Models\Client::selectRaw('COUNT(id) AS hits, DATE(timestamp) AS date')
             ->where('redirect_id', '=', $redirectId)
             ->groupBy('day', 'month', 'year')
             ->orderByRaw('year ASC, month ASC, day ASC')
             ->where('timestamp', '>=', $startDate->toDateTimeString())
-            ->get(['hits'])
+            ->get()
+            ->keyBy('date')
             ->toArray();
 
-        return array_flatten($result);
+        $hits = [];
+
+        while ($startDate->lt(Carbon::now())) {
+            if (isset($result[$startDate->toDateString()])) {
+                $hits[] = (int) $result[$startDate->toDateString()]['hits'];
+            } else {
+                $hits[] = 0;
+            }
+
+            $startDate->addDay();
+        }
+
+        return $hits;
     }
 
     /**
