@@ -49,6 +49,6 @@ columns:
         type: datetime
         invisible: true
     created_at:
-        label: vdlp.redirect::lang.redirect.updated_at
+        label: vdlp.redirect::lang.redirect.created_at
         type: datetime
         invisible: true
