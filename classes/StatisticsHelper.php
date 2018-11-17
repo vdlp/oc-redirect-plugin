@@ -124,6 +124,7 @@ class StatisticsHelper
     {
         $startDate = Carbon::now()->subDays(30);
 
+        // DB index: redirect_timestamp_crawler
         /** @noinspection PhpMethodParametersCountMismatchInspection */
         $builder = Models\Client::selectRaw('COUNT(id) AS hits, DATE(timestamp) AS date')
             ->where('redirect_id', '=', $redirectId)
@@ -177,11 +178,12 @@ class StatisticsHelper
      */
     public function getTopTenCrawlersThisMonth(): array
     {
+        // DB index: month_year_crawler
         return (array) Models\Client::selectRaw('COUNT(id) AS hits')
             ->addSelect('crawler')
-            ->whereNotNull('crawler')
             ->where('month', '=', (int) date('n'))
             ->where('year', '=', (int) date('Y'))
+            ->whereNotNull('crawler')
             ->groupBy('crawler')
             ->orderByRaw('hits DESC')
             ->limit(10)
@@ -193,7 +195,7 @@ class StatisticsHelper
      * @param int $limit
      * @return array
      */
-    public function getTopRedirectsThisMonth($limit = 10): array
+    public function getTopRedirectsThisMonth(int $limit = 10): array
     {
         /** @noinspection PhpMethodParametersCountMismatchInspection */
         return (array) Models\Client::selectRaw('COUNT(redirect_id) AS hits')
