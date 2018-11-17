@@ -8,3 +8,6 @@
     - "Add support for ignoring query parameters -- See: https://github.com/vdlp/oc-redirect-plugin/issues/6"
     - 20181019_0003_add_ignore_query_parameters_to_redirects_table.php
 1.4.0: "Code dusting and improvements to the redirect list view"
+1.4.1:
+    - "Add extra statistics database index to improve performance"
+    - 20181117_0004_add_redirect_timestamp_crawler_index_on_clients_table.php
