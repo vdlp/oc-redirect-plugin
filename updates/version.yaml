@@ -14,3 +14,5 @@
 1.4.2:
     - "Add extra statistics database index to improve performance (Statistics dashboard)"
     - 20181117_0005_add_month_year_crawler_index_on_clients_table.php
+1.4.3:
+    - "Fix thrown BindingResolutionException on redirecting"

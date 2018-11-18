@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Carbon\Carbon;
-use October\Rain\Database\Collection;
+use DB;
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
-use Illuminate\Database\DatabaseManager;
+use October\Rain\Database\Collection;
 use Vdlp\Redirect\Models;
 
 /**
@@ -226,12 +226,9 @@ class StatisticsHelper
 
         $now = Carbon::now();
 
-        /** @var DatabaseManager $databaseManager */
-        $databaseManager = resolve(DatabaseManager::class);
-
         /** @noinspection PhpUndefinedClassInspection */
         $redirect->update([
-            'hits' => $databaseManager->raw('hits + 1'),
+            'hits' => DB::raw('hits + 1'),
             'last_used_at' => $now,
         ]);
 
