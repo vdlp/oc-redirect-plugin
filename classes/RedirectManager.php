@@ -184,7 +184,10 @@ class RedirectManager implements RedirectManagerInterface
 
         $toUrl = $this->getLocation($rule);
 
-        if (!$toUrl || empty($toUrl)) {
+        if (!$toUrl
+            || empty($toUrl)
+            || (new \Cms\Helpers\Cms())->url($requestUri) === $toUrl // Prevent redirect loops
+        ) {
             return;
         }
 
