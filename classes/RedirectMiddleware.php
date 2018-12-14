@@ -35,7 +35,7 @@ class RedirectMiddleware
         $manager->setLoggingEnabled(Settings::isLoggingEnabled())
             ->setStatisticsEnabled(Settings::isStatisticsEnabled());
 
-        if ($request->header('X-Adrenth-Redirect') === 'Tester') {
+        if ($request->header('X-Vdlp-Redirect') === 'Tester') {
             $manager->setStatisticsEnabled(false)
                 ->setLoggingEnabled(false);
         }
