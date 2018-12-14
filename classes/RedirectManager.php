@@ -332,7 +332,7 @@ class RedirectManager implements RedirectManagerInterface
             $parameters[str_replace(['{', '}'], '', $placeholder)] = $value;
         }
 
-        return $controller->pageUrl($rule->getCmsPage(), $parameters);
+        return (string) $controller->pageUrl($rule->getCmsPage(), $parameters);
     }
 
     /**
