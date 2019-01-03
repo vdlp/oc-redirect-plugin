@@ -5,7 +5,7 @@
             <?php foreach ($topTenCrawlersThisMonth as $key => $record): ?>
             <li>
                 <span class="status-icon info"><?= $key + 1 ?></span>
-                <span class="status-text"><?= $record['crawler'] ?></span>
+                <span class="status-text"><?= e($record['crawler']) ?></span>
                 <span class="status-label"><?= number_format($record['hits'], 0, null, '.'); ?></span>
             </li>
             <?php endforeach; ?>

@@ -7,7 +7,7 @@
                 <span class="status-icon info"><?= $key + 1 ?></span>
                 <span class="status-text">
                     <a href="<?= Backend::url('vdlp/redirect/redirects/update/' . $record['redirect_id']); ?>">
-                        <?= $record['from_url'] ?>
+                        <?= e($record['from_url']) ?>
                     </a>
                 </span>
                 <span class="status-label"><?= number_format($record['hits'], 0, null, '.'); ?></span>

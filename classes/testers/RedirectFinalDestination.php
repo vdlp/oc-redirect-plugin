@@ -41,7 +41,12 @@ class RedirectFinalDestination extends TesterBase
         if (empty($finalDestination) && $statusCode > 400) {
             $message = $error ?? trans('vdlp.redirect::lang.test_lab.no_destination_url');
         } else {
-            $finalDestination = sprintf('<a href="%s" target="_blank">%s</a>', $finalDestination, $finalDestination);
+            $finalDestination = sprintf(
+                '<a href="%s" target="_blank">%s</a>',
+                e($finalDestination),
+                e($finalDestination)
+            );
+
             $message = $error ?? trans('vdlp.redirect::lang.test_lab.final_destination_is', ['destination' => $finalDestination]);
         }
 
