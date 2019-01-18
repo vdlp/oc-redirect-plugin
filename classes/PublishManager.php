@@ -41,6 +41,7 @@ class PublishManager
             'requirements',
             'from_date',
             'to_date',
+            'ignore_query_parameters'
         ];
 
         /** @var Collection $redirects */
