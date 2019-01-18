@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Vdlp\Redirect\Classes;
 
-use Illuminate\Contracts\Logging\Log;
-use Vdlp\Redirect\Models\Settings;
 use Closure;
 use Exception;
+use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
+use Vdlp\Redirect\Models\Settings;
 
 /**
  * Class RedirectMiddleware
