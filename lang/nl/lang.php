@@ -187,6 +187,7 @@ return [
         'no_data' => 'Geen data',
         'top_crawlers_this_month' => 'Hoogste :top crawlers deze maand',
         'top_redirects_this_month' => 'Hoogste :top redirects deze maand',
+        'activity_last_three_months' => 'Activiteit laatste 3 maanden'
     ],
     'title' => [
         'import' => 'Invoer',

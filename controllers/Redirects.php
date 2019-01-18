@@ -8,6 +8,7 @@ use Vdlp\Redirect\Classes\CacheManager;
 use Vdlp\Redirect\Classes\PublishManager;
 use Vdlp\Redirect\Classes\RedirectManager;
 use Vdlp\Redirect\Classes\RedirectRule;
+use Vdlp\Redirect\Classes\StatisticsHelper;
 use Vdlp\Redirect\Models\Client;
 use Vdlp\Redirect\Models\Redirect;
 use Vdlp\Redirect\Models\Settings;
@@ -57,22 +58,37 @@ class Redirects extends Controller
         'Backend.Behaviors.ImportExportController',
     ];
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $formConfig = 'config_form.yaml';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $listConfig = [
         'list' => 'config_list.yaml',
         'requestLog' => 'request-log/config_list.yaml',
     ];
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $reorderConfig = 'config_reorder.yaml';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $importExportConfig = 'config_import_export.yaml';
 
-    /** @var PublishManager */
+    /**
+     * {@inheritdoc}
+     */
+    //public $bodyClass = 'compact-container';
+
+    /**
+     * @var PublishManager
+     */
     public $publishManager;
 
     /**
@@ -93,6 +109,7 @@ class Redirects extends Controller
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css', 'Vdlp.Redirect');
 
         $this->vars['match'] = null;
+        $this->vars['statisticsHelper'] = new StatisticsHelper();
     }
 
     /**
@@ -119,6 +136,8 @@ class Redirects extends Controller
      */
     public function update($recordId = null, $context = null)
     {
+        $this->bodyClass = 'compact-container';
+
         /** @var Redirect $redirect */
         $redirect = Redirect::findOrFail($recordId);
 
