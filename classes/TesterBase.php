@@ -112,7 +112,7 @@ abstract class TesterBase implements TesterInterface
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curlHandle, CURLOPT_VERBOSE, false);
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, [
-            'X-Adrenth-Redirect: Tester'
+            'X-Vdlp-Redirect: Tester'
         ]);
     }
 

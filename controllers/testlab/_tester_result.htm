@@ -1,6 +1,6 @@
 <div class="row heading">
     <div class="col-md-8">
-        <h5><?= $testPath ?> <?php if (!empty($redirect->to_url)): ?><i class="icon-arrow-right"></i> <?= $redirect->to_url ?><?php endif; ?></h5>
+        <h5><?= e($testPath) ?> <?php if (!empty($redirect->to_url)): ?><i class="icon-arrow-right"></i> <?= e($redirect->to_url) ?><?php endif; ?></h5>
     </div>
     <div class="col-md-4 text-right">
         <div class="loading-indicator-container">

@@ -184,7 +184,10 @@ class RedirectManager implements RedirectManagerInterface
 
         $toUrl = $this->getLocation($rule);
 
-        if (!$toUrl || empty($toUrl)) {
+        if (!$toUrl
+            || empty($toUrl)
+            || (new \Cms\Helpers\Cms())->url($requestUri) === $toUrl // Prevent redirect loops
+        ) {
             return;
         }
 
@@ -332,7 +335,7 @@ class RedirectManager implements RedirectManagerInterface
             $parameters[str_replace(['{', '}'], '', $placeholder)] = $value;
         }
 
-        return $controller->pageUrl($rule->getCmsPage(), $parameters);
+        return (string) $controller->pageUrl($rule->getCmsPage(), $parameters);
     }
 
     /**

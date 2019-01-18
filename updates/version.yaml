@@ -16,3 +16,5 @@
     - 20181117_0005_add_month_year_crawler_index_on_clients_table.php
 1.4.3:
     - "Fix thrown BindingResolutionException on redirecting"
+1.4.4:
+    - "Fixes a redirect loop bug which might occur after renaming content pages."
