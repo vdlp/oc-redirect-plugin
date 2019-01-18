@@ -17,4 +17,6 @@
 1.4.3:
     - "Fix thrown BindingResolutionException on redirecting"
 1.4.4:
-    - "Fixes a redirect loop bug which might occur after renaming content pages."
+    - "Fixes a redirect loop bug which might occur after renaming content pages"
+1.4.5:
+    - "Fixes critical issue with ignoring query parameters"
