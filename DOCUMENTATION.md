@@ -89,3 +89,9 @@ Target: CMS Page `Blog`
 Request path: /blog.php?cat=news&subcat=general
 Result: /blog/news/general
 ````
+
+## Events
+
+| Event | Description |
+| --- | --- |
+| `vdlp.redirect.match` | Will be fired when a request matched, right before the redirect response. 

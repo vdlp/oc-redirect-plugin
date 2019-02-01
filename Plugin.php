@@ -8,6 +8,7 @@ use Vdlp\Redirect\Classes\CacheManager;
 use Vdlp\Redirect\Classes\PageHandler;
 use Vdlp\Redirect\Classes\PublishManager;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
+use Vdlp\Redirect\Classes\RedirectRule;
 use Vdlp\Redirect\Classes\StaticPageHandler;
 use Vdlp\Redirect\Models\Redirect;
 use Vdlp\Redirect\Models\Settings;
@@ -20,6 +21,7 @@ use Event;
 use Exception;
 use System\Classes\PluginBase;
 use Illuminate\Contracts\Http\Kernel;
+use Vdlp\Redirect\ServiceProviders;
 
 /**
  * Class Plugin
@@ -28,6 +30,11 @@ use Illuminate\Contracts\Http\Kernel;
  */
 class Plugin extends PluginBase
 {
+    /**
+     * {@inheritdoc}
+     */
+    public $elevated = true;
+
     /**
      * {@inheritdoc}
      */
@@ -60,6 +67,14 @@ class Plugin extends PluginBase
         }
 
         $this->bootBackend();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function register()
+    {
+        $this->app->register(ServiceProviders\Redirect::class);
     }
 
     /**
