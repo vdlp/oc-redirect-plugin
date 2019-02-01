@@ -14,6 +14,17 @@ use Vdlp\Redirect\Classes\RedirectRule;
 interface RedirectConditionInterface
 {
     /**
+     * A unique code which identifies this redirect condition.
+     *
+     * CAUTION: The resulting value of this method will be used to store the
+     * parameters of this condition in the database. Make sure you never change
+     * the code after releasing your code to the public.
+     *
+     * @return string
+     */
+    public function getCode(): string;
+
+    /**
      * Describes the condition.
      *
      * @return string
