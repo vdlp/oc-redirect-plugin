@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
 use October\Rain\Events\Dispatcher;
+use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Models\Settings;
 
@@ -78,6 +79,9 @@ class RedirectMiddleware
          * Developers can add their own conditions. If a condition does not pass the redirect will be ignored.
          */
         foreach ($manager->getConditions() as $condition) {
+            /** @var RedirectConditionInterface $condition */
+            $condition = app($condition);
+
             if (!$condition->passes($rule, $requestUri)) {
                 return $next($request);
             }

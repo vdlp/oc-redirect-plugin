@@ -13,6 +13,8 @@ use Vdlp\Redirect\Classes\RedirectRule;
  */
 interface RedirectConditionInterface
 {
+    const TAB_NAME = 'Conditions';
+
     /**
      * A unique code which identifies this redirect condition.
      *
@@ -42,4 +44,9 @@ interface RedirectConditionInterface
      * @return bool
      */
     public function passes(RedirectRule $rule, string $requestUri): bool;
+
+    /**
+     * @return array
+     */
+    public function getFormConfig(): array;
 }

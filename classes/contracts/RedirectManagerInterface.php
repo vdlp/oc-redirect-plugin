@@ -58,9 +58,9 @@ interface RedirectManagerInterface
     /**
      * Add a redirect condition.
      *
-     * @param RedirectConditionInterface $condition
+     * @param string $conditionClass
      * @param int $priority
      * @return void
      */
-    public function addCondition(RedirectConditionInterface $condition, int $priority);
+    public function addCondition(string $conditionClass, int $priority);
 }

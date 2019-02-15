@@ -262,9 +262,9 @@ final class RedirectManager implements RedirectManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function addCondition(RedirectConditionInterface $condition, int $priority)//: void
+    public function addCondition(string $conditionClass, int $priority)//: void
     {
-        $this->conditions[$priority] = $condition;
+        $this->conditions[$priority] = $conditionClass;
         ksort($this->conditions);
         return $this;
     }
