@@ -22,14 +22,12 @@ use Backend\Classes\Controller;
 use Backend\Classes\FormField;
 use Backend\Widgets\Form;
 use BackendMenu;
-use BadMethodCallException;
 use Carbon\Carbon;
 use Event;
 use Exception;
 use Flash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Lang;
-use Redirect as RedirectFacade;
 use Request;
 use System\Models\RequestLog;
 use SystemException;
@@ -145,7 +143,7 @@ class Redirects extends Controller
             && !class_exists('\RainLab\Pages\Classes\Page')
         ) {
             Flash::error(Lang::get('vdlp.redirect::lang.flash.static_page_redirect_not_supported'));
-            return RedirectFacade::back();
+            return redirect()->back();
         }
 
         if (!$redirect->isActiveOnDate(Carbon::now())) {
@@ -180,7 +178,7 @@ class Redirects extends Controller
     public function index_onDelete(): array
     {
         Redirect::destroy($this->getCheckedIds());
-        Event::fire('redirects.changed');
+        Event::fire('redirects.changed'); // TODO: This event will be removed soon.
         return $this->listRefresh();
     }
 
@@ -192,7 +190,7 @@ class Redirects extends Controller
     public function index_onEnable(): array
     {
         Redirect::whereIn('id', $this->getCheckedIds())->update(['is_enabled' => 1]);
-        Event::fire('redirects.changed');
+        Event::fire('redirects.changed');  // TODO: This event will be removed soon.
         return $this->listRefresh();
     }
 
@@ -204,7 +202,7 @@ class Redirects extends Controller
     public function index_onDisable(): array
     {
         Redirect::whereIn('id', $this->getCheckedIds())->update(['is_enabled' => 0]);
-        Event::fire('redirects.changed');
+        Event::fire('redirects.changed');  // TODO: This event will be removed soon.
         return $this->listRefresh();
     }
 
@@ -230,7 +228,7 @@ class Redirects extends Controller
     /**
      * Clears redirect cache.
      *
-     * @throws BadMethodCallException
+     * @return void
      */
     public function index_onClearCache()//: void
     {
@@ -242,10 +240,11 @@ class Redirects extends Controller
      * Renders actions partial.
      *
      * @return string
+     * @throws SystemException
      */
     public function index_onLoadActions(): string
     {
-        return (string) $this->makePartial('popup_actions', [], true);
+        return (string) $this->makePartial('popup_actions');
     }
 
     /**
@@ -306,6 +305,7 @@ class Redirects extends Controller
      * Renders status code information partial.
      *
      * @return string
+     * @throws SystemException
      */
     public function onShowStatusCodeInfo(): string
     {
@@ -402,8 +402,10 @@ class Redirects extends Controller
     /**
      * Test Input Path.
      *
-     * @throws ApplicationException
      * @return array
+     * @throws ApplicationException
+     * @throws SystemException
+     * @throws \Cms\Classes\CmsException
      */
     public function onTest(): array
     {
@@ -480,7 +482,7 @@ class Redirects extends Controller
         }
 
         if ($redirectsCreated > 0) {
-            Event::fire('redirects.changed');
+            Event::fire('redirects.changed');  // TODO: This event will be removed soon.
 
             Flash::success(Lang::get(
                 'vdlp.redirect::lang.flash.success_created_redirects',
@@ -534,27 +536,45 @@ class Redirects extends Controller
         return $path;
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
-
     /**
-     * Called after the creation or updating form is saved.
-     *
-     * @param Model
+     * @param Redirect $model
      */
-    public function formAfterSave($model)//: void
+    public function formBeforeSave(Redirect $model)
     {
-        Event::fire('redirects.changed');
+        Event::fire('vdlp.redirect.beforeRedirectSave', [$model]);
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
+    /**
+     * @param Redirect $model
+     */
+    public function formBeforeUpdate(Redirect $model)
+    {
+        Event::fire('vdlp.redirect.beforeRedirectUpdate', [$model]);
+    }
 
     /**
-     * Called after the form model is deleted.
-     *
-     * @param Model
+     * @param Redirect  $model
      */
-    public function formAfterDelete($model)//: void
+    public function formAfterSave(Redirect $model)//: void
     {
-        Event::fire('redirects.changed');
+        Event::fire('vdlp.redirect.afterRedirectSave', [$model]);
+        Event::fire('redirects.changed'); // TODO: This event will be removed soon.
+    }
+
+    /**
+     * @param Redirect $model
+     */
+    public function formAfterUpdate(Redirect $model)
+    {
+        Event::fire('vdlp.redirect.afterRedirectUpdate', [$model]);
+    }
+
+    /**
+     * @param Redirect  $model
+     */
+    public function formAfterDelete(Redirect $model)//: void
+    {
+        Event::fire('vdlp.redirect.afterRedirectDelete', [$model]);
+        Event::fire('redirects.changed'); // TODO: This event will be removed soon.
     }
 }
