@@ -34,6 +34,13 @@ interface RedirectConditionInterface
     public function getDescription(): string;
 
     /**
+     * Should return a clear explanation of what this condition is for.
+     *
+     * @return string
+     */
+    public function getExplanation(): string;
+
+    /**
      * Whether this redirect condition passes.
      *
      * When a condition passes the redirect will take place, otherwise the
