@@ -49,3 +49,6 @@ div.actions .btn {
     opacity: .8;
 }
 
+.scoreboard-item.title-value p {
+    font-size: 20px;
+}
