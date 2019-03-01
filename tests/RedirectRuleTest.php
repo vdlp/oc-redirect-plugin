@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Tests;
 
-use Vdlp\Redirect\Classes\RedirectRule;
-use Vdlp\Redirect\Models\Redirect;
 use Carbon\Carbon;
 use PluginTestCase;
+use Vdlp\Redirect\Classes\RedirectRule;
+use Vdlp\Redirect\Models\Redirect;
 
 /**
  * Class RedirectRuleTest

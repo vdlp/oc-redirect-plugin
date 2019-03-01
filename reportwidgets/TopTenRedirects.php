@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\ReportWidgets;
 
-use SystemException;
-use Vdlp\Redirect\Classes\StatisticsHelper;
 use Backend\Classes\Controller;
 use Backend\Classes\ReportWidgetBase;
+use SystemException;
+use Vdlp\Redirect\Classes\StatisticsHelper;
 
 /** @noinspection LongInheritanceChainInspection */
 

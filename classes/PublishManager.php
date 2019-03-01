@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use Vdlp\Redirect\Models\Redirect;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use League\Csv\Writer;
 use Log;
 use October\Rain\Support\Traits\Singleton;
+use Vdlp\Redirect\Models\Redirect;
 
 /**
  * Class PublishManager

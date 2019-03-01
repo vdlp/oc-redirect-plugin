@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect;
 
-use Vdlp\Redirect\Classes\CacheManager;
-use Vdlp\Redirect\Classes\PageHandler;
-use Vdlp\Redirect\Classes\PublishManager;
-use Vdlp\Redirect\Classes\RedirectMiddleware;
-use Vdlp\Redirect\Classes\RedirectRule;
-use Vdlp\Redirect\Classes\StaticPageHandler;
-use Vdlp\Redirect\Models;
-use Vdlp\Redirect\ReportWidgets\CreateRedirect;
-use Vdlp\Redirect\ReportWidgets\TopTenRedirects;
 use App;
 use Backend;
 use Cms\Classes\Page;
 use Event;
 use Exception;
-use System\Classes\PluginBase;
 use Illuminate\Contracts\Http\Kernel;
+use System\Classes\PluginBase;
+use Vdlp\Redirect\Classes\CacheManager;
+use Vdlp\Redirect\Classes\PageHandler;
+use Vdlp\Redirect\Classes\PublishManager;
+use Vdlp\Redirect\Classes\RedirectMiddleware;
+use Vdlp\Redirect\Classes\StaticPageHandler;
+use Vdlp\Redirect\Models;
+use Vdlp\Redirect\ReportWidgets\CreateRedirect;
+use Vdlp\Redirect\ReportWidgets\TopTenRedirects;
 use Vdlp\Redirect\ServiceProviders;
 
 /**

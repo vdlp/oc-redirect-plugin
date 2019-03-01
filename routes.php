@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use Backend\Models\BrandSetting;
 use Vdlp\Redirect\Classes\Sparkline;
 use Vdlp\Redirect\Classes\StatisticsHelper;
-use Backend\Models\BrandSetting;
 
 Route::group(['middleware' => ['web']], function () {
 

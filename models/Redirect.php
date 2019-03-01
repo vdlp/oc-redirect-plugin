@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Models;
 
-use Vdlp\Redirect\Classes\OptionHelper;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Support\Fluent;
@@ -14,6 +13,7 @@ use October\Rain\Database\Model;
 use October\Rain\Database\Relations\HasMany;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use Vdlp\Redirect\Classes\OptionHelper;
 
 /** @noinspection ClassOverridesFieldOfSuperClassInspection */
 

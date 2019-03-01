@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
 
-use Vdlp\Redirect\Classes\StatisticsHelper;
 use Backend\Classes\Controller;
 use BackendMenu;
 use SystemException;
+use Vdlp\Redirect\Classes\StatisticsHelper;
 
 /**
  * Class Statistics

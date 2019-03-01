@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
 
-use Vdlp\Redirect\Models\RedirectLog;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
 use BackendMenu;
 use Exception;
 use Flash;
 use Lang;
+use Vdlp\Redirect\Models\RedirectLog;
 
 /** @noinspection ClassOverridesFieldOfSuperClassInspection */
 

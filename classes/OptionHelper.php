@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use Vdlp\Redirect\Models\Category;
-use Vdlp\Redirect\Models\Redirect;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
 use System\Classes\PluginManager;
+use Vdlp\Redirect\Models\Category;
+use Vdlp\Redirect\Models\Redirect;
 
 /**
  * Class OptionHelper

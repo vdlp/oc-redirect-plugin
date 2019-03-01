@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\ReportWidgets;
 
-use Vdlp\Redirect\Models\Redirect;
-use Backend\Classes\Controller;
-use Redirect as RedirectFacade;
 use Backend;
+use Backend\Classes\Controller;
 use Backend\Classes\ReportWidgetBase;
 use Backend\Widgets\Form;
 use Illuminate\Http\RedirectResponse;
+use Redirect as RedirectFacade;
+use Vdlp\Redirect\Models\Redirect;
 
 /** @noinspection LongInheritanceChainInspection */
 

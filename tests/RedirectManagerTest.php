@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Tests;
 
-use Vdlp\Redirect\Classes\RedirectManager;
-use Vdlp\Redirect\Classes\RedirectRule;
-use Vdlp\Redirect\Models\Redirect;
 use Carbon\Carbon;
 use Cms;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
 use PluginTestCase;
+use Vdlp\Redirect\Classes\RedirectManager;
+use Vdlp\Redirect\Classes\RedirectRule;
+use Vdlp\Redirect\Models\Redirect;
 
 /**
  * Class RedirectManagerTest

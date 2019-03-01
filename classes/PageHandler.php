@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use Vdlp\Redirect\Models\Redirect;
 use Cms\Classes\CmsCompoundObject;
 use Event;
 use Exception;
+use Vdlp\Redirect\Models\Redirect;
 
 /**
  * Class PageHandler

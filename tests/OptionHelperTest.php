@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Tests;
 
+use PluginTestCase;
 use Vdlp\Redirect\Classes\OptionHelper;
 use Vdlp\Redirect\Models\Redirect;
-use PluginTestCase;
 
 /**
  * Class OptionHelperTest
