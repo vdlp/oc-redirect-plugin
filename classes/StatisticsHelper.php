@@ -154,7 +154,7 @@ class StatisticsHelper
         /** @noinspection PhpMethodParametersCountMismatchInspection */
         $builder = Models\Client::selectRaw('COUNT(id) AS hits, DATE(timestamp) AS date')
             ->where('redirect_id', '=', $redirectId)
-            ->groupBy('day', 'month', 'year')
+            ->groupBy('day', 'month', 'year', 'timestamp')
             ->orderByRaw('year ASC, month ASC, day ASC')
             ->where('timestamp', '>=', $startDate->toDateTimeString());
 
