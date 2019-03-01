@@ -46,3 +46,15 @@
         </div>
     </div>
 </div>
+
+<?php $updatedAt = \Backend::dateTime($redirect->updated_at, ['formatAlias' => 'dateTimeMin']) ?>
+
+<div class="scoreboard">
+    <div data-control="toolbar">
+        <div class="scoreboard-item title-value">
+            <h4><?= e(trans('vdlp.redirect::lang.redirect.updated_at')); ?></h4>
+            <p><?= empty($updatedAt) ? '-' : $updatedAt; ?></p>
+            <p class="description"></p>
+        </div>
+    </div>
+</div>
