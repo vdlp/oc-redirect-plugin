@@ -10,8 +10,7 @@ use Vdlp\Redirect\Classes\PublishManager;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
 use Vdlp\Redirect\Classes\RedirectRule;
 use Vdlp\Redirect\Classes\StaticPageHandler;
-use Vdlp\Redirect\Models\Redirect;
-use Vdlp\Redirect\Models\Settings;
+use Vdlp\Redirect\Models;
 use Vdlp\Redirect\ReportWidgets\CreateRedirect;
 use Vdlp\Redirect\ReportWidgets\TopTenRedirects;
 use App;
@@ -67,6 +66,50 @@ class Plugin extends PluginBase
         }
 
         $this->bootBackend();
+
+        /*
+         * Extensibility:
+         *
+         * Allows third-party plugin develop to notify when a URL has changed.
+         * E.g. An editor changes the slug of a blog item.
+         *
+         * `Event::fire('vdlp.redirect.toUrlChanged', [$oldSlug, $newSlug])`
+         *
+         * Only 'exact' redirects will be supported.
+         */
+        Event::listen('vdlp.redirect.toUrlChanged', function (string $oldUrl, string $newUrl) {
+            Models\Redirect::query()
+                ->where('match_type', '=', Models\Redirect::TYPE_EXACT)
+                ->where('target_type', '=', Models\Redirect::TARGET_TYPE_PATH_URL)
+                ->where('to_url', '=', $oldUrl)
+                ->where('is_enabled', '=', true)
+                ->update([
+                    'to_url' => $newUrl,
+                    'system' => true
+                ]);
+
+            Event::fire('vdlp.redirect.changed');
+        });
+
+        /*
+         * Extensibility:
+         *
+         * When one or more redirects have been changed.
+         */
+        Event::listen([
+            'vdlp.redirect.changed',
+            'vdlp.redirect.afterRedirectSave',
+            'vdlp.redirect.afterRedirectDelete',
+
+        ], function () {
+            // The caches should be flushed is caching is enabled and supported.
+            if (CacheManager::cachingEnabledAndSupported()) {
+                CacheManager::instance()->flush();
+            }
+
+            // Publish all redirect rules to file or cache repository.
+            PublishManager::instance()->publish();
+        });
     }
 
     /**
@@ -110,15 +153,6 @@ class Plugin extends PluginBase
                 });
             });
         }
-
-        // When one or more redirects have been changed.
-        Event::listen('redirects.changed', function () {
-            if (CacheManager::cachingEnabledAndSupported()) {
-                CacheManager::instance()->flush();
-            }
-
-            PublishManager::instance()->publish();
-        });
     }
 
     /**
@@ -140,7 +174,7 @@ class Plugin extends PluginBase
     public function registerNavigation(): array
     {
         $defaultBackendUrl = Backend::url(
-            'vdlp/redirect/' . (Settings::isStatisticsEnabled() ? 'statistics' : 'redirects')
+            'vdlp/redirect/' . (Models\Settings::isStatisticsEnabled() ? 'statistics' : 'redirects')
         );
 
         $navigation = [
@@ -203,7 +237,7 @@ class Plugin extends PluginBase
             ],
         ];
 
-        if (Settings::isStatisticsEnabled()) {
+        if (Models\Settings::isStatisticsEnabled()) {
             $navigation['redirect']['sideMenu']['statistics'] = [
                 'icon' => 'icon-bar-chart',
                 'label' => 'vdlp.redirect::lang.title.statistics',
@@ -215,7 +249,7 @@ class Plugin extends PluginBase
             ];
         }
 
-        if (Settings::isTestLabEnabled()) {
+        if (Models\Settings::isTestLabEnabled()) {
             $navigation['redirect']['sideMenu']['test_lab'] = [
                 'icon' => 'icon-flask',
                 'label' => 'vdlp.redirect::lang.title.test_lab',
@@ -227,7 +261,7 @@ class Plugin extends PluginBase
             ];
         }
 
-        if (Settings::isLoggingEnabled()) {
+        if (Models\Settings::isLoggingEnabled()) {
             $navigation['redirect']['sideMenu']['logs'] = [
                 'label' => 'vdlp.redirect::lang.buttons.logs',
                 'url' => Backend::url('vdlp/redirect/logs'),
@@ -254,7 +288,7 @@ class Plugin extends PluginBase
                 'label' => 'vdlp.redirect::lang.settings.menu_label',
                 'description' => 'vdlp.redirect::lang.settings.menu_description',
                 'icon' => 'icon-link',
-                'class' => Settings::class,
+                'class' => Models\Settings::class,
                 'order' => 600,
                 'permissions' => [
                     'vdlp.redirect.access_redirects',
@@ -273,7 +307,7 @@ class Plugin extends PluginBase
             'context' => 'dashboard'
         ];
 
-        if (Settings::isStatisticsEnabled()) {
+        if (Models\Settings::isStatisticsEnabled()) {
             $reportWidgets[TopTenRedirects::class] = [
                 'label' => trans('vdlp.redirect::lang.statistics.top_redirects_this_month', ['top' => 10]),
                 'context' => 'dashboard',
@@ -300,9 +334,9 @@ class Plugin extends PluginBase
             },
             'redirect_match_type' => function ($value) {
                 switch ($value) {
-                    case Redirect::TYPE_EXACT:
+                    case Models\Redirect::TYPE_EXACT:
                         return e(trans('vdlp.redirect::lang.redirect.exact'));
-                    case Redirect::TYPE_PLACEHOLDERS:
+                    case Models\Redirect::TYPE_PLACEHOLDERS:
                         return e(trans('vdlp.redirect::lang.redirect.placeholders'));
                     default:
                         return e($value);
@@ -326,11 +360,11 @@ class Plugin extends PluginBase
             },
             'redirect_target_type' => function ($value) {
                 switch ($value) {
-                    case Redirect::TARGET_TYPE_PATH_URL:
+                    case Models\Redirect::TARGET_TYPE_PATH_URL:
                         return e(trans('vdlp.redirect::lang.redirect.target_type_path_or_url'));
-                    case Redirect::TARGET_TYPE_CMS_PAGE:
+                    case Models\Redirect::TARGET_TYPE_CMS_PAGE:
                         return e(trans('vdlp.redirect::lang.redirect.target_type_cms_page'));
-                    case Redirect::TARGET_TYPE_STATIC_PAGE:
+                    case Models\Redirect::TARGET_TYPE_STATIC_PAGE:
                         return e(trans('vdlp.redirect::lang.redirect.target_type_static_page'));
                     default:
                         return e($value);

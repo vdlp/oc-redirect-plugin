@@ -92,6 +92,20 @@ Result: /blog/news/general
 
 ## Events
 
-| Event | Description |
+### Fires events
+
+| Event | Payload | Description |
 | --- | --- |
-| `vdlp.redirect.match` | Will be fired when a request matched, right before the redirect response. 
+| `vdlp.redirect.match` | none | When a request matched, right before the redirect response. 
+| `vdlp.redirect.changed` | none | When one or more redirects are changed.
+| `vdlp.redirect.beforeRedirectSave` | `Redirect` | Before a redirect is saved (using the backend form).
+| `vdlp.redirect.afterRedirectSave` | `Redirect` | After a redirect is saved (using the backend form).
+| `vdlp.redirect.beforeRedirectUpdate` | `Redirect` | Before a redirect is updated (using the backend form).
+| `vdlp.redirect.afterRedirectUpdate` | `Redirect` | After a redirect is updated (using the backend form).
+| `vdlp.redirect.afterRedirectDelete` | `Redirect` | After a redirect is deleted (using the backend form).
+
+### Listens to events
+
+| Event | Payload | Description |
+| --- | --- | --- |
+| `vdlp.redirect.toUrlChanged` | `string $oldUrl, string $newUrl` | Can be fired from a third-party plugin.

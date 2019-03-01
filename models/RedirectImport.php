@@ -79,6 +79,6 @@ class RedirectImport extends ImportModel
             }
         }
 
-        Event::fire('redirects.changed');
+        Event::fire('vdlp.redirect.changed');
     }
 }

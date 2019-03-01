@@ -16,7 +16,9 @@ use Exception;
  */
 class PageHandler
 {
-    /** @var CmsCompoundObject */
+    /**
+     * @var CmsCompoundObject
+     */
     protected $page;
 
     /**
@@ -55,7 +57,7 @@ class PageHandler
 
         $this->createRedirect();
 
-        Event::fire('redirects.changed');
+        Event::fire('vdlp.redirect.changed');
     }
 
     /**
@@ -77,7 +79,7 @@ class PageHandler
                 'is_enabled' => false,
             ]);
 
-        Event::fire('redirects.changed');
+        Event::fire('vdlp.redirect.changed');
     }
 
     /**
