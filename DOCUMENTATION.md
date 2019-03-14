@@ -95,7 +95,7 @@ Result: /blog/news/general
 ### Fires events
 
 | Event | Payload | Description |
-| --- | --- |
+| --- | --- | --- |
 | `vdlp.redirect.match` | none | When a request matched, right before the redirect response. 
 | `vdlp.redirect.changed` | none | When one or more redirects are changed.
 | `vdlp.redirect.beforeRedirectSave` | `Redirect` | Before a redirect is saved (using the backend form).
