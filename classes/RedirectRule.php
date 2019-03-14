@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
+use Carbon\Carbon;
 use Throwable;
 use Vdlp\Redirect\Models\Redirect;
-use Carbon\Carbon;
 
 /**
  * Class RedirectRule

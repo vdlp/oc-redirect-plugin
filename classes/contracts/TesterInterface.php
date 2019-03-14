@@ -7,7 +7,7 @@ namespace Vdlp\Redirect\Classes\Contracts;
 use Vdlp\Redirect\Classes\TesterResult;
 
 /**
- * Interface Tester
+ * Interface TesterInterface
  *
  * @package Vdlp\Redirect\Classes\Contracts
  */

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use Vdlp\Redirect\Models\Settings;
 use BadMethodCallException;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Cache\TaggedCache;
 use October\Rain\Support\Traits\Singleton;
+use Vdlp\Redirect\Models\Settings;
 
 /**
  * Class CacheManager

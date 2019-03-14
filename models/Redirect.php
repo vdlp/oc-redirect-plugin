@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Models;
 
-use Vdlp\Redirect\Classes\OptionHelper;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Support\Fluent;
@@ -14,6 +13,7 @@ use October\Rain\Database\Model;
 use October\Rain\Database\Relations\HasMany;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use Vdlp\Redirect\Classes\OptionHelper;
 
 /** @noinspection ClassOverridesFieldOfSuperClassInspection */
 
@@ -399,25 +399,26 @@ class Redirect extends Model
      * Make sure target fields are correctly set after saving.
      *
      * @return void
+     * @throws \Exception
      */
     public function beforeSave()//: void
     {
         switch ($this->getAttribute('target_type')) {
-            case Redirect::TARGET_TYPE_NONE:
+            case self::TARGET_TYPE_NONE:
                 $this->setAttribute('to_url', null);
                 $this->setAttribute('cms_page', null);
                 $this->setAttribute('static_page', null);
                 $this->setAttribute('to_scheme', self::SCHEME_AUTO);
                 break;
-            case Redirect::TARGET_TYPE_PATH_URL:
+            case self::TARGET_TYPE_PATH_URL:
                 $this->setAttribute('cms_page', null);
                 $this->setAttribute('static_page', null);
                 break;
-            case Redirect::TARGET_TYPE_CMS_PAGE:
+            case self::TARGET_TYPE_CMS_PAGE:
                 $this->setAttribute('to_url', null);
                 $this->setAttribute('static_page', null);
                 break;
-            case Redirect::TARGET_TYPE_STATIC_PAGE:
+            case self::TARGET_TYPE_STATIC_PAGE:
                 $this->setAttribute('to_url', null);
                 $this->setAttribute('cms_page', null);
                 break;

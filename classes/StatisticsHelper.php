@@ -26,34 +26,58 @@ class StatisticsHelper
     }
 
     /**
+     * @param int|null $redirectId
      * @return Models\Client|null
      */
-    public function getLatestClient()//: ?Client
+    public function getLatestClient(int $redirectId = null)//: ?Client
     {
-        return Models\Client::orderBy('timestamp', 'desc')->limit(1)->first();
+        $builder = Models\Client::query()
+            ->orderBy('timestamp', 'desc')
+            ->limit(1);
+
+        if ($redirectId) {
+            $builder->where('redirect_id', '=', $redirectId);
+        }
+
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $builder->first();
     }
 
     /**
+     * @param int|null $redirectId
      * @return int
      */
-    public function getTotalThisMonth(): int
+    public function getTotalThisMonth(int $redirectId = null): int
     {
-        return Models\Client::where('month', '=', date('m'))
-            ->where('year', '=', date('Y'))
-            ->count();
+        $builder = Models\Client::query()
+            ->where('month', '=', date('m'))
+            ->where('year', '=', date('Y'));
+
+        if ($redirectId) {
+            $builder->where('redirect_id', '=', $redirectId);
+        }
+
+        return $builder->count();
     }
 
     /**
+     * @param int|null $redirectId
      * @return int
      */
-    public function getTotalLastMonth(): int
+    public function getTotalLastMonth(int $redirectId = null): int
     {
         $lastMonth = Carbon::today();
         $lastMonth->subMonthNoOverflow();
 
-        return Models\Client::where('month', '=', $lastMonth->month)
-            ->where('year', '=', $lastMonth->year)
-            ->count();
+        $builder = Models\Client::query()
+            ->where('month', '=', $lastMonth->month)
+            ->where('year', '=', $lastMonth->year);
+
+        if ($redirectId) {
+            $builder->where('redirect_id', '=', $redirectId);
+        }
+
+        return $builder->count();
     }
 
     /**
@@ -118,17 +142,19 @@ class StatisticsHelper
      * Gets the data for the 30d sparkline graph.
      *
      * @param int $redirectId
+     * @param bool $crawler
+     * @param int $days
      * @return array
      */
-    public function getRedirectHitsSparkline(int $redirectId, bool $crawler): array
+    public function getRedirectHitsSparkline(int $redirectId, bool $crawler, int $days = 30): array
     {
-        $startDate = Carbon::now()->subDays(30);
+        $startDate = Carbon::now()->subDays($days);
 
         // DB index: redirect_timestamp_crawler
         /** @noinspection PhpMethodParametersCountMismatchInspection */
         $builder = Models\Client::selectRaw('COUNT(id) AS hits, DATE(timestamp) AS date')
             ->where('redirect_id', '=', $redirectId)
-            ->groupBy('day', 'month', 'year')
+            ->groupBy('day', 'month', 'year', 'timestamp')
             ->orderByRaw('year ASC, month ASC, day ASC')
             ->where('timestamp', '>=', $startDate->toDateTimeString());
 

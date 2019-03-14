@@ -7,48 +7,75 @@
 
 <?php if (!$this->fatalError): ?>
 
-    <?php if (isset($warningMessage)): ?>
-        <?= $this->makePartial('warning', ['warningMessage' => $warningMessage]); ?>
-    <?php endif; ?>
+    <?php Block::put('form-contents') ?>
 
-    <?= Form::open(['class' => 'layout']); ?>
-        <div class="layout-row">
-            <?= $this->formRender(); ?>
-        </div>
-        <div class="form-buttons">
-            <div class="loading-indicator-container">
-                <button
-                    type="submit"
-                    data-request="onSave"
-                    data-request-data="redirect:0"
-                    data-hotkey="ctrl+s, cmd+s"
-                    data-load-indicator="<?= e(trans('backend::lang.form.saving')); ?>"
-                    class="btn btn-primary">
-                    <?= e(trans('backend::lang.form.save')); ?>
-                </button>
-                <button
-                    type="button"
-                    data-request="onSave"
-                    data-request-data="close:1"
-                    data-hotkey="ctrl+enter, cmd+enter"
-                    data-load-indicator="<?= e(trans('backend::lang.form.saving')); ?>"
-                    class="btn btn-default">
-                    <?= e(trans('backend::lang.form.save_and_close')); ?>
-                </button>
-                <button
-                    type="button"
-                    class="oc-icon-trash-o btn-icon danger pull-right"
-                    data-request="onDelete"
-                    data-load-indicator="<?= e(trans('backend::lang.form.deleting')); ?>"
-                    data-request-confirm="<?= e(trans('vdlp.redirect::lang.redirect.delete_confirm')); ?>">
-                </button>
-                <span class="btn-text">
-                    <?= e(trans('backend::lang.form.or')); ?> <a href="<?= Backend::url('vdlp/redirect/redirects'); ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
-                </span>
+        <?php if (isset($warningMessage)): ?>
+            <?= $this->makePartial('warning', ['warningMessage' => $warningMessage]); ?>
+        <?php endif; ?>
+
+        <div class="layout">
+
+            <div class="layout-row">
+                <?= $this->formRenderOutsideFields() ?>
+                <?= $this->formRenderPrimaryTabs() ?>
+            </div>
+
+            <div class="form-buttons">
+                <div class="loading-indicator-container">
+                    <button
+                        type="submit"
+                        data-request="onSave"
+                        data-request-data="redirect:0"
+                        data-hotkey="ctrl+s, cmd+s"
+                        data-load-indicator="<?= e(trans('backend::lang.form.saving')); ?>"
+                        class="btn btn-primary">
+                        <?= e(trans('backend::lang.form.save')); ?>
+                    </button>
+                    <button
+                        type="button"
+                        data-request="onSave"
+                        data-request-data="close:1"
+                        data-hotkey="ctrl+enter, cmd+enter"
+                        data-load-indicator="<?= e(trans('backend::lang.form.saving')); ?>"
+                        class="btn btn-default">
+                        <?= e(trans('backend::lang.form.save_and_close')); ?>
+                    </button>
+                    <button
+                        type="button"
+                        class="oc-icon-trash-o btn-icon danger pull-right"
+                        data-request="onDelete"
+                        data-load-indicator="<?= e(trans('backend::lang.form.deleting')); ?>"
+                        data-request-confirm="<?= e(trans('vdlp.redirect::lang.redirect.delete_confirm')); ?>">
+                    </button>
+                    <span class="btn-text">
+                        <?= e(trans('backend::lang.form.or')); ?> <a href="<?= Backend::url('vdlp/redirect/redirects'); ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
+                    </span>
+                </div>
             </div>
         </div>
-    <?= Form::close(); ?>
+
+    <?php Block::endPut() ?>
+
+    <?php Block::put('form-sidebar') ?>
+        <div class="hide-tabs">
+            <?= $this->formRenderSecondaryTabs() ?>
+        </div>
+    <?php Block::endPut() ?>
+
+    <?php Block::put('body') ?>
+        <?= Form::open(['class'=>'layout stretch']) ?>
+            <?= $this->makeLayout('form-with-sidebar') ?>
+        <?= Form::close() ?>
+    <?php Block::endPut() ?>
+
 <?php else: ?>
-    <p class="flash-message static error"><?= e($this->fatalError); ?></p>
-    <p><a href="<?= Backend::url('vdlp/redirect/redirects'); ?>" class="btn btn-default"><?= e(trans('vdlp.redirect::lang.redirect.return_to_redirects')); ?></a></p>
+
+    <div class="control-breadcrumb">
+        <?= Block::placeholder('breadcrumb') ?>
+    </div>
+    <div class="padded-container">
+        <p class="flash-message static error"><?= e($this->fatalError); ?></p>
+        <p><a href="<?= Backend::url('vdlp/redirect/redirects'); ?>" class="btn btn-default"><?= e(trans('vdlp.redirect::lang.redirect.return_to_redirects')); ?></a></p>
+    </div>
+
 <?php endif ?>

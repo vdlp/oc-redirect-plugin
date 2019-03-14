@@ -8,6 +8,9 @@ use Closure;
 use Exception;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
+use October\Rain\Events\Dispatcher;
+use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
+use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Models\Settings;
 
 /**
@@ -23,17 +26,16 @@ class RedirectMiddleware
      * @param Request $request
      * @param Closure $next
      * @return mixed
-     * @throws \Cms\Classes\CmsException
      */
     public function handle($request, Closure $next)
     {
-        // Only handle specific request methods
+        // Only handle specific request methods.
         if (!in_array($request->method(), ['GET', 'POST', 'HEAD'], true)) {
             return $next($request);
         }
 
-        // Create the redirect manager if redirect rules are readable.
-        $manager = new RedirectManager();
+        /** @var RedirectManagerInterface $manager */
+        $manager = resolve(RedirectManagerInterface::class);
         $manager->setLoggingEnabled(Settings::isLoggingEnabled())
             ->setStatisticsEnabled(Settings::isStatisticsEnabled());
 
@@ -54,13 +56,37 @@ class RedirectMiddleware
             }
         } catch (Exception $e) {
             $logger = resolve(Log::class);
-            $logger->error("Could not perform redirect for $requestUri: " . $e->getMessage());
+            $logger->error("Vdlp.Redirect: Could not perform redirect for $requestUri: " . $e->getMessage());
         }
 
-        if ($rule) {
-            $manager->redirectWithRule($rule, $requestUri);
+        if (!$rule) {
+            return $next($request);
         }
 
-        return $next($request);
+        /** @var Dispatcher $eventDispatcher */
+        $eventDispatcher = resolve(Dispatcher::class);
+
+        /*
+         * Extensibility:
+         *
+         * At this point a positive match was made based on the request URI.
+         */
+        $eventDispatcher->fire('vdlp.redirect.match', [$rule, $requestUri]);
+
+        /*
+         * Extensibility:
+         *
+         * Developers can add their own conditions. If a condition does not pass the redirect will be ignored.
+         */
+        foreach ($manager->getConditions() as $condition) {
+            /** @var RedirectConditionInterface $condition */
+            $condition = app($condition);
+
+            if (!$condition->passes($rule, $requestUri)) {
+                return $next($request);
+            }
+        }
+
+        $manager->redirectWithRule($rule, $requestUri);
     }
 }

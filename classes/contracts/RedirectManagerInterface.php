@@ -47,4 +47,20 @@ interface RedirectManagerInterface
      * @return bool|string
      */
     public function getLocation(RedirectRule $rule);
+
+    /**
+     * Get redirect conditions.
+     *
+     * @return RedirectConditionInterface[]
+     */
+    public function getConditions(): array;
+
+    /**
+     * Add a redirect condition.
+     *
+     * @param string $conditionClass
+     * @param int $priority
+     * @return void
+     */
+    public function addCondition(string $conditionClass, int $priority);
 }

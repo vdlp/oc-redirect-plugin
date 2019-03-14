@@ -13,6 +13,8 @@ use Vdlp\Redirect\Models\Redirect;
  */
 class StaticPageHandler extends PageHandler
 {
+    /** @noinspection PhpMissingParentCallCommonInspection */
+
     /**
      * {@inheritdoc}
      */
@@ -20,6 +22,8 @@ class StaticPageHandler extends PageHandler
     {
         return $this->getNewUrl() !== $this->getOriginalUrl();
     }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
      * {@inheritdoc}
@@ -34,6 +38,8 @@ class StaticPageHandler extends PageHandler
 
         return '';
     }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
      * {@inheritdoc}
@@ -50,6 +56,8 @@ class StaticPageHandler extends PageHandler
 
         return $this->getOriginalUrl();
     }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
      * {@inheritdoc}

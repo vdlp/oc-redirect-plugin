@@ -34,3 +34,21 @@ div.actions .btn {
     height: 30px;
     opacity: .8;
 }
+
+.form-sidebar .sparkline {
+    width: 260px;
+    height: 120px;
+    background-size: 260px 120px;
+    background-repeat: no-repeat;
+    margin-top: 4px;
+}
+
+.form-sidebar .sparkline img {
+    width: 260px;
+    height: 120px;
+    opacity: .8;
+}
+
+.scoreboard-item.title-value p {
+    font-size: 20px;
+}

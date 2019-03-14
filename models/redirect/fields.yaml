@@ -217,3 +217,9 @@ tabs:
                 https: https
                 auto: vdlp.redirect::lang.redirect.scheme_auto
             dependsOn: status_code
+
+secondaryTabs:
+    fields:
+        _statistics@update:
+            type: partial
+            path: field_statistics

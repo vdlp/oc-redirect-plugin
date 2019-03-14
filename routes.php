@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
+use Backend\Models\BrandSetting;
 use Vdlp\Redirect\Classes\Sparkline;
 use Vdlp\Redirect\Classes\StatisticsHelper;
-use Backend\Models\BrandSetting;
 
 Route::group(['middleware' => ['web']], function () {
+
     Route::get('vdlp/redirect/sparkline/{redirectId}', function ($redirectId) {
         if (!BackendAuth::check()) {
             return response('Forbidden', 403);
@@ -17,23 +18,41 @@ Route::group(['middleware' => ['web']], function () {
 
         $crawler = $request->has('crawler');
 
-        $cacheKey = sprintf('vdlp_redirect_%d_%d', (int) $redirectId, (int) $crawler);
+        $preset = $request->get('preset', '30d-small');
 
-        $data = Cache::remember($cacheKey, 5, function () use ($redirectId, $crawler) {
-            return (new StatisticsHelper())->getRedirectHitsSparkline((int) $redirectId, $crawler);
+        switch ($preset) {
+            case '3m-large':
+                $properties = [
+                    'format' => '520x120',
+                    'lineThickness' => 2,
+                    'days' => 90,
+                ];
+                break;
+            default:
+                $properties = [
+                    'format' => '200x60',
+                    'lineThickness' => 3,
+                    'days' => 30,
+                ];
+        }
+
+        $cacheKey = sprintf('vdlp_redirect_%s_%d_%d', $preset, (int) $redirectId, (int) $crawler);
+
+        $data = Cache::remember($cacheKey, 5, function () use ($redirectId, $crawler, $properties) {
+            return (new StatisticsHelper())->getRedirectHitsSparkline((int) $redirectId, $crawler, $properties['days']);
         });
 
-        $imageData = Cache::remember($cacheKey . '_image', 5, function () use ($crawler, $data) {
+        $imageData = Cache::remember($cacheKey . '_image', 5, function () use ($crawler, $data, $properties) {
             $primaryColor = BrandSetting::get(
                 $crawler ? 'primary_color' : 'secondary_color',
                 $crawler ? BrandSetting::PRIMARY_COLOR : BrandSetting::SECONDARY_COLOR
             );
 
             $sparkline = new Sparkline();
-            $sparkline->setFormat('200x60');
+            $sparkline->setFormat($properties['format']);
             $sparkline->setPadding('2 0 0 2');
             $sparkline->setData($data);
-            $sparkline->setLineThickness(3);
+            $sparkline->setLineThickness($properties['lineThickness']);
             $sparkline->setLineColorHex($primaryColor);
             $sparkline->setFillColorHex($primaryColor);
             $sparkline->deactivateBackgroundColor();

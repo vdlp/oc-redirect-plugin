@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use Vdlp\Redirect\Models\Redirect;
 use Cms\Classes\CmsCompoundObject;
 use Event;
 use Exception;
+use Vdlp\Redirect\Models\Redirect;
 
 /**
  * Class PageHandler
@@ -16,7 +16,9 @@ use Exception;
  */
 class PageHandler
 {
-    /** @var CmsCompoundObject */
+    /**
+     * @var CmsCompoundObject
+     */
     protected $page;
 
     /**
@@ -55,7 +57,7 @@ class PageHandler
 
         $this->createRedirect();
 
-        Event::fire('redirects.changed');
+        Event::fire('vdlp.redirect.changed');
     }
 
     /**
@@ -77,7 +79,7 @@ class PageHandler
                 'is_enabled' => false,
             ]);
 
-        Event::fire('redirects.changed');
+        Event::fire('vdlp.redirect.changed');
     }
 
     /**

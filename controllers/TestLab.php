@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
 
-use Vdlp\Redirect\Classes\Testers\RedirectCount;
-use Vdlp\Redirect\Classes\Testers\RedirectFinalDestination;
-use Vdlp\Redirect\Classes\Testers\RedirectLoop;
-use Vdlp\Redirect\Classes\Testers\RedirectMatch;
-use Vdlp\Redirect\Classes\Testers\ResponseCode;
-use Vdlp\Redirect\Models\Redirect;
 use Backend\Classes\Controller;
 use BackendMenu;
 use Carbon\Carbon;
@@ -18,6 +12,12 @@ use Flash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Input;
 use October\Rain\Database\Collection;
+use Vdlp\Redirect\Classes\Testers\RedirectCount;
+use Vdlp\Redirect\Classes\Testers\RedirectFinalDestination;
+use Vdlp\Redirect\Classes\Testers\RedirectLoop;
+use Vdlp\Redirect\Classes\Testers\RedirectMatch;
+use Vdlp\Redirect\Classes\Testers\ResponseCode;
+use Vdlp\Redirect\Models\Redirect;
 
 /**
  * Class Test

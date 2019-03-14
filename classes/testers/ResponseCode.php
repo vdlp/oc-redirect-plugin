@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes\Testers;
 
+use Request;
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\RulesPathNotReadable;
 use Vdlp\Redirect\Classes\TesterBase;
 use Vdlp\Redirect\Classes\TesterResult;
 use Vdlp\Redirect\Models\Redirect;
-use Request;
 
 /**
  * Class ResponseCode
