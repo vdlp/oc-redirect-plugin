@@ -402,7 +402,11 @@ final class RedirectManager implements RedirectManagerInterface
 
         // Strip query parameters from request path.
         if ($rule->isIgnoreQueryParameters()) {
-            $requestPath = parse_url($requestPath, PHP_URL_PATH);
+            $parseResult = parse_url($requestPath, PHP_URL_PATH);
+
+            if ($parseResult !== null && $parseResult !== false) {
+                $requestPath = $parseResult;
+            }
         }
 
         // Perform exact match if applicable.
