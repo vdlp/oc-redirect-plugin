@@ -363,7 +363,7 @@ final class RedirectManager implements RedirectManagerInterface
 
         // Strip curly braces from keys
         foreach ($rule->getPlaceholderMatches() as $placeholder => $value) {
-            $parameters[str_replace(['{', '}'], '', $placeholder)] = $value;
+            $parameters[str_replace(['{', '}'], '', (string) $placeholder)] = $value;
         }
 
         return (string) $controller->pageUrl($rule->getCmsPage(), $parameters);
