@@ -22,7 +22,7 @@ This plugin adds a 'Redirects' section to the main menu of October CMS. This plu
 * **Quick** matching algorithm
 * A **test** utility for redirects
 * Matching using **placeholders** (dynamic paths)
-* Match placeholders using **regular expressions**
+* Matching using **regular expressions**
 * **Exact** path matching
 * **Importing** and **exporting** redirect rules
 * **Schedule** redirects (e.g. active for 2 months)
