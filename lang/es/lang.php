@@ -52,6 +52,7 @@ return [
         'static_page_required_if' => 'Por favor ingresa una página estática a la cual deseas redirigir',
         'match_type' => 'Coincidir Tipo',
         'exact' => 'Exacto',
+        'regex' => 'Regular expression', // TODO
         'placeholders' => 'Marcadores',
         'target_type' => 'Tipo de destino',
         'target_type_none' => 'Not applicable', // TODO
@@ -105,6 +106,7 @@ return [
         'sparkline_30d' => 'Hits (30d)', // TODO
         'has_hits' => 'Has hits', // TODO
         'minimum_hits' => 'Minimum # hits', // TODO
+        'invalid_regex' => 'Invalid regular expression.', // TODO
     ],
     'list' => [
         'no_records' => 'No hay redirecciones en esta vista.',
@@ -239,7 +241,7 @@ return [
         'cache_cleared_success' => 'Successfully cleared redirect cache', // TODO
     ],
     'import_export' => [
-        'match_type' => 'Match Type [match_type] (Allowed values: exact, placeholders)',
+        'match_type' => 'Match Type [match_type] (Allowed values: exact, placeholders, regex)',
         'category_id' => 'Category [category_id]',
         'target_type' => 'Target Type [target_type] (Allowed values: path_or_url, cms_page, static_page, none)',
         'from_url' => 'Source path [from_url]',

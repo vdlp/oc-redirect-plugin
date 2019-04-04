@@ -52,6 +52,7 @@ return [
         'match_type' => 'Type van overeenkomst',
         'exact' => 'Exact',
         'placeholders' => 'Placeholders',
+        'regex' => 'Reguliere expressie',
         'target_type' => 'Doel Type',
         'target_type_none' => 'Niet van toepassing',
         'target_type_path_or_url' => 'Pad of URL',
@@ -105,6 +106,7 @@ return [
         'minimum_hits' => 'Minimum treffers',
         'last_used_at' => 'Laatste treffer',
         'updated_at' => 'Bijgewerkt op',
+        'invalid_regex' => 'Ongeldige reguliere expressie.',
     ],
     'list' => [
         'no_records' => 'Er zijn geen redirects in dit beeld.',
@@ -248,7 +250,7 @@ return [
         'deleted_all_redirects_success' => 'Alle redirects zijn verwijderd',
     ],
     'import_export' => [
-        'match_type' => 'Match Type [match_type] (Toegestane waarden: exact, placeholders)',
+        'match_type' => 'Match Type [match_type] (Toegestane waarden: exact, placeholders, regex)',
         'category_id' => 'Category [category_id]',
         'target_type' => 'Target Type [target_type] (Toegestane waarden: path_or_url, cms_page, static_page, none)',
         'from_url' => 'Source path [from_url]',

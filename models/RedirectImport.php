@@ -32,7 +32,7 @@ class RedirectImport extends ImportModel
      */
     public $rules = [
         'from_url' => 'required',
-        'match_type' => 'required|in:exact,placeholders',
+        'match_type' => 'required|in:exact,placeholders,regex',
         'target_type' => 'required|in:path_or_url,cms_page,static_page,none',
         'status_code' => 'required|in:301,302,303,404,410',
     ];

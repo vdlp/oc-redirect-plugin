@@ -52,6 +52,7 @@ return [
         'match_type' => 'Match Type',
         'exact' => 'Exact',
         'placeholders' => 'Placeholders',
+        'regex' => 'Regular expression',
         'target_type' => 'Target Type',
         'target_type_none' => 'Not applicable',
         'target_type_path_or_url' => 'Path or URL',
@@ -107,6 +108,7 @@ return [
         'ignore_query_parameters_comment' => 'The engine will ignore all query parameters from the Source Path.',
         'last_used_at' => 'Last hit',
         'updated_at' => 'Updated at',
+        'invalid_regex' => 'Invalid regular expression.',
     ],
     'list' => [
         'no_records' => 'There are no redirects in this view.',
@@ -250,7 +252,7 @@ return [
         'deleted_all_redirects_success' => 'All redirects have been successfully deleted',
     ],
     'import_export' => [
-        'match_type' => 'Match Type [match_type] (Allowed values: exact, placeholders)',
+        'match_type' => 'Match Type [match_type] (Allowed values: exact, placeholders, regex)',
         'category_id' => 'Category [category_id]',
         'target_type' => 'Target Type [target_type] (Allowed values: path_or_url, cms_page, static_page, none)',
         'from_url' => 'Source path [from_url]',

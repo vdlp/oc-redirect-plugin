@@ -11,6 +11,7 @@ use Event;
 use Exception;
 use Illuminate\Contracts\Http\Kernel;
 use System\Classes\PluginBase;
+use Validator;
 use Vdlp\Redirect\Classes\CacheManager;
 use Vdlp\Redirect\Classes\PageHandler;
 use Vdlp\Redirect\Classes\PublishManager;
@@ -108,6 +109,19 @@ class Plugin extends PluginBase
 
             // Publish all redirect rules to file or cache repository.
             PublishManager::instance()->publish();
+        });
+
+        /*
+         * Custom validators.
+         */
+        Validator::extend('is_regex', function ($attribute, $value) {
+            try {
+                preg_match($value, '');
+            } catch (\Throwable $e) {
+                return false;
+            }
+
+            return true;
         });
     }
 
@@ -337,6 +351,8 @@ class Plugin extends PluginBase
                         return e(trans('vdlp.redirect::lang.redirect.exact'));
                     case Models\Redirect::TYPE_PLACEHOLDERS:
                         return e(trans('vdlp.redirect::lang.redirect.placeholders'));
+                    case Models\Redirect::TYPE_REGEX:
+                        return e(trans('vdlp.redirect::lang.redirect.regex'));
                     default:
                         return e($value);
                 }
