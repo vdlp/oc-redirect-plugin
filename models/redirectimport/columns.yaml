@@ -21,6 +21,7 @@ columns:
     test_lab: vdlp.redirect::lang.import_export.test_lab
     test_lab_path: vdlp.redirect::lang.import_export.test_lab_path
     system: vdlp.redirect::lang.import_export.system
+    description: vdlp.redirect::lang.import_export.description
     last_used_at: vdlp.redirect::lang.import_export.last_used_at
     created_at: vdlp.redirect::lang.import_export.created_at
     updated_at: vdlp.redirect::lang.import_export.updated_at

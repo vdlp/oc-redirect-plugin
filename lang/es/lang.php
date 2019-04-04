@@ -94,6 +94,7 @@ return [
         'and_delete_log_item' => 'y borra los elementos seleccionados', // since 2.0.3,
         'category' => 'Categoría',
         'categories' => 'Categorías',
+        'description' => 'Description', // TODO
         'name' => 'Nombre',
         'date_time' => 'Fecha y Hora',
         'date' => 'Fecha',
@@ -261,6 +262,7 @@ return [
         'test_lab' => 'Test Lab [test_lab] (1 = enable Test Lab, 0 = disable TestLab [default])',
         'test_lab_path' => 'Test Lab path [test_lab_path] (required if match_type = placeholders)',
         'system' => 'System [system] (1 = system generated redirect, 0 = user generated redirect [default])',
+        'description' => 'Description [description]',
         'last_used_at' => 'Last Used At [last_used_at] (YYYY-MM-DD HH:MM:SS or empty)',
         'created_at' => 'Created At [created_at] (YYYY-MM-DD HH:MM:SS or empty)',
         'updated_at' => 'Updated At [updated_at] (YYYY-MM-DD HH:MM:SS or empty)',
