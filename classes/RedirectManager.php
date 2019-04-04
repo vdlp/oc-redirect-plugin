@@ -264,8 +264,8 @@ final class RedirectManager implements RedirectManagerInterface
      */
     public function addCondition(string $conditionClass, int $priority)//: void
     {
-        $this->conditions[$priority] = $conditionClass;
-        ksort($this->conditions);
+        $this->conditions[$conditionClass] = $priority;
+        arsort($this->conditions);
         return $this;
     }
 
@@ -274,7 +274,7 @@ final class RedirectManager implements RedirectManagerInterface
      */
     public function getConditions(): array
     {
-        return $this->conditions;
+        return array_keys($this->conditions);
     }
 
     /**
@@ -419,6 +419,11 @@ final class RedirectManager implements RedirectManagerInterface
             return $this->matchPlaceholders($rule, $requestPath);
         }
 
+        // Perform regex match if applicable.
+        if ($rule->isRegexMatchType()) {
+            return $this->matchRegex($rule, $requestPath);
+        }
+
         return false;
     }
 
@@ -482,6 +487,26 @@ final class RedirectManager implements RedirectManagerInterface
         }
 
         return $rule;
+    }
+
+    /**
+     * @param RedirectRule $rule
+     * @param string $url
+     * @return RedirectRule|bool
+     */
+    private function matchRegex(RedirectRule $rule, string $url)
+    {
+        $pattern = $rule->getFromUrl();
+
+        try {
+            if (preg_match($pattern, $url) === 1) {
+                return $rule;
+            }
+        } catch (Throwable $e) {
+            return false;
+        }
+
+        return false;
     }
 
     /**

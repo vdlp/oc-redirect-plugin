@@ -85,6 +85,10 @@ tabs:
             span: left
             default: false
             comment: vdlp.redirect::lang.redirect.ignore_query_parameters_comment
+        description:
+            label: vdlp.redirect::lang.redirect.description
+            span: right
+            type: text
         sort_order:
             label: vdlp.redirect::lang.redirect.priority
             type: text

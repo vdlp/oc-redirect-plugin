@@ -1,6 +1,6 @@
 {
     "name": "vdlp/oc-redirect-plugin",
-    "description": "Advanced redirect plugin for October CMS",
+    "description": "Advanced redirect plugin for OctoberCMS",
     "type": "october-plugin",
     "license": "GPL-2.0",
     "authors": [

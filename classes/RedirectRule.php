@@ -233,6 +233,14 @@ class RedirectRule
     }
 
     /**
+     * @return bool
+     */
+    public function isRegexMatchType(): bool
+    {
+        return $this->matchType === Redirect::TYPE_REGEX;
+    }
+
+    /**
      * @return array
      */
     public function getPlaceholderMatches(): array

@@ -596,4 +596,36 @@ class RedirectManagerTest extends PluginTestCase
         // These should be equal
         self::assertEquals($expectedTargetUrl, $actualTargetUrl);
     }
+
+    /**
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     */
+    public function testRegularExpressionRedirect()
+    {
+        $redirect = new Redirect([
+            'match_type' => Redirect::TYPE_REGEX,
+            'target_type' => Redirect::TARGET_TYPE_PATH_URL,
+            'from_scheme' => Redirect::SCHEME_AUTO,
+            'from_url' => '/\/file\.(css|js)/',
+            'to_scheme' => Redirect::SCHEME_AUTO,
+            'to_url' => '/this-should-be-target',
+            'requirements' => null,
+            'status_code' => 301,
+            'is_enabled' => 1,
+            'from_date' => null,
+            'to_date' => null,
+        ]);
+
+        $rule = RedirectRule::createWithModel($redirect);
+        $manager = RedirectManager::createWithRule($rule);
+
+        $rule = $manager->match('/file.css', Redirect::SCHEME_HTTP);
+
+        self::assertNotFalse($rule);
+
+        $rule = $manager->match('/file.js', Redirect::SCHEME_HTTP);
+
+        self::assertNotFalse($rule);
+    }
 }

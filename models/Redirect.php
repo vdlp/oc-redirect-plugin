@@ -33,6 +33,7 @@ class Redirect extends Model
     // Types
     const TYPE_EXACT = 'exact';
     const TYPE_PLACEHOLDERS = 'placeholders';
+    const TYPE_REGEX = 'regex';
 
     // Target Types
     const TARGET_TYPE_PATH_URL = 'path_or_url';
@@ -49,6 +50,7 @@ class Redirect extends Model
     public static $types = [
         self::TYPE_EXACT,
         self::TYPE_PLACEHOLDERS,
+        self::TYPE_REGEX,
     ];
 
     /** @var array */
@@ -90,7 +92,7 @@ class Redirect extends Model
         'to_scheme' => 'in:http,https,auto',
         'cms_page' => 'required_if:target_type,cms_page',
         'static_page' => 'required_if:target_type,static_page',
-        'match_type' => 'required|in:exact,placeholders',
+        'match_type' => 'required|in:exact,placeholders,regex',
         'target_type' => 'required|in:path_or_url,cms_page,static_page,none',
         'status_code' => 'required|in:301,302,303,404,410',
         'sort_order' => 'numeric',
@@ -105,6 +107,7 @@ class Redirect extends Model
         'to_url.required_if' => 'vdlp.redirect::lang.redirect.to_url_required_if',
         'cms_page.required_if' => 'vdlp.redirect::lang.redirect.cms_page_required_if',
         'static_page.required_if' => 'vdlp.redirect::lang.redirect.static_page_required_if',
+        'is_regex' => 'vdlp.redirect::lang.redirect.invalid_regex'
     ];
 
     /**
@@ -188,17 +191,21 @@ class Redirect extends Model
 
         $validator->sometimes('to_url', 'required', function (Fluent $request) {
             return in_array($request->get('status_code'), ['301', '302', '303'], true)
-            && $request->get('target_type') === self::TARGET_TYPE_PATH_URL;
+                && $request->get('target_type') === self::TARGET_TYPE_PATH_URL;
         });
 
         $validator->sometimes('cms_page', 'required', function (Fluent $request) {
             return in_array($request->get('status_code'), ['301', '302', '303'], true)
-            && $request->get('target_type') === self::TARGET_TYPE_CMS_PAGE;
+                && $request->get('target_type') === self::TARGET_TYPE_CMS_PAGE;
         });
 
         $validator->sometimes('static_page', 'required', function (Fluent $request) {
             return in_array($request->get('status_code'), ['301', '302', '303'], true)
-            && $request->get('target_type') === self::TARGET_TYPE_STATIC_PAGE;
+                && $request->get('target_type') === self::TARGET_TYPE_STATIC_PAGE;
+        });
+
+        $validator->sometimes('from_url', 'is_regex', function (Fluent $request) {
+            return $request->get('match_type') === self::TYPE_REGEX;
         });
 
         return $validator;
@@ -236,6 +243,14 @@ class Redirect extends Model
     public function isMatchTypePlaceholders(): bool
     {
         return $this->attributes['match_type'] === self::TYPE_PLACEHOLDERS;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMatchTypeRegex(): bool
+    {
+        return $this->attributes['match_type'] === self::TYPE_REGEX;
     }
 
     /**
