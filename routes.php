@@ -6,9 +6,9 @@ use Backend\Models\BrandSetting;
 use Vdlp\Redirect\Classes\Sparkline;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
-Route::group(['middleware' => ['web']], function () {
+Route::group(['middleware' => ['web']], static function () {
 
-    Route::get('vdlp/redirect/sparkline/{redirectId}', function ($redirectId) {
+    Route::get('vdlp/redirect/sparkline/{redirectId}', static function ($redirectId) {
         if (!BackendAuth::check()) {
             return response('Forbidden', 403);
         }
@@ -38,7 +38,7 @@ Route::group(['middleware' => ['web']], function () {
 
         $cacheKey = sprintf('vdlp_redirect_%s_%d_%d', $preset, (int) $redirectId, (int) $crawler);
 
-        $data = Cache::remember($cacheKey, 5, function () use ($redirectId, $crawler, $properties) {
+        $data = Cache::remember($cacheKey, 5, static function () use ($redirectId, $crawler, $properties) {
             return (new StatisticsHelper())->getRedirectHitsSparkline((int) $redirectId, $crawler, $properties['days']);
         });
 

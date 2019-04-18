@@ -19,7 +19,7 @@ class AddDescriptionToRedirectsTable extends Migration
 {
     public function up()
     {
-        Schema::table('vdlp_redirect_redirects', function (Blueprint $table) {
+        Schema::table('vdlp_redirect_redirects', static function (Blueprint $table) {
             $table->string('description')
                 ->nullable()
                 ->after('system');
@@ -28,7 +28,7 @@ class AddDescriptionToRedirectsTable extends Migration
 
     public function down()
     {
-        Schema::table('vdlp_redirect_redirects', function (Blueprint $table) {
+        Schema::table('vdlp_redirect_redirects', static function (Blueprint $table) {
             $table->dropColumn('description');
         });
     }

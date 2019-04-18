@@ -47,6 +47,11 @@ This plugin adds a 'Redirects' section to the main menu of October CMS. This plu
 * PostgreSQL
 * SQLite
 
+## PHP requirements
+
+* PHP version 7.0 or higher.
+* PHP extensions: `ext-curl` and `ext-json`.
+
 ## Supported HTTP status codes
 
 * HTTP/1.1 301 Moved Permanently

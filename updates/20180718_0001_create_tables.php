@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Updates;
 
 use Exception;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
 use Schema;
@@ -24,7 +25,23 @@ class CreateTables extends Migration
 {
     public function up()
     {
-        Schema::create('vdlp_redirect_categories', function (Blueprint $table) {
+        /** @var DatabaseManager $database */
+        $database = resolve('db');
+
+        $schema = $database->getSchemaBuilder();
+
+        // Drop any existing index keys on SQLite databases #24.
+        if ($schema->hasTable('adrenth_redirect_redirects')
+            && $database->getDriverName() === 'sqlite'
+        ) {
+            $database->statement('DROP INDEX redirect_dmy;');
+            $database->statement('DROP INDEX redirect_my;');
+            $database->statement('DROP INDEX redirect_log_dmy;');
+            $database->statement('DROP INDEX redirect_log_my;');
+            $database->statement('DROP INDEX month_year;');
+        }
+
+        Schema::create('vdlp_redirect_categories', static function (Blueprint $table) {
             // Table configuration
             $table->engine = 'InnoDB';
 
@@ -34,10 +51,9 @@ class CreateTables extends Migration
             $table->timestamps();
         });
 
-        // TODO: Multi-lingual
         Category::create(['name' => 'General']);
 
-        Schema::create('vdlp_redirect_redirects', function (Blueprint $table) {
+        Schema::create('vdlp_redirect_redirects', static function (Blueprint $table) {
             // Table configuration
             $table->engine = 'InnoDB';
 
@@ -77,7 +93,7 @@ class CreateTables extends Migration
                 ->onDelete('set null');
         });
 
-        Schema::create('vdlp_redirect_clients', function (Blueprint $table) {
+        Schema::create('vdlp_redirect_clients', static function (Blueprint $table) {
             // Table configuration
             $table->engine = 'InnoDB';
 
@@ -101,7 +117,7 @@ class CreateTables extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::create('vdlp_redirect_redirect_logs', function (Blueprint $table) {
+        Schema::create('vdlp_redirect_redirect_logs', static function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('redirect_id');
