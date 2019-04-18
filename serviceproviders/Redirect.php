@@ -20,7 +20,7 @@ class Redirect extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton(RedirectManager::class, function (Container $container) {
+        $this->app->singleton(RedirectManager::class, static function (Container $container) {
             return new RedirectManager(
                 $container->make(Request::class),
                 $container->make(Dispatcher::class)

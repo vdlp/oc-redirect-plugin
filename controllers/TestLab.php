@@ -12,6 +12,7 @@ use Flash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Input;
 use October\Rain\Database\Collection;
+use SystemException;
 use Vdlp\Redirect\Classes\Testers\RedirectCount;
 use Vdlp\Redirect\Classes\Testers\RedirectFinalDestination;
 use Vdlp\Redirect\Classes\Testers\RedirectLoop;
@@ -71,7 +72,7 @@ class TestLab extends Controller
             ->testLabEnabled()
             ->orderBy('sort_order')
             ->get()
-            ->filter(function (Redirect $redirect) {
+            ->filter(static function (Redirect $redirect) {
                 return $redirect->isActiveOnDate(Carbon::today());
             })
             ->all());
@@ -94,6 +95,7 @@ class TestLab extends Controller
 
     /**
      * @return string
+     * @throws SystemException
      */
     public function index_onTest(): string
     {
@@ -129,6 +131,7 @@ class TestLab extends Controller
     /**
      * @return array
      * @throws ModelNotFoundException
+     * @throws SystemException
      */
     public function index_onReRun(): array
     {
@@ -148,6 +151,7 @@ class TestLab extends Controller
     /**
      * @return array
      * @throws ModelNotFoundException
+     * @throws SystemException
      */
     public function index_onExclude(): array
     {

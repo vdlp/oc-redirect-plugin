@@ -51,10 +51,9 @@ class CreateTables extends Migration
             $table->timestamps();
         });
 
-        // TODO: Multi-lingual
         Category::create(['name' => 'General']);
 
-        Schema::create('vdlp_redirect_redirects', function (Blueprint $table) {
+        Schema::create('vdlp_redirect_redirects', static function (Blueprint $table) {
             // Table configuration
             $table->engine = 'InnoDB';
 
@@ -94,7 +93,7 @@ class CreateTables extends Migration
                 ->onDelete('set null');
         });
 
-        Schema::create('vdlp_redirect_clients', function (Blueprint $table) {
+        Schema::create('vdlp_redirect_clients', static function (Blueprint $table) {
             // Table configuration
             $table->engine = 'InnoDB';
 
@@ -118,7 +117,7 @@ class CreateTables extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::create('vdlp_redirect_redirect_logs', function (Blueprint $table) {
+        Schema::create('vdlp_redirect_redirect_logs', static function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('redirect_id');

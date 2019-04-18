@@ -19,7 +19,7 @@ class AddRedirectTimestampCrawlerIndexOnClientsTable extends Migration
 {
     public function up()
     {
-        Schema::table('vdlp_redirect_clients', function (Blueprint $table) {
+        Schema::table('vdlp_redirect_clients', static function (Blueprint $table) {
             $table->index(
                 [
                     'redirect_id',
@@ -33,7 +33,7 @@ class AddRedirectTimestampCrawlerIndexOnClientsTable extends Migration
 
     public function down()
     {
-        Schema::table('vdlp_redirect_clients', function (Blueprint $table) {
+        Schema::table('vdlp_redirect_clients', static function (Blueprint $table) {
             $table->dropIndex('redirect_timestamp_crawler');
         });
     }

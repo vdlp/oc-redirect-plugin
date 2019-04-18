@@ -19,7 +19,7 @@ class AddIgnoreQueryParametersToRedirectsTable extends Migration
 {
     public function up()
     {
-        Schema::table('vdlp_redirect_redirects', function (Blueprint $table) {
+        Schema::table('vdlp_redirect_redirects', static function (Blueprint $table) {
             $table->boolean('ignore_query_parameters')
                 ->default(false)
                 ->after('sort_order');
@@ -28,7 +28,7 @@ class AddIgnoreQueryParametersToRedirectsTable extends Migration
 
     public function down()
     {
-        Schema::table('vdlp_redirect_redirects', function (Blueprint $table) {
+        Schema::table('vdlp_redirect_redirects', static function (Blueprint $table) {
             $table->dropColumn('ignore_query_parameters');
         });
     }

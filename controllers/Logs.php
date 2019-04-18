@@ -26,7 +26,7 @@ class Logs extends Controller
      * {@inheritdoc}
      */
     public $implement = [
-        'Backend.Behaviors.ListController'
+        ListController::class
     ];
 
     /** @var string */

@@ -24,8 +24,8 @@ class Categories extends Controller
      * {@inheritdoc}
      */
     public $implement = [
-        'Backend.Behaviors.FormController',
-        'Backend.Behaviors.ListController'
+        FormController::class,
+        ListController::class
     ];
 
     /** @var string */

@@ -77,7 +77,7 @@ class Plugin extends PluginBase
          *
          * Only 'exact' redirects will be supported.
          */
-        Event::listen('vdlp.redirect.toUrlChanged', function (string $oldUrl, string $newUrl) {
+        Event::listen('vdlp.redirect.toUrlChanged', static function (string $oldUrl, string $newUrl) {
             Models\Redirect::query()
                 ->where('match_type', '=', Models\Redirect::TYPE_EXACT)
                 ->where('target_type', '=', Models\Redirect::TARGET_TYPE_PATH_URL)
@@ -101,7 +101,7 @@ class Plugin extends PluginBase
             'vdlp.redirect.afterRedirectSave',
             'vdlp.redirect.afterRedirectDelete',
 
-        ], function () {
+        ], static function () {
             // The caches should be flushed is caching is enabled and supported.
             if (CacheManager::cachingEnabledAndSupported()) {
                 CacheManager::instance()->flush();
@@ -114,7 +114,7 @@ class Plugin extends PluginBase
         /*
          * Custom validators.
          */
-        Validator::extend('is_regex', function ($attribute, $value) {
+        Validator::extend('is_regex', static function ($attribute, $value) {
             try {
                 preg_match($value, '');
             } catch (\Throwable $e) {
@@ -141,27 +141,27 @@ class Plugin extends PluginBase
      */
     public function bootBackend()//: void
     {
-        Page::extend(function (Page $page) {
+        Page::extend(static function (Page $page) {
             $handler = new PageHandler($page);
 
-            $page->bindEvent('model.beforeUpdate', function () use ($handler) {
+            $page->bindEvent('model.beforeUpdate', static function () use ($handler) {
                 $handler->onBeforeUpdate();
             });
 
-            $page->bindEvent('model.afterDelete', function () use ($handler) {
+            $page->bindEvent('model.afterDelete', static function () use ($handler) {
                 $handler->onAfterDelete();
             });
         });
 
         if (class_exists('\RainLab\Pages\Classes\Page')) {
-            \RainLab\Pages\Classes\Page::extend(function (\RainLab\Pages\Classes\Page $page) {
+            \RainLab\Pages\Classes\Page::extend(static function (\RainLab\Pages\Classes\Page $page) {
                 $handler = new StaticPageHandler($page);
 
-                $page->bindEvent('model.beforeUpdate', function () use ($handler) {
+                $page->bindEvent('model.beforeUpdate', static function () use ($handler) {
                     $handler->onBeforeUpdate();
                 });
 
-                $page->bindEvent('model.afterDelete', function () use ($handler) {
+                $page->bindEvent('model.afterDelete', static function () use ($handler) {
                     $handler->onAfterDelete();
                 });
             });
@@ -336,7 +336,7 @@ class Plugin extends PluginBase
     public function registerListColumnTypes(): array
     {
         return [
-            'redirect_switch_color' => function ($value) {
+            'redirect_switch_color' => static function ($value) {
                 $format = '<div class="oc-icon-circle" style="color: %s">%s</div>';
 
                 if ((int) $value === 1) {
@@ -345,7 +345,7 @@ class Plugin extends PluginBase
 
                 return sprintf($format, '#cc3300', e(trans('backend::lang.list.column_switch_false')));
             },
-            'redirect_match_type' => function ($value) {
+            'redirect_match_type' => static function ($value) {
                 switch ($value) {
                     case Models\Redirect::TYPE_EXACT:
                         return e(trans('vdlp.redirect::lang.redirect.exact'));
@@ -357,7 +357,7 @@ class Plugin extends PluginBase
                         return e($value);
                 }
             },
-            'redirect_status_code' => function ($value) {
+            'redirect_status_code' => static function ($value) {
                 switch ($value) {
                     case 301:
                         return e(trans('vdlp.redirect::lang.redirect.permanent'));
@@ -373,7 +373,7 @@ class Plugin extends PluginBase
                         return e($value);
                 }
             },
-            'redirect_target_type' => function ($value) {
+            'redirect_target_type' => static function ($value) {
                 switch ($value) {
                     case Models\Redirect::TARGET_TYPE_PATH_URL:
                         return e(trans('vdlp.redirect::lang.redirect.target_type_path_or_url'));
@@ -385,7 +385,7 @@ class Plugin extends PluginBase
                         return e($value);
                 }
             },
-            'redirect_from_url' => function ($value) {
+            'redirect_from_url' => static function ($value) {
                 $maxChars = 40;
                 $textLength = strlen($value);
                 if ($textLength > $maxChars) {
@@ -395,7 +395,7 @@ class Plugin extends PluginBase
                 }
                 return e($value);
             },
-            'redirect_system' => function ($value) {
+            'redirect_system' => static function ($value) {
                 return sprintf(
                     '<span class="%s" title="%s"></span>',
                     $value ? 'oc-icon-magic' : 'oc-icon-user',

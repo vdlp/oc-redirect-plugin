@@ -189,22 +189,22 @@ class Redirect extends Model
     ): Validator {
         $validator = self::traitMakeValidator($data, $rules, $customMessages, $attributeNames);
 
-        $validator->sometimes('to_url', 'required', function (Fluent $request) {
+        $validator->sometimes('to_url', 'required', static function (Fluent $request) {
             return in_array($request->get('status_code'), ['301', '302', '303'], true)
                 && $request->get('target_type') === self::TARGET_TYPE_PATH_URL;
         });
 
-        $validator->sometimes('cms_page', 'required', function (Fluent $request) {
+        $validator->sometimes('cms_page', 'required', static function (Fluent $request) {
             return in_array($request->get('status_code'), ['301', '302', '303'], true)
                 && $request->get('target_type') === self::TARGET_TYPE_CMS_PAGE;
         });
 
-        $validator->sometimes('static_page', 'required', function (Fluent $request) {
+        $validator->sometimes('static_page', 'required', static function (Fluent $request) {
             return in_array($request->get('status_code'), ['301', '302', '303'], true)
                 && $request->get('target_type') === self::TARGET_TYPE_STATIC_PAGE;
         });
 
-        $validator->sometimes('from_url', 'is_regex', function (Fluent $request) {
+        $validator->sometimes('from_url', 'is_regex', static function (Fluent $request) {
             return $request->get('match_type') === self::TYPE_REGEX;
         });
 
