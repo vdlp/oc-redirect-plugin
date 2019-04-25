@@ -110,3 +110,9 @@ Result: /blog/news/general
 | Event | Payload | Description |
 | --- | --- | --- |
 | `vdlp.redirect.toUrlChanged` | `string $oldUrl, string $newUrl` | Can be fired from a third-party plugin.
+
+## Commands
+
+| Command | Description |
+| --- | --- |
+| `vdlp:redirect:publish-redirects` | Publish all redirects. |
