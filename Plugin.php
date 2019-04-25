@@ -9,6 +9,7 @@ use Backend;
 use Cms\Classes\Page;
 use Event;
 use Exception;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Http\Kernel;
 use System\Classes\PluginBase;
 use Validator;
@@ -17,6 +18,7 @@ use Vdlp\Redirect\Classes\PageHandler;
 use Vdlp\Redirect\Classes\PublishManager;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
 use Vdlp\Redirect\Classes\StaticPageHandler;
+use Vdlp\Redirect\Console\PublishRedirects;
 use Vdlp\Redirect\Models;
 use Vdlp\Redirect\ReportWidgets\CreateRedirect;
 use Vdlp\Redirect\ReportWidgets\TopTenRedirects;
@@ -131,6 +133,7 @@ class Plugin extends PluginBase
     public function register()
     {
         $this->app->register(ServiceProviders\Redirect::class);
+        $this->registerConsoleCommands();
     }
 
     /**
@@ -403,5 +406,24 @@ class Plugin extends PluginBase
                 );
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     * @param Schedule $schedule
+     */
+    public function registerSchedule($schedule)
+    {
+        $schedule->command('vdlp:redirect:publish-redirects')->daily();
+    }
+
+    /**
+     * Register Console Commands
+     *
+     * @return void
+     */
+    private function registerConsoleCommands()
+    {
+        $this->registerConsoleCommand('vdlp.redirect.publish-redirects', PublishRedirects::class);
     }
 }

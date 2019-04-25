@@ -29,8 +29,15 @@ class Logs extends Controller
         ListController::class
     ];
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $listConfig = 'config_list.yaml';
+
+    /**
+     * {@inheritdoc}
+     */
+    public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     /**
      * {@inheritdoc}

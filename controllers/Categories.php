@@ -28,11 +28,20 @@ class Categories extends Controller
         ListController::class
     ];
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $formConfig = 'config_form.yaml';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $listConfig = 'config_list.yaml';
+
+    /**
+     * {@inheritdoc}
+     */
+    public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     /**
      * {@inheritdoc}
