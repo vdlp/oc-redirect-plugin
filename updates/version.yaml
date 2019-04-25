@@ -27,3 +27,5 @@
     - 20190404_0006_add_description_to_redirects_table.php
 1.7.0:
     - "Bugfixes and code improvements -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.7.0"
+1.8.0:
+    - "Add CLI command for publishing redirects -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.8.0"
