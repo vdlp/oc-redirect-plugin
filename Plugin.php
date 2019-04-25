@@ -9,6 +9,7 @@ use Backend;
 use Cms\Classes\Page;
 use Event;
 use Exception;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Http\Kernel;
 use System\Classes\PluginBase;
 use Validator;
@@ -406,6 +407,16 @@ class Plugin extends PluginBase
             },
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     * @param Schedule $schedule
+     */
+    public function registerSchedule($schedule)
+    {
+        $schedule->command('vdlp:redirect:publish-redirects')->daily();
+    }
+
     /**
      * Register Console Commands
      *
