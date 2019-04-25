@@ -17,8 +17,15 @@ use Vdlp\Redirect\Classes\StatisticsHelper;
  */
 class Statistics extends Controller
 {
-    /** @var StatisticsHelper */
+    /**
+     * @var StatisticsHelper
+     */
     private $helper;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     /**
      * {@inheritdoc}

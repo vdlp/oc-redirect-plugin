@@ -28,8 +28,15 @@ use Vdlp\Redirect\Models\Redirect;
  */
 class TestLab extends Controller
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     private $redirects;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     /**
      * {@inheritdoc}

@@ -86,6 +86,11 @@ class Redirects extends Controller
     public $publishManager;
 
     /**
+     * {@inheritdoc}
+     */
+    public $requiredPermissions = ['vdlp.redirect.access_redirects'];
+
+    /**
      * @var FlashBag
      */
     private $flashBag;
