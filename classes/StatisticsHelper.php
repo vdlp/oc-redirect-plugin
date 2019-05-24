@@ -90,7 +90,7 @@ class StatisticsHelper
         /** @var Collection $redirects */
         $redirects = Models\Redirect::enabled()
             ->get()
-            ->filter(function (Models\Redirect $redirect) {
+            ->filter(static function (Models\Redirect $redirect) {
                 return $redirect->isActiveOnDate(Carbon::today());
             });
 
@@ -109,7 +109,7 @@ class StatisticsHelper
     {
         return Models\Redirect::enabled()
             ->get()
-            ->filter(function (Models\Redirect $redirect) {
+            ->filter(static function (Models\Redirect $redirect) {
                 return $redirect->isActiveOnDate(Carbon::today());
             })
             ->count();
@@ -253,10 +253,12 @@ class StatisticsHelper
         $now = Carbon::now();
 
         /** @noinspection PhpUndefinedClassInspection */
-        $redirect->update([
+        $redirect->forceFill([
             'hits' => DB::raw('hits + 1'),
             'last_used_at' => $now,
         ]);
+
+        $redirect->forceSave();
 
         $crawlerDetect = new CrawlerDetect();
 

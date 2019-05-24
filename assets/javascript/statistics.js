@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $.request('onRedirectHitsPerDay', {
         data: {},
         success: function (data) {
