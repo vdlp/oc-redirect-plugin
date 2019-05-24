@@ -253,10 +253,12 @@ class StatisticsHelper
         $now = Carbon::now();
 
         /** @noinspection PhpUndefinedClassInspection */
-        $redirect->update([
+        $redirect->forceFill([
             'hits' => DB::raw('hits + 1'),
             'last_used_at' => $now,
         ]);
+
+        $redirect->forceSave();
 
         $crawlerDetect = new CrawlerDetect();
 
