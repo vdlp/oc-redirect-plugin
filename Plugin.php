@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Http\Kernel;
 use System\Classes\PluginBase;
+use Throwable;
 use Validator;
 use Vdlp\Redirect\Classes\CacheManager;
 use Vdlp\Redirect\Classes\PageHandler;
@@ -59,6 +60,8 @@ class Plugin extends PluginBase
         if (App::runningInConsole() || App::runningUnitTests()) {
             return;
         }
+
+        $this->registerCustomValidators();
 
         if (!App::runningInBackend()) {
             /** @var Kernel $kernel */
@@ -113,19 +116,6 @@ class Plugin extends PluginBase
 
             // Publish all redirect rules to file or cache repository.
             PublishManager::instance()->publish();
-        });
-
-        /*
-         * Custom validators.
-         */
-        Validator::extend('is_regex', static function ($attribute, $value) {
-            try {
-                preg_match($value, '');
-            } catch (\Throwable $e) {
-                return false;
-            }
-
-            return true;
         });
     }
 
@@ -420,12 +410,30 @@ class Plugin extends PluginBase
     }
 
     /**
-     * Register Console Commands
+     * Register Console Commands.
      *
      * @return void
      */
     private function registerConsoleCommands()
     {
         $this->registerConsoleCommand('vdlp.redirect.publish-redirects', PublishRedirects::class);
+    }
+
+    /**
+     * Register Custom Validators.
+     *
+     * @return void
+     */
+    private function registerCustomValidators()
+    {
+        Validator::extend('is_regex', static function ($attribute, $value) {
+            try {
+                preg_match($value, '');
+            } catch (Throwable $e) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }
