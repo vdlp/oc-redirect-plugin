@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Http\Kernel;
 use System\Classes\PluginBase;
+use Throwable;
 use Validator;
 use Vdlp\Redirect\Classes\CacheManager;
 use Vdlp\Redirect\Classes\PageHandler;
@@ -60,6 +61,8 @@ class Plugin extends PluginBase
             return;
         }
 
+        $this->registerCustomValidators();
+
         if (!App::runningInBackend()) {
             /** @var Kernel $kernel */
             $kernel = $this->app[Kernel::class];
@@ -67,7 +70,9 @@ class Plugin extends PluginBase
             return;
         }
 
-        $this->bootBackend();
+        if (Models\Settings::isAutoRedirectCreationEnabled()) {
+            $this->initAutoRedirectCreation();
+        }
 
         /*
          * Extensibility:
@@ -112,19 +117,6 @@ class Plugin extends PluginBase
             // Publish all redirect rules to file or cache repository.
             PublishManager::instance()->publish();
         });
-
-        /*
-         * Custom validators.
-         */
-        Validator::extend('is_regex', static function ($attribute, $value) {
-            try {
-                preg_match($value, '');
-            } catch (\Throwable $e) {
-                return false;
-            }
-
-            return true;
-        });
     }
 
     /**
@@ -137,12 +129,12 @@ class Plugin extends PluginBase
     }
 
     /**
-     * Boot stuff for Backend
+     * Perform initialization for automatic redirect creation.
      *
      * @return void
      * @throws Exception
      */
-    public function bootBackend()//: void
+    public function initAutoRedirectCreation()//: void
     {
         Page::extend(static function (Page $page) {
             $handler = new PageHandler($page);
@@ -418,12 +410,30 @@ class Plugin extends PluginBase
     }
 
     /**
-     * Register Console Commands
+     * Register Console Commands.
      *
      * @return void
      */
     private function registerConsoleCommands()
     {
         $this->registerConsoleCommand('vdlp.redirect.publish-redirects', PublishRedirects::class);
+    }
+
+    /**
+     * Register Custom Validators.
+     *
+     * @return void
+     */
+    private function registerCustomValidators()
+    {
+        Validator::extend('is_regex', static function ($attribute, $value) {
+            try {
+                preg_match($value, '');
+            } catch (Throwable $e) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }

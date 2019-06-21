@@ -95,4 +95,18 @@ class Settings extends Model
         /** @noinspection PhpMethodParametersCountMismatchInspection */
         return (bool) self::get('caching_enabled', false);
     }
+
+    /**
+     * Whether auto redirect creation is enabled.
+     *
+     * @return bool
+     */
+    public static function isAutoRedirectCreationEnabled(): bool
+    {
+        /** @noinspection DynamicInvocationViaScopeResolutionInspection */
+        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
+        /** @noinspection PhpMethodParametersCountMismatchInspection */
+        // TODO: As of v2.0 the default value must be FALSE.
+        return (bool) self::get('auto_redirect_creation_enabled', true);
+    }
 }

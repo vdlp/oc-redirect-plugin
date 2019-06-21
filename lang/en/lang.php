@@ -30,6 +30,9 @@ return [
         'caching_enabled_comment' => 'Improves the redirect engine when having a lot of redirects. '
             . 'CAUTION: Cache driver `file` and `database` are NOT supported. '
             . 'Recommended driver is `memcached` or a similar "in-memory" caching driver.',
+        'auto_redirect_creation_enabled_label' => 'Auto redirect creation',
+        'auto_redirect_creation_enabled_comment' => 'Automatically create redirects when the slug of a '
+            . 'Page or Static Page was changed.',
     ],
     'redirect' => [
         'redirect' => 'Redirect',

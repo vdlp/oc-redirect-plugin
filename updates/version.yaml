@@ -30,3 +30,4 @@
 1.8.0:
     - "Add CLI command for publishing redirects -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.8.0"
 1.8.1: "Fix critical issue regarding regular expression redirects"
+1.9.0: "Add setting for enabling/disabling automatic creation of redirects -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.9.0"
