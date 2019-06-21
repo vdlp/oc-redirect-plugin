@@ -26,6 +26,7 @@ class RedirectMiddleware
      * @param Request $request
      * @param Closure $next
      * @return mixed
+     * @throws \Cms\Classes\CmsException
      */
     public function handle($request, Closure $next)
     {
@@ -34,7 +35,7 @@ class RedirectMiddleware
             return $next($request);
         }
 
-        /** @var RedirectManagerInterface $manager */
+        /** @var RedirectManager $manager */
         $manager = resolve(RedirectManagerInterface::class);
         $manager->setLoggingEnabled(Settings::isLoggingEnabled())
             ->setStatisticsEnabled(Settings::isStatisticsEnabled());

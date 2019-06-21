@@ -67,7 +67,9 @@ class Plugin extends PluginBase
             return;
         }
 
-        $this->bootBackend();
+        if (Models\Settings::isAutoRedirectCreationEnabled()) {
+            $this->initAutoRedirectCreation();
+        }
 
         /*
          * Extensibility:
@@ -137,12 +139,12 @@ class Plugin extends PluginBase
     }
 
     /**
-     * Boot stuff for Backend
+     * Perform initialization for automatic redirect creation.
      *
      * @return void
      * @throws Exception
      */
-    public function bootBackend()//: void
+    public function initAutoRedirectCreation()//: void
     {
         Page::extend(static function (Page $page) {
             $handler = new PageHandler($page);
