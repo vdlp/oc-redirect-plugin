@@ -32,5 +32,5 @@
 1.8.1: "Fix critical issue regarding regular expression redirects"
 1.9.0: "Add setting for enabling/disabling automatic creation of redirects -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.9.0"
 1.10.0:
-    - "TODO -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.0"
+    - "Improve statistics performance -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.0"
     - 20190704_0007_add_timestamp_crawler_index_on_clients_table.php
