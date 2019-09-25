@@ -73,7 +73,7 @@ return [
         'requirements_prompt' => 'Добавить новый параметр',
         'replacement' => 'Замена',
         'replacement_comment' => 'Пропишите (опционально) замену для текущей метки. В целевом URL метка будет заменена на это значение.',
-        
+
         'permanent' => '301 - перемещено навсегда',
         'temporary' => '302 - перемещено временно',
         'see_other' => '303 - смотреть другое',
@@ -194,9 +194,9 @@ return [
         'latest_redirected_requests' => 'Последний перенаправленный запрос',
         'redirects_per_month' => 'Перенаправления за месяц',
         'no_data' => 'Нет данных',
-        'top_crawlers_this_month' => 'Топ :top crawlers в этом месяце', // TODO
+        'top_crawlers_this_month' => 'Топ :top crawlers в этом месяце',
         'top_redirects_this_month' => 'Топ :top редиректов в этом месяце',
-        'activity_last_three_months' => 'Activity last 3 months' // TODO
+        'activity_last_three_months' => 'Activity last 3 months', // TODO
     ],
     'title' => [
         'import' => 'Импорт',
