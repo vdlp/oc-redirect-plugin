@@ -18,18 +18,21 @@ return [
         'menu_description' => 'Управление редиректами',
     ],
     'settings' => [
-        'menu_label' => 'Redirects', // TODO
-        'menu_description' => 'Manage settings for Redirects.', // TODO
-        'logging_enabled_label' => 'Log redirect events', // TODO
-        'logging_enabled_comment' => 'Store redirect events in the database.', // TODO
-        'statistics_enabled_label' => 'Gather statistics', // TODO
-        'statistics_enabled_comment' => 'Gather statistics of redirected requests to get more insight.', // TODO
-        'test_lab_enabled_label' => 'TestLab (beta)', // TODO
-        'test_lab_enabled_comment' => 'TestLab allows you to mass test your redirects.', // TODO
-        'caching_enabled_label' => 'Caching of redirects (advanced)', // TODO
-        'caching_enabled_comment' => 'Improves the redirect engine when having a lot of redirects. ' // TODO
-            . 'CAUTION: Cache driver `file` and `database` are NOT supported. '
-            . 'Recommended driver is `memcached` or a similar "in-memory" caching driver.',
+        'menu_label' => 'Редиректы',
+        'menu_description' => 'Управление настройками для Редиректов.',
+        'logging_enabled_label' => 'Журнал событий перенаправлений',
+        'logging_enabled_comment' => 'Хранить события перенаправления в базе данных.',
+        'statistics_enabled_label' => 'Собирать статистику',
+        'statistics_enabled_comment' => 'Соберите статистику перенаправленных запросов, чтобы получить больше информации.',
+        'test_lab_enabled_label' => 'TestLab (beta)',
+        'test_lab_enabled_comment' => 'TestLab позволяет вам массово протестировать ваши редиректы.',
+        'caching_enabled_label' => 'Кэширование редиректов (продвинутый)',
+        'caching_enabled_comment' => 'Улучшает механизм перенаправления при большом количестве перенаправлений. '
+            . 'ВНИМАНИЕ: Драйвер кэша `file` и `database` НЕ поддерживаются. '
+            . 'Рекомендуемым драйвером является `memcached` или аналогичный драйвер "in-memory" для кеширования в памяти.',
+        'auto_redirect_creation_enabled_label' => 'Автоматическое создание перенаправления',
+        'auto_redirect_creation_enabled_comment' => 'Автоматически создавать перенаправления когда slug для '
+            . 'Page или Static Page был изменён.',
     ],
     'redirect' => [
         'redirect' => 'Редиректы',
@@ -52,9 +55,9 @@ return [
         'match_type' => 'Тип соответствия',
         'exact' => 'Точный',
         'placeholders' => 'По меткам',
-        'regex' => 'Regular expression', // TODO
+        'regex' => 'Регулярное выражение',
         'target_type' => 'Тип цели редиректа',
-        'target_type_none' => 'Not applicable', // TODO
+        'target_type_none' => 'Неприменимый',
         'target_type_path_or_url' => 'Путь или URL',
         'target_type_cms_page' => 'Страница CMS',
         'target_type_static_page' => 'Статическая страница',
@@ -63,12 +66,14 @@ return [
         'requirements' => 'Параметры меток',
         'requirements_comment' => 'Добавьте параметры для каждого условия.',
         'placeholder' => 'Метка',
-        'placeholder_comment' => 'Имя метки (включая фигурные скобки) проставленной в поле \'Исходный путь\'. Например, {category} или {id}',
+        'placeholder_comment' => 'Имя метки (включая фигурные скобки) проставленной в поле \'Исходный путь\'. '
+            . 'Например: {category} или {id}',
         'requirement' => 'Параметры',
         'requirement_comment' => 'Пропишите параметры с помощью регулярных выражений. Например, [0-9]+ или [a-zA-Z]+.',
         'requirements_prompt' => 'Добавить новый параметр',
         'replacement' => 'Замена',
         'replacement_comment' => 'Пропишите (опционально) замену для текущей метки. В целевом URL метка будет заменена на это значение.',
+
         'permanent' => '301 - перемещено навсегда',
         'temporary' => '302 - перемещено временно',
         'see_other' => '303 - смотреть другое',
@@ -76,7 +81,7 @@ return [
         'gone' => '410 - удалено',
         'enabled' => 'Включено',
         'none' => 'none', // TODO
-        'enabled_comment' => 'Сдвиньте переключатель для включения этого редиректа.',
+        'enabled_comment' => 'Установите флажок для включения этого редиректа.',
         'priority' => 'Приоритет',
         'hits' => 'Переходы',
         'return_to_redirects' => 'Вернуться к списку редиректов',
@@ -87,24 +92,28 @@ return [
         'system_tip' => 'Системный редирект',
         'user_tip' => 'Пользовательский редирект',
         'type' => 'Тип',
-        'last_used_at' => 'Последнее использование',
+        'last_used_at' => 'Последнее применение',
         'and_delete_log_item' => 'И удалить выбранные элементы лога',
         'category' => 'Категория',
         'categories' => 'Категории',
-        'description' => 'Description', // TODO
+        'description' => 'Описание',
         'name' => 'Имя',
         'date_time' => 'Дата и время',
         'date' => 'Дата',
         'truncate_confirm' => 'Вы уверены, что хотите удалить ВСЕ записи?',
         'truncating' => 'Удаление...',
-        'warning' => 'Warning', // TODO
-        'cache_warning' => 'You have enabled caching but your caching driver is not supported. ' // TODO
-            . 'Redirects will not be cached.',
-        'general_confirm' => 'Are you sure you want to do this?', // TODO
-        'sparkline_30d' => 'Hits (30d)', // TODO
-        'has_hits' => 'Has hits', // TODO
-        'minimum_hits' => 'Minimum # hits', // TODO
-        'invalid_regex' => 'Invalid regular expression.', // TODO
+        'warning' => 'Предупреждение',
+        'cache_warning' => 'Вы включили кэширование, но ваш драйвер кэширования не поддерживается. '
+            . 'Перенаправления не будут кэшироваться.',
+        'general_confirm' => 'Вы уверены, что хотите это сделать?',
+        'sparkline_30d' => 'Хиты (30дн)',
+        'has_hits' => 'Хиты',
+        'minimum_hits' => 'Минимум # хитов',
+        'ignore_query_parameters' => 'Игнорировать параметры запроса (рекомендуется).',
+        'ignore_query_parameters_comment' => 'Движок будет игнорировать все параметры запроса из исходного пути.',
+        'last_used_at' => 'Последний хит',
+        'updated_at' => 'Обновлено',
+        'invalid_regex' => 'Неправильное регулярное выражение.',
     ],
     'list' => [
         'no_records' => 'В этом списке нет редиректов.',
@@ -113,80 +122,81 @@ return [
     ],
     'scheduling' => [
         'from_date' => 'Дата включения',
-        'from_date_comment' => 'Дата, с которой редирект будет активен. Не обязательное поле.',
+        'from_date_comment' => 'Дата, с которой редирект будет активен. Необязательное поле.',
         'to_date' => 'Дата выключения',
-        'to_date_comment' => 'Дата, по которую редирект будет активен. Не обязательное поле.',
+        'to_date_comment' => 'Дата до которой редирект будет активен. Необязательное поле.',
         'scheduling_comment' => 'Здесь вы можете задать период, в течении которого редирект будет активен. Возможны любые комбинации дат.',
-        'not_active_warning' => 'Redirect is not available anymore, please check \'Scheduling\' tab.', // TODO
+        'not_active_warning' => 'Редирект больше не доступен, пожалуйста, проверьте вкладку \'Расписание\'.',
     ],
     'test' => [
         'test_comment' => 'Пожалуйста, проверьте редирект перед сохранением.',
         'input_path' => 'Введите путь',
-        'input_path_comment' => 'Путь для тестирование. Например, /old-blog/category/123',
+        'input_path_comment' => 'Путь для тестирования. Например, /old-blog/category/123',
         'input_path_placeholder' => '/input/path',
         'input_scheme' => 'Input scheme', // TODO
         'test_date' => 'Выберите дату',
         'test_date_comment' => 'Если вы запланировали редирект по расписанию, вы можете проверить его работу для конкретной даты.',
         'testing' => 'Проверка...',
-        'run_test' => 'Запустить проверку',
+        'run_test' => 'Начать проверку',
         'no_match_label' => 'Извините, совпадения не найдены!',
         'no_match' => 'Совпадений не найдено!',
         'match_success_label' => 'Есть совпадение!',
     ],
     'test_lab' => [
-        'section_test_lab_comment' => 'TestLab allows you to mass test your redirects.', // TODO
-        'test_lab_label' => 'Include in TestLab', // TODO
-        'test_lab_enable' => 'Flick this switch to allow testing this redirect in the TestLab.', // TODO
+        'section_test_lab_comment' => 'TestLab позволяет вам массово протестировать ваши перенаправления.',
+        'test_lab_label' => 'Включить в TestLab',
+        'test_lab_enable' => 'Включите этот переключатель, чтобы разрешить тестирование этого редиректа в TestLab.',
         'test_lab_path_label' => 'Test Path', // TODO
         'test_lab_path_comment' => 'This path will be used when performing tests. '
             . 'Replace placeholders with real values.', // TODO
-        'start_tests' => 'Start Tests', // TODO
-        'start_tests_description' => 'Press the \'Start tests\' button to begin.', // TODO
-        'edit' => 'Edit', // TODO
-        'exclude' => 'Exclude', // TODO
-        'exclude_confirm' => 'Are you sure want to exclude this redirect from TestLab?', // TODO
+        'start_tests' => 'Запустить тесты',
+        'start_tests_description' => 'Нажмите кнопку \'Запустить тесты\' чтобы начать.',
+        'edit' => 'Редактировать',
+        'exclude' => 'Исключить',
+        'exclude_confirm' => 'Вы действительно хотите исключить этот редирект из TestLab?',
         'exclude_indicator' => 'Excluding redirect from TestLab', // TODO
         're_run' => 'Re-run', // TODO
-        're_run_indicator' => 'Running tests, please wait...', // TODO
+        're_run_indicator' => 'Запуск тестов, подождите...',
         'loop' => 'Loop', // TODO
         'match' => 'Match', // TODO
         'response_http_code' => 'Response HTTP code', // TODO
         'response_http_code_should_be' => 'Response HTTP code should be one of:', // TODO
         'redirect_count' => 'Redirect count', // TODO
         'final_destination' => 'Final Destination', // TODO
-        'no_redirects' => 'No redirects have been marked with TestLab enabled. '
-            . 'Please enable the option \'Include in TestLab\' when editing a redirect.', // TODO
-        'test_error' => 'An error occurred when testing this redirect.', // TODO
-        'flash_test_executed' => 'Test has been executed.', // TODO
-        'flash_redirect_excluded' => 'Redirect has been excluded from TestLab and will not show up on next test run.', // TODO
-        'result_request_failed' => 'Could not execute request.', // TODO
+        'no_redirects' => 'Нет отмеченных редиректов с включенным TestLab. '
+            . 'Пожалуйста, включите опцию \'Включить в TestLab\' в редактировании редиректа.',
+        'test_error' => 'Произошла ошибка при тестировании этого редиректа.',
+        'flash_test_executed' => 'Тест был выполнен.',
+        'flash_redirect_excluded' => 'Перенаправление было исключено из TestLab и не будет отображаться при следующем запуске теста.',
+        'result_request_failed' => 'Не удалось выполнить запрос.',
         'redirects_followed' => 'Number of redirects followed: :count (limited to :limit)', // TODO
         'not_determinate_destination_url' => 'Could not determine final destination URL.', // TODO
         'no_destination_url' => 'No final destination URL.', // TODO
         'final_destination_is' => 'Final destination is: :destination', // TODO
         'possible_loop' => 'Possible redirect loop!', // TODO
         'no_loop' => 'No redirect loop detected.', // TODO
-        'not_match_redirect' => 'Did not match any redirect.', // TODO
+        'not_match_redirect' => 'Не соответствует ни одному редиректу.',
         'matched' => 'Matched', // TODO
         'redirect' => 'redirect', // TODO
         'matched_not_http_code' => 'Matched redirect, but response HTTP code did not match! '
             . 'Expected :expected but received :received.', // TODO
         'matched_http_code' => 'Matched redirect, response HTTP code :code.', // TODO
-        'executing_tests' => 'Executing tests...', // TODO
+        'executing_tests' => 'Выполнение тестов...',
     ],
     'statistics' => [
-        'hits_per_day' => 'Redirect hits per day', // TODO
-        'click_on_chart' => 'Click on the chart to enable zooming and dragging.', // TODO
-        'requests_redirected' => 'Requests redirected', // TODO
-        'all_time' => 'all time', // TODO
-        'active_redirects' => 'Active redirects', // TODO
-        'redirects_this_month' => 'Redirects this month', // TODO
-        'previous_month' => 'previous month', // TODO
-        'latest_redirected_requests' => 'Latest redirected request', // TODO
-        'redirects_per_month' => 'Redirects per month', // TODO
-        'no_data' => 'No data', // TODO
-        'top_crawlers_this_month' => 'Top :top crawlers this month', // TODO
-        'top_redirects_this_month' => 'Top :top redirects this month', // TODO
+        'hits_per_day' => 'Хиты перенаправлений за день',
+        'click_on_chart' => 'Нажмите на график, чтобы включить масштабирование и перетаскивание.',
+        'requests_redirected' => 'Запросы перенаправлений',
+        'all_time' => 'всё время',
+        'active_redirects' => 'Активных редиректов',
+        'redirects_this_month' => 'Перенаправлений в этом месяце',
+        'previous_month' => 'Прошлый месяц',
+        'latest_redirected_requests' => 'Последний перенаправленный запрос',
+        'redirects_per_month' => 'Перенаправления за месяц',
+        'no_data' => 'Нет данных',
+        'top_crawlers_this_month' => 'Топ :top crawlers в этом месяце',
+        'top_redirects_this_month' => 'Топ :top редиректов в этом месяце',
+        'activity_last_three_months' => 'Activity last 3 months', // TODO
     ],
     'title' => [
         'import' => 'Импорт',
@@ -199,67 +209,77 @@ return [
         'edit_category' => 'Редактировать категорию',
         'view_redirect_log' => 'Смотреть лог редиректов',
         'statistics' => 'Статистика',
-        'test_lab' => 'TestLab (beta)', // TODO
+        'test_lab' => 'TestLab (beta)',
     ],
     'buttons' => [
         'add' => 'Добавить',
         'from_request_log' => 'Из лога запросов',
         'new_redirect' => 'Новый редирект',
         'create_redirects' => 'Создание редиректов',
-        'create_and_new' => 'Create and new', // TODO
+        'create_redirect' => 'Создать редирект',
+        'create_and_new' => 'Создать и новый',
         'delete' => 'Удалить',
         'enable' => 'Включить',
         'disable' => 'Отключить',
         'reorder_redirects' => 'Упорядочить',
-        'export' => 'Экспортировать',
-        'import' => 'Импортировать',
+        'export' => 'Экспорт',
+        'import' => 'Импорт',
+        'settings' => 'Настройки',
         'categories' => 'Категории',
         'new_category' => 'Новая категория',
         'reset_statistics' => 'Сбросить статистику',
         'logs' => 'Лог редиректов',
         'empty_redirect_log' => 'Очистить лог',
-        'clear_cache' => 'Clear cache', // TODO
-        'stop' => 'Stop', // TODO
+        'clear_cache' => 'Очистить кэш',
+        'stop' => 'Стоп',
+        'reset_all' => 'Сброс статистики для всех редиректов',
+        'all_redirects' => 'все редиректы',
+        'bulk_actions' => 'Массовые действия',
     ],
     'tab' => [
         'tab_general' => 'Основные',
         'tab_requirements' => 'Параметры меток',
         'tab_test' => 'Проверка',
         'tab_scheduling' => 'Расписание',
-        'tab_test_lab' => 'TestLab', // TODO
-        'tab_advanced' => 'Advanced', // TODO
+        'tab_test_lab' => 'TestLab',
+        'tab_advanced' => 'Продвинутый',
     ],
     'flash' => [
         'success_created_redirects' => 'Успешно создано :count редирект(ов)',
         'static_page_redirect_not_supported' => 'Этот редирект нельзя изменить. Необходим плагин RainLab.Pages.',
         'truncate_success' => 'Все записи успешно удалены',
         'delete_selected_success' => 'Выбранные записи успешно удалены',
-        'cache_cleared_success' => 'Successfully cleared redirect cache', // TODO
+        'cache_cleared_success' => 'Кэш редиректа успешно очищен',
+        'statistics_reset_success' => 'Вся статистика была успешно сброшена',
+        'enabled_all_redirects_success' => 'Все перенаправления были успешно включены',
+        'disabled_all_redirects_success' => 'Все перенаправления были успешно выключены',
+        'deleted_all_redirects_success' => 'Все перенаправления были успешно удалены',
     ],
     'import_export' => [ // TODO
-        'match_type' => 'Match Type [match_type] (Allowed values: exact, placeholders, regex)',
-        'category_id' => 'Category [category_id]',
-        'target_type' => 'Target Type [target_type] (Allowed values: path_or_url, cms_page, static_page, none)',
+        'match_type' => 'Match Type [match_type] (Допустимые значения: exact, placeholders, regex)',
+        'category_id' => 'Категория [category_id]',
+        'target_type' => 'Target Type [target_type] (Допустимые значения: path_or_url, cms_page, static_page, none)',
         'from_url' => 'Source path [from_url]',
-        'from_scheme' => 'Source scheme [from_scheme] (Allowed values: http, https, auto [default])',
+        'from_scheme' => 'Source scheme [from_scheme] (Допустимые значения: http, https, auto [default])',
         'to_url' => 'Target path [to_url]',
-        'to_scheme' => 'Target scheme [to_scheme] (Allowed values: http, https, auto [default])',
+        'to_scheme' => 'Target scheme [to_scheme] (Допустимые значения: http, https, auto [default])',
         'test_url' => 'Test URL [test_url]',
-        'cms_page' => 'CMS Page [cms_page] (Filename without .htm extension)',
-        'static_page' => 'Static Page [static_page] (Filename without .htm extension)',
+        'cms_page' => 'CMS страница [cms_page] (Имя файла без .htm расширения)',
+        'static_page' => 'Static Page [static_page] (Имя файла без .htm расширения)',
         'requirements' => 'Placeholder requirements [requirements]',
-        'status_code' => 'HTTP status code [status_code] (Possible values: 301, 302, 303, 404, 410)',
-        'hits' => 'Redirect Hits [hits]',
-        'from_date' => 'Scheduled date from [from_date] (YYYY-MM-DD or empty)',
-        'to_date' => 'Scheduled date to [to_date] (YYYY-MM-DD or empty)',
-        'sort_order' => 'Priority [sort_order]',
-        'is_enabled' => 'Enabled [is_enabled] (1 = enable redirect, 0 = disable redirect [default])',
-        'test_lab' => 'Test Lab [test_lab] (1 = enable Test Lab, 0 = disable TestLab [default])',
-        'test_lab_path' => 'Test Lab path [test_lab_path] (required if match_type = placeholders)',
-        'system' => 'System [system] (1 = system generated redirect, 0 = user generated redirect [default])',
-        'description' => 'Description [description]',
-        'last_used_at' => 'Last Used At [last_used_at] (YYYY-MM-DD HH:MM:SS or empty)',
-        'created_at' => 'Created At [created_at] (YYYY-MM-DD HH:MM:SS or empty)',
-        'updated_at' => 'Updated At [updated_at] (YYYY-MM-DD HH:MM:SS or empty)',
+        'status_code' => 'HTTP status code [status_code] (Возможные значения: 301, 302, 303, 404, 410)',
+        'hits' => 'Хиты редиректа [hits]',
+        'from_date' => 'Запланированная дата от [from_date] (YYYY-MM-DD или пустой)',
+        'to_date' => 'Запланированная дата до [to_date] (YYYY-MM-DD или пустой)',
+        'sort_order' => 'Приоритет [sort_order]',
+        'is_enabled' => 'Включен [is_enabled] (1 = редирект включен, 0 = редирект отключен [default])',
+        'ignore_query_parameters' => 'Ignore Query Parameters [ignore_query_parameters] (1 = ignore query parameters, 0 = include query parameters [default])',
+        'test_lab' => 'TestLab [test_lab] (1 = TestLab включен, 0 = TestLab выключен [default])',
+        'test_lab_path' => 'TestLab path [test_lab_path] (требуется, если match_type = placeholders)',
+        'system' => 'System [system] (1 = система сгенерировала редирект, 0 = пользователь создал редирект [default])',
+        'description' => 'Описание [description]',
+        'last_used_at' => 'Последнее применение [last_used_at] (YYYY-MM-DD HH:MM:SS или пустой)',
+        'created_at' => 'Создан [created_at] (YYYY-MM-DD HH:MM:SS или пустой)',
+        'updated_at' => 'Обновлен [updated_at] (YYYY-MM-DD HH:MM:SS или пустой)',
     ],
 ];

@@ -615,7 +615,7 @@ final class RedirectManager implements RedirectManagerInterface
         }
 
         /** @var Reader $reader */
-        $reader = Reader::createFromPath($rulesPath);
+        $reader = Reader::createFromPath($rulesPath, 'r');
 
         // WARNING: this is deprecated method in league/csv:8.0, when league/csv is upgraded to version 9 we should
         // follow the instructions on this page: http://csv.thephpleague.com/upgrading/9.0/
