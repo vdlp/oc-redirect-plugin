@@ -18,12 +18,12 @@ use Eloquent;
 class RedirectExport extends ExportModel
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $table = 'vdlp_redirect_redirects';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function exportData($columns, $sessionKey = null): array
     {

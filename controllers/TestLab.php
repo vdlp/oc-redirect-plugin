@@ -34,12 +34,12 @@ class TestLab extends Controller
     private $redirects;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __construct()
     {

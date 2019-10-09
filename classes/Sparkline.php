@@ -16,7 +16,7 @@ class Sparkline extends \Davaxi\Sparkline
     /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws InvalidArgumentException
      */
     public function setFillColorHex($color)

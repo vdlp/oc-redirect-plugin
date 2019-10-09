@@ -19,7 +19,7 @@ use Vdlp\Redirect\Classes\TesterResult;
 class RedirectMatch extends TesterBase
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws InvalidScheme
      */
     protected function test(): TesterResult

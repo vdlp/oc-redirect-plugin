@@ -43,7 +43,7 @@ use Vdlp\Redirect\Models;
 class Redirects extends Controller
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $implement = [
         Behaviors\FormController::class,
@@ -76,7 +76,7 @@ class Redirects extends Controller
     public $importExportConfig = 'config_import_export.yaml';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     //public $bodyClass = 'compact-container';
 
@@ -86,7 +86,7 @@ class Redirects extends Controller
     public $publishManager;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
@@ -96,7 +96,7 @@ class Redirects extends Controller
     private $flashBag;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __construct()
     {

@@ -71,12 +71,12 @@ class Redirect extends Model
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $table = 'vdlp_redirect_redirects';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected $guarded = [];
 
@@ -111,7 +111,7 @@ class Redirect extends Model
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $jsonable = [
         'requirements',
@@ -140,7 +140,7 @@ class Redirect extends Model
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected $dates = [
         'from_date',
@@ -149,7 +149,7 @@ class Redirect extends Model
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected $casts = [
         'ignore_query_parameters' => 'boolean',
@@ -159,14 +159,14 @@ class Redirect extends Model
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $hasMany = [
         'clients' => Client::class,
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $belongsTo = [
         'category' => Category::class,

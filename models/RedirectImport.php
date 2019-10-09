@@ -20,7 +20,7 @@ use Exception;
 class RedirectImport extends ImportModel
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $table = 'vdlp_redirect_redirects';
 
@@ -51,7 +51,7 @@ class RedirectImport extends ImportModel
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function importData($results, $sessionKey = null)//: void
     {

@@ -15,7 +15,7 @@ use Vdlp\Redirect\Classes\TesterResult;
 class RedirectCount extends TesterBase
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function test(): TesterResult
     {

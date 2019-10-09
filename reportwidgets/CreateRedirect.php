@@ -23,7 +23,7 @@ use Vdlp\Redirect\Models\Redirect;
 class CreateRedirect extends ReportWidgetBase
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __construct(Controller $controller, array $properties = [])
     {
@@ -33,7 +33,7 @@ class CreateRedirect extends ReportWidgetBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function render()
     {

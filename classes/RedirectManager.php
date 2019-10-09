@@ -260,7 +260,7 @@ final class RedirectManager implements RedirectManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addCondition(string $conditionClass, int $priority)//: void
     {
@@ -270,7 +270,7 @@ final class RedirectManager implements RedirectManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getConditions(): array
     {

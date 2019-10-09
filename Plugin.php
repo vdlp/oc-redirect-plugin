@@ -33,12 +33,12 @@ use Vdlp\Redirect\ServiceProviders;
 class Plugin extends PluginBase
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $elevated = true;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function pluginDetails(): array
     {
@@ -52,7 +52,7 @@ class Plugin extends PluginBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws Exception
      */
     public function boot()
@@ -120,7 +120,7 @@ class Plugin extends PluginBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function register()
     {
@@ -164,7 +164,7 @@ class Plugin extends PluginBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function registerPermissions(): array
     {
@@ -177,7 +177,7 @@ class Plugin extends PluginBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function registerNavigation(): array
     {
@@ -286,7 +286,7 @@ class Plugin extends PluginBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function registerSettings(): array
     {
@@ -306,7 +306,7 @@ class Plugin extends PluginBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function registerReportWidgets(): array
     {
@@ -326,7 +326,7 @@ class Plugin extends PluginBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function registerListColumnTypes(): array
     {
@@ -401,7 +401,7 @@ class Plugin extends PluginBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @param Schedule $schedule
      */
     public function registerSchedule($schedule)

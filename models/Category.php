@@ -18,7 +18,7 @@ use October\Rain\Database\Model;
 class Category extends Model
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $table = 'vdlp_redirect_categories';
 }
