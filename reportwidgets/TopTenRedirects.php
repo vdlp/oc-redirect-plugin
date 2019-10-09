@@ -20,7 +20,7 @@ use Vdlp\Redirect\Classes\StatisticsHelper;
 class TopTenRedirects extends ReportWidgetBase
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __construct(Controller $controller, array $properties = [])
     {
@@ -30,7 +30,7 @@ class TopTenRedirects extends ReportWidgetBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws SystemException
      */
     public function render()

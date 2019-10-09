@@ -16,7 +16,7 @@ class StaticPageHandler extends PageHandler
     /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function hasUrlChanged(): bool
     {
@@ -26,7 +26,7 @@ class StaticPageHandler extends PageHandler
     /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getOriginalUrl(): string
     {
@@ -42,7 +42,7 @@ class StaticPageHandler extends PageHandler
     /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getNewUrl(): string
     {
@@ -60,7 +60,7 @@ class StaticPageHandler extends PageHandler
     /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getTargetType(): string
     {

@@ -15,7 +15,7 @@ use Vdlp\Redirect\Classes\TesterResult;
 class RedirectLoop extends TesterBase
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function test(): TesterResult
     {

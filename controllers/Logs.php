@@ -23,7 +23,7 @@ use Vdlp\Redirect\Models\RedirectLog;
 class Logs extends Controller
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $implement = [
         ListController::class
@@ -35,12 +35,12 @@ class Logs extends Controller
     public $listConfig = 'config_list.yaml';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __construct()
     {

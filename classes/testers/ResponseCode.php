@@ -26,7 +26,7 @@ use Vdlp\Redirect\Models\Redirect;
 class ResponseCode extends TesterBase
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws InvalidScheme
      */
     protected function test(): TesterResult

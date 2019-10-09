@@ -30,7 +30,7 @@ class CacheManager
     private $cache;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws BadMethodCallException
      */
     protected function init()//: void

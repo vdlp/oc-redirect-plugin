@@ -18,31 +18,31 @@ use October\Rain\Database\Model;
 class RedirectLog extends Model
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $table = 'vdlp_redirect_redirect_logs';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected $guarded = [];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $dates = [
         'date_time',
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $belongsTo = [
         'redirect' => Redirect::class,
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $timestamps = false;
 }

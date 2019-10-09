@@ -15,7 +15,7 @@ use Vdlp\Redirect\Classes\PublishManager;
 class PublishRedirects extends Command
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __construct()
     {

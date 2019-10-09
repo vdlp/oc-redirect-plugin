@@ -38,14 +38,14 @@ abstract class TesterBase implements TesterInterface
     /**
      * @param string $testPath
      */
-    public function __construct($testPath)
+    public function __construct(string $testPath)
     {
         $this->testPath = $testPath;
         $this->testUrl = Cms::url($testPath);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     final public function execute(): TesterResult
     {
@@ -63,7 +63,7 @@ abstract class TesterBase implements TesterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getTestPath(): string
     {
@@ -71,7 +71,7 @@ abstract class TesterBase implements TesterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getTestUrl(): string
     {

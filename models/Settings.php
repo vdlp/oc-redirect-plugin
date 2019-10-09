@@ -31,7 +31,7 @@ class Settings extends Model
     public $settingsFields = 'fields.yaml';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __construct(array $attributes = [])
     {

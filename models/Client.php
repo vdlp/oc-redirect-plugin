@@ -18,24 +18,24 @@ use October\Rain\Database\Model;
 class Client extends Model
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $table = 'vdlp_redirect_clients';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected $guarded = [];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $belongsTo = [
         'redirect' => Redirect::class,
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $timestamps = false;
 }
