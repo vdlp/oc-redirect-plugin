@@ -36,3 +36,5 @@
     - 20190704_0007_add_timestamp_crawler_index_on_clients_table.php
 1.10.1:
     - "This fixes an issue where redirects will fail to work when the redirects.csv file does not have the write permission -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.1"
+1.10.2:
+    - "Fixes a fatal error when running TestLab -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.2"
