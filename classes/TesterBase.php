@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Cms;
+use Illuminate\Http\Request;
+use October\Rain\Events\Dispatcher;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Vdlp\Redirect\Classes\Contracts\TesterInterface;
 
@@ -29,10 +31,14 @@ abstract class TesterBase implements TesterInterface
      */
     const CONNECTION_TIMEOUT = 10;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $testUrl;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $testPath;
 
     /**
@@ -121,7 +127,7 @@ abstract class TesterBase implements TesterInterface
      */
     protected function getRedirectManager(): RedirectManager
     {
-        $manager = new RedirectManager();
+        $manager = new RedirectManager(resolve(Request::class), resolve(Dispatcher::class));
 
         return $manager->setLoggingEnabled(false)
             ->setStatisticsEnabled(false);
