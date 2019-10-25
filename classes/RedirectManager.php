@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Carbon\Carbon;
+use Cms\Classes\CmsException;
 use Cms\Classes\Controller;
 use Cms\Classes\Theme;
+use Cms\Helpers\Cms;
 use Exception;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
@@ -178,7 +180,7 @@ final class RedirectManager implements RedirectManagerInterface
      * @param RedirectRule $rule
      * @param string $requestUri
      * @return void
-     * @throws \Cms\Classes\CmsException
+     * @throws CmsException
      */
     public function redirectWithRule(RedirectRule $rule, string $requestUri)//: void
     {
@@ -199,7 +201,7 @@ final class RedirectManager implements RedirectManagerInterface
 
         if (!$toUrl
             || empty($toUrl)
-            || (new \Cms\Helpers\Cms())->url($requestUri) === $toUrl // Prevent redirect loops
+            || (new Cms())->url($requestUri) === $toUrl // Prevent redirect loops
         ) {
             return;
         }
@@ -218,7 +220,7 @@ final class RedirectManager implements RedirectManagerInterface
      *
      * @param RedirectRule $rule
      * @return bool|string
-     * @throws \Cms\Classes\CmsException
+     * @throws CmsException
      */
     public function getLocation(RedirectRule $rule)
     {
@@ -240,7 +242,7 @@ final class RedirectManager implements RedirectManagerInterface
                 }
 
                 if (strpos($toUrl, '/') === 0) {
-                    $toUrl = (new \Cms\Helpers\Cms())->url($toUrl);
+                    $toUrl = (new Cms())->url($toUrl);
                 }
 
                 break;
@@ -353,7 +355,7 @@ final class RedirectManager implements RedirectManagerInterface
     /**
      * @param RedirectRule $rule
      * @return string
-     * @throws \Cms\Classes\CmsException
+     * @throws CmsException
      */
     private function redirectToCmsPage(RedirectRule $rule): string
     {

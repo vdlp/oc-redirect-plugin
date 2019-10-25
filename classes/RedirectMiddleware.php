@@ -89,5 +89,7 @@ class RedirectMiddleware
         }
 
         $manager->redirectWithRule($rule, $requestUri);
+
+        return $next($request);
     }
 }
