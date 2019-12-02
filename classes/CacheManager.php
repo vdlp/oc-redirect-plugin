@@ -8,7 +8,7 @@ use BadMethodCallException;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Cache\TaggedCache;
-use October\Rain\Support\Traits\Singleton;
+use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Models\Settings;
 
 /**
@@ -18,11 +18,9 @@ use Vdlp\Redirect\Models\Settings;
  *
  * @package Vdlp\Redirect\Classes
  */
-class CacheManager
+final class CacheManager implements CacheManagerInterface
 {
-    use Singleton;
-
-    const CACHE_TAG = 'Vdlp.Redirect';
+    private const CACHE_TAG = 'Vdlp.Redirect';
 
     /**
      * @var TaggedCache
@@ -30,81 +28,65 @@ class CacheManager
     private $cache;
 
     /**
+     * @param TaggedCache $cache
+     */
+    public function __construct(TaggedCache $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
      * {@inheritDoc}
-     * @throws BadMethodCallException
      */
-    protected function init()//: void
+    public function get(string $key)
     {
-        $this->cache = Cache::tags([static::CACHE_TAG]);
+        return $this->cache->get($key);
     }
 
     /**
-     * Get item from cache storage.
-     *
-     * @param string $cacheKey
-     * @return mixed
+     * {@inheritDoc}
      */
-    public function get($cacheKey)
+    public function forget(string $key): bool
     {
-        return $this->cache->get($cacheKey);
+        return $this->cache->forget($key);
     }
 
     /**
-     * @param $cacheKey
-     * @return bool
+     * {@inheritDoc}
      */
-    public function forget($cacheKey): bool
+    public function has(string $key): bool
     {
-        return $this->cache->forget($cacheKey);
+        return $this->cache->has($key);
     }
 
     /**
-     * Checks if items resists in cache storage.
-     *
-     * @param string $cacheKey
-     * @return bool
+     * {@inheritDoc}
      */
-    public function has($cacheKey): bool
+    public function cacheKey(string $requestPath, string $scheme): string
     {
-        return $this->cache->has($cacheKey);
-    }
-
-    /**
-     * Generate proper cache key.
-     *
-     * Most caching backend have no limits on key lengths.
-     * But to be sure I chose to MD5 hash the cache key.
-     *
-     * @param string $requestPath
-     * @param string $scheme
-     * @return string
-     */
-    public function cacheKey($requestPath, $scheme): string
-    {
+        // Most caching backend have no limits on key lengths.
+        // But to be sure I chose to MD5 hash the cache key.
         return md5($requestPath . $scheme);
     }
 
     /**
-     * Clears redirect cache.
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function flush()//: void
+    public function flush(): void
     {
         $this->cache->flush();
     }
 
     /**
-     * @param array $redirectRules
-     * @return void
+     * {@inheritDoc}
      */
-    public function putRedirectRules(array $redirectRules)
+    public function putRedirectRules(array $redirectRules): void
     {
         $this->cache->forever('Vdlp.Redirect.Rules', $redirectRules);
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getRedirectRules(): array
     {
@@ -112,29 +94,25 @@ class CacheManager
     }
 
     /**
-     * Put matched rule or FALSE to cache.
-     *
-     * @param string $cacheKey
-     * @param RedirectRule|false $matchedRuleOrFalse
-     * @return RedirectRule|false
+     * {@inheritDoc}
      */
-    public function putMatch($cacheKey, $matchedRuleOrFalse)
+    public function putMatch(string $cacheKey, ?RedirectRule $matchedRule = null): ?RedirectRule
     {
-        if ($matchedRuleOrFalse === false) {
+        if ($matchedRule === null) {
             $this->cache->forever($cacheKey, false);
-            return false;
+            return null;
         }
 
-        $matchedRuleToDate = $matchedRuleOrFalse->getToDate();
+        $matchedRuleToDate = $matchedRule->getToDate();
 
         if ($matchedRuleToDate instanceof Carbon) {
             $minutes = $matchedRuleToDate->diffInMinutes(Carbon::now());
-            $this->cache->put($cacheKey, $matchedRuleOrFalse, $minutes);
+            $this->cache->put($cacheKey, $matchedRule, $minutes);
         } else {
-            $this->cache->forever($cacheKey, $matchedRuleOrFalse);
+            $this->cache->forever($cacheKey, $matchedRule);
         }
 
-        return $matchedRuleOrFalse;
+        return $matchedRule;
     }
 
     /**

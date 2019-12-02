@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes\Contracts;
 
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
+use Vdlp\Redirect\Classes\RedirectManagerSettings;
 use Vdlp\Redirect\Classes\RedirectRule;
 
 /**
@@ -38,7 +40,7 @@ interface RedirectManagerInterface
      * @param string $requestUri
      * @return void
      */
-    public function redirectWithRule(RedirectRule $rule, string $requestUri);
+    public function redirectWithRule(RedirectRule $rule, string $requestUri): void;
 
     /**
      * Get Location URL to redirect to.
@@ -60,7 +62,13 @@ interface RedirectManagerInterface
      *
      * @param string $conditionClass
      * @param int $priority
-     * @return void
+     * @return RedirectManagerInterface
      */
-    public function addCondition(string $conditionClass, int $priority);
+    public function addCondition(string $conditionClass, int $priority): RedirectManagerInterface;
+
+    /**
+     * @param RedirectManagerSettings $settings
+     * @return mixed
+     */
+    public function setSettings(RedirectManagerSettings $settings): RedirectManagerInterface;
 }

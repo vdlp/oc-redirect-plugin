@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\ServiceProviders;
 
+use Illuminate\Cache\TaggedCache;
+use Illuminate\Cache\TagSet;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Http\Request;
-use October\Rain\Events\Dispatcher;
 use October\Rain\Support\ServiceProvider;
-use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
+use Vdlp\Redirect\Classes\CacheManager;
+use Vdlp\Redirect\Classes\Contracts;
+use Vdlp\Redirect\Classes\PublishManager;
 use Vdlp\Redirect\Classes\RedirectManager;
 
 /**
@@ -18,15 +21,27 @@ use Vdlp\Redirect\Classes\RedirectManager;
  */
 class Redirect extends ServiceProvider
 {
-    public function register()
+    /**
+     * @return void
+     */
+    public function register(): void
     {
-        $this->app->singleton(RedirectManager::class, static function (Container $container) {
-            return new RedirectManager(
-                $container->make(Request::class),
-                $container->make(Dispatcher::class)
-            );
+        $this->app->bind(Contracts\RedirectManagerInterface::class, RedirectManager::class);
+        $this->app->bind(Contracts\PublishManagerInterface::class, PublishManager::class);
+
+        $this->app->bind(Contracts\CacheManagerInterface::class, static function (Container $container) {
+            $repository = $container->make(Repository::class);
+
+            return new CacheManager(new TaggedCache(
+                $repository->getStore(),
+                new TagSet($repository->getStore(), [
+                    'Vdlp.Redirect'
+                ])
+            ));
         });
 
-        $this->app->alias(RedirectManager::class, RedirectManagerInterface::class);
+        $this->app->singleton(RedirectManager::class);
+        $this->app->singleton(PublishManager::class);
+        $this->app->singleton(CacheManager::class);
     }
 }

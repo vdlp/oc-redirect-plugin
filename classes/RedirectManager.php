@@ -14,9 +14,10 @@ use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
 use League\Csv\Reader;
-use October\Rain\Events\Dispatcher;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing;
 use Throwable;
+use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Exceptions;
@@ -57,17 +58,9 @@ final class RedirectManager implements RedirectManagerInterface
     private $basePath;
 
     /**
-     * Whether redirect logging is enabled (default: true).
-     *
-     * @var bool
+     * @var RedirectManagerSettings
      */
-    private $loggingEnabled = true;
-
-    /**
-     * Whether the manager should gather statistics (default: true).
-     * @var bool
-     */
-    private $statisticsEnabled = true;
+    private $settings;
 
     /**
      * HTTP 1.1 headers
@@ -83,21 +76,29 @@ final class RedirectManager implements RedirectManagerInterface
     ];
 
     /**
-     * @var Dispatcher
+     * @var CacheManagerInterface
      */
-    private $eventDispatcher;
+    private $cacheManager;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $log;
 
     /**
      * Constructs a RedirectManager instance.
      *
      * @param Request $request
-     * @param Dispatcher $eventDispatcher
+     * @param CacheManagerInterface $cacheManager
+     * @param LoggerInterface $log
      */
-    public function __construct(Request $request, Dispatcher $eventDispatcher)
+    public function __construct(Request $request, CacheManagerInterface $cacheManager, LoggerInterface $log)
     {
         $this->matchDate = Carbon::today();
         $this->basePath = $request->getBasePath();
-        $this->eventDispatcher = $eventDispatcher;
+        $this->settings = RedirectManagerSettings::createDefault();
+        $this->cacheManager = $cacheManager;
+        $this->log = $log;
     }
 
     /**
@@ -108,8 +109,14 @@ final class RedirectManager implements RedirectManagerInterface
      */
     public static function createWithRule(RedirectRule $rule): RedirectManagerInterface
     {
-        $instance = new self(resolve(Request::class), resolve(Dispatcher::class));
+        $instance = new self(
+            resolve(Request::class),
+            resolve(CacheManagerInterface::class),
+            resolve(LoggerInterface::class)
+        );
+
         $instance->rules[] = $rule;
+
         return $instance;
     }
 
@@ -152,11 +159,10 @@ final class RedirectManager implements RedirectManagerInterface
      */
     public function matchCached(string $requestPath, string $scheme)
     {
-        $cacheManager = CacheManager::instance();
-        $cacheKey = $cacheManager->cacheKey($requestPath, $scheme);
+        $cacheKey = $this->cacheManager->cacheKey($requestPath, $scheme);
 
-        if ($cacheManager->has($cacheKey)) {
-            $cachedItem = $cacheManager->get($cacheKey);
+        if ($this->cacheManager->has($cacheKey)) {
+            $cachedItem = $this->cacheManager->get($cacheKey);
 
             // Verify the data from cache. In some cases a cache driver can not unserialize
             // (due to invalid php configuration) the cached data which causes this function to return invalid data.
@@ -171,7 +177,7 @@ final class RedirectManager implements RedirectManagerInterface
 
         $matchedRule = $this->match($requestPath, $scheme);
 
-        return $cacheManager->putMatch($cacheKey, $matchedRule);
+        return $this->cacheManager->putMatch($cacheKey, $matchedRule);
     }
 
     /**
@@ -182,9 +188,9 @@ final class RedirectManager implements RedirectManagerInterface
      * @return void
      * @throws CmsException
      */
-    public function redirectWithRule(RedirectRule $rule, string $requestUri)//: void
+    public function redirectWithRule(RedirectRule $rule, string $requestUri): void
     {
-        if ($this->statisticsEnabled) {
+        if ($this->settings->isStatisticsEnabled()) {
             $helper = new StatisticsHelper();
             $helper->increaseHitsForRedirect($rule->getId());
         }
@@ -264,7 +270,15 @@ final class RedirectManager implements RedirectManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function addCondition(string $conditionClass, int $priority)//: void
+    public function getConditions(): array
+    {
+        return array_keys($this->conditions);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addCondition(string $conditionClass, int $priority): RedirectManagerInterface
     {
         $this->conditions[$conditionClass] = $priority;
         arsort($this->conditions);
@@ -274,32 +288,9 @@ final class RedirectManager implements RedirectManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function getConditions(): array
+    public function setSettings(RedirectManagerSettings $settings): RedirectManagerInterface
     {
-        return array_keys($this->conditions);
-    }
-
-    /**
-     * Enable or disable logging.
-     *
-     * @param bool $loggingEnabled
-     * @return RedirectManager
-     */
-    public function setLoggingEnabled(bool $loggingEnabled): RedirectManager
-    {
-        $this->loggingEnabled = $loggingEnabled;
-        return $this;
-    }
-
-    /**
-     * Enable or disable gathering of statistics.
-     *
-     * @param bool $statisticsEnabled
-     * @return RedirectManager
-     */
-    public function setStatisticsEnabled(bool $statisticsEnabled): RedirectManager
-    {
-        $this->statisticsEnabled = $statisticsEnabled;
+        $this->settings = $settings;
         return $this;
     }
 
@@ -561,7 +552,7 @@ final class RedirectManager implements RedirectManagerInterface
      * @param string $placeholder
      * @return string|null
      */
-    private function findReplacementForPlaceholder(RedirectRule $rule, string $placeholder)//: ?string
+    private function findReplacementForPlaceholder(RedirectRule $rule, string $placeholder): ?string
     {
         foreach ($rule->getRequirements() as $requirement) {
             if ($requirement['placeholder'] === $placeholder && !empty($requirement['replacement'])) {
@@ -577,7 +568,7 @@ final class RedirectManager implements RedirectManagerInterface
      *
      * @return void
      */
-    private function loadRedirectRules()//: void
+    private function loadRedirectRules(): void
     {
         if ($this->rules !== null) {
             return;
@@ -593,9 +584,8 @@ final class RedirectManager implements RedirectManagerInterface
             }
         } catch (Throwable $e) {
             /** @var Log $log */
-            $log = resolve(Log::class);
-            $log->error('Vdlp.Redirect: Could not load redirect rules: ' . $e->getMessage());
-            $log->debug($e);
+            $this->log->error('Vdlp.Redirect: Could not load redirect rules: ' . $e->getMessage());
+            $this->log->debug($e);
         }
 
         $this->rules = $rules;
@@ -639,7 +629,7 @@ final class RedirectManager implements RedirectManagerInterface
      */
     private function readRulesFromCache(): array
     {
-        $results = CacheManager::instance()->getRedirectRules();
+        $results = $this->cacheManager->getRedirectRules();
 
         $rules = [];
 
@@ -662,9 +652,9 @@ final class RedirectManager implements RedirectManagerInterface
      * @param string $toUrl
      * @return void
      */
-    private function addLogEntry(RedirectRule $rule, string $requestUri, string $toUrl)//: void
+    private function addLogEntry(RedirectRule $rule, string $requestUri, string $toUrl): void
     {
-        if (!$this->loggingEnabled) {
+        if (!$this->settings->isLoggingEnabled()) {
             return;
         }
 

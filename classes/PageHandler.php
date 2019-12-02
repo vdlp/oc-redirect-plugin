@@ -34,7 +34,7 @@ class PageHandler
      *
      * @return void
      */
-    public function onBeforeUpdate()//: void
+    public function onBeforeUpdate(): void
     {
         if ($this->page->getAttribute('is_hidden')) {
             return;
@@ -66,7 +66,7 @@ class PageHandler
      * @return void
      * @throws Exception
      */
-    public function onAfterDelete()//: void
+    public function onAfterDelete(): void
     {
         Redirect::where($this->getTargetType(), '=', $this->page->getBaseFileName())
             ->where('system', '=', 1)
@@ -133,7 +133,7 @@ class PageHandler
      *
      * @return void
      */
-    protected function createRedirect()//: void
+    protected function createRedirect(): void
     {
         Redirect::create([
             'match_type' => Redirect::TYPE_EXACT,

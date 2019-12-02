@@ -15,7 +15,7 @@ use Vdlp\Redirect\Models\Redirect;
  *
  * @package Vdlp\Redirect\Classes
  */
-class OptionHelper
+final class OptionHelper
 {
     /**
      * Returns available target type options based on given status code.

@@ -1,10 +1,11 @@
 <?php
 
+/** @noinspection PhpMissingParentCallCommonInspection */
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect;
 
-use App;
 use Backend;
 use Cms\Classes\Page;
 use Event;
@@ -14,10 +15,9 @@ use Illuminate\Contracts\Http\Kernel;
 use System\Classes\PluginBase;
 use Throwable;
 use Validator;
-use Vdlp\Redirect\Classes\CacheManager;
 use Vdlp\Redirect\Classes\PageHandler;
-use Vdlp\Redirect\Classes\PublishManager;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
+use Vdlp\Redirect\Classes\RedirectObserver;
 use Vdlp\Redirect\Classes\StaticPageHandler;
 use Vdlp\Redirect\Console\PublishRedirects;
 use Vdlp\Redirect\Models;
@@ -57,15 +57,16 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-        if (App::runningInConsole() || App::runningUnitTests()) {
+        if ($this->app->runningInConsole() || $this->app->runningUnitTests()) {
             return;
         }
 
         $this->registerCustomValidators();
+        $this->registerObservers();
 
-        if (!App::runningInBackend()) {
+        if (!$this->app->runningInBackend()) {
             /** @var Kernel $kernel */
-            $kernel = $this->app[Kernel::class];
+            $kernel = resolve(Kernel::class);
             $kernel->prependMiddleware(RedirectMiddleware::class);
             return;
         }
@@ -94,8 +95,6 @@ class Plugin extends PluginBase
                     'to_url' => $newUrl,
                     'system' => true
                 ]);
-
-            Event::fire('vdlp.redirect.changed');
         });
 
         /*
@@ -103,28 +102,22 @@ class Plugin extends PluginBase
          *
          * When one or more redirects have been changed.
          */
-        Event::listen([
-            'vdlp.redirect.changed',
-            'vdlp.redirect.afterRedirectSave',
-            'vdlp.redirect.afterRedirectDelete',
+        Event::listen('vdlp.redirect.changed', static function (int $redirectId) {
+            // TODO
+        });
 
-        ], static function () {
-            // The caches should be flushed is caching is enabled and supported.
-            if (CacheManager::cachingEnabledAndSupported()) {
-                CacheManager::instance()->flush();
-            }
-
-            // Publish all redirect rules to file or cache repository.
-            PublishManager::instance()->publish();
+        Event::listen('vdlp.redirects.changed', static function (array $redirectIds) {
+            // TODO
         });
     }
 
     /**
      * {@inheritDoc}
      */
-    public function register()
+    public function register(): void
     {
         $this->app->register(ServiceProviders\Redirect::class);
+
         $this->registerConsoleCommands();
     }
 
@@ -134,7 +127,7 @@ class Plugin extends PluginBase
      * @return void
      * @throws Exception
      */
-    public function initAutoRedirectCreation()//: void
+    public function initAutoRedirectCreation(): void
     {
         Page::extend(static function (Page $page) {
             $handler = new PageHandler($page);
@@ -404,7 +397,7 @@ class Plugin extends PluginBase
      * {@inheritDoc}
      * @param Schedule $schedule
      */
-    public function registerSchedule($schedule)
+    public function registerSchedule($schedule): void
     {
         $schedule->command('vdlp:redirect:publish-redirects')->daily();
     }
@@ -414,7 +407,7 @@ class Plugin extends PluginBase
      *
      * @return void
      */
-    private function registerConsoleCommands()
+    private function registerConsoleCommands(): void
     {
         $this->registerConsoleCommand('vdlp.redirect.publish-redirects', PublishRedirects::class);
     }
@@ -424,7 +417,7 @@ class Plugin extends PluginBase
      *
      * @return void
      */
-    private function registerCustomValidators()
+    private function registerCustomValidators(): void
     {
         Validator::extend('is_regex', static function ($attribute, $value) {
             try {
@@ -435,5 +428,13 @@ class Plugin extends PluginBase
 
             return true;
         });
+    }
+
+    /**
+     * @return void
+     */
+    private function registerObservers(): void
+    {
+        Models\Redirect::observe(RedirectObserver::class);
     }
 }

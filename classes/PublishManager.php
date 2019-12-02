@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use League\Csv\Writer;
-use Log;
-use October\Rain\Support\Traits\Singleton;
+use Psr\Log\LoggerInterface;
+use Throwable;
+use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
+use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 use Vdlp\Redirect\Models\Redirect;
 
 /**
@@ -16,9 +17,27 @@ use Vdlp\Redirect\Models\Redirect;
  *
  * @package Vdlp\Redirect\Classes
  */
-class PublishManager
+final class PublishManager implements PublishManagerInterface
 {
-    use Singleton;
+    /**
+     * @var LoggerInterface
+     */
+    private $log;
+
+    /**
+     * @var CacheManagerInterface
+     */
+    private $cacheManager;
+
+    /**
+     * @param LoggerInterface $log
+     * @param CacheManagerInterface $cacheManager
+     */
+    public function __construct(LoggerInterface $log, CacheManagerInterface $cacheManager)
+    {
+        $this->log = $log;
+        $this->cacheManager = $cacheManager;
+    }
 
     /**
      * Publish applicable redirects.
@@ -63,7 +82,7 @@ class PublishManager
      * @param array $columns
      * @param array $redirects
      */
-    private function publishToFilesystem(array $columns, array $redirects)
+    private function publishToFilesystem(array $columns, array $redirects): void
     {
         $redirectsFile = storage_path('app/redirects.csv');
 
@@ -82,15 +101,15 @@ class PublishManager
 
                 $writer->insertOne($row);
             }
-        } catch (Exception $e) {
-            Log::critical($e);
+        } catch (Throwable $e) {
+            $this->log->error($e);
         }
     }
 
     /**
      * @param array $redirects
      */
-    private function publishToCache(array $redirects)
+    private function publishToCache(array $redirects): void
     {
         foreach ($redirects as &$redirect) {
             if (isset($redirect['requirements'])) {
@@ -101,6 +120,6 @@ class PublishManager
 
         unset($redirect);
 
-        CacheManager::instance()->putRedirectRules($redirects);
+        $this->cacheManager->putRedirectRules($redirects);
     }
 }

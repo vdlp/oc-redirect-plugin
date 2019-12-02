@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use October\Rain\Events\Dispatcher;
 use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
-use Vdlp\Redirect\Models\Settings;
 
 /**
  * Class RedirectMiddleware
@@ -21,12 +20,24 @@ use Vdlp\Redirect\Models\Settings;
 class RedirectMiddleware
 {
     /**
+     * @var RedirectManagerInterface
+     */
+    private $redirectManager;
+
+    /**
+     * @param RedirectManagerInterface $redirectManager
+     */
+    public function __construct(RedirectManagerInterface $redirectManager)
+    {
+        $this->redirectManager = $redirectManager;
+    }
+
+    /**
      * Run the request filter.
      *
      * @param Request $request
      * @param Closure $next
      * @return mixed
-     * @throws \Cms\Classes\CmsException
      */
     public function handle($request, Closure $next)
     {
@@ -35,14 +46,8 @@ class RedirectMiddleware
             return $next($request);
         }
 
-        /** @var RedirectManager $manager */
-        $manager = resolve(RedirectManagerInterface::class);
-        $manager->setLoggingEnabled(Settings::isLoggingEnabled())
-            ->setStatisticsEnabled(Settings::isStatisticsEnabled());
-
         if ($request->header('X-Vdlp-Redirect') === 'Tester') {
-            $manager->setStatisticsEnabled(false)
-                ->setLoggingEnabled(false);
+            $this->redirectManager->setSettings(new RedirectManagerSettings(false, false));
         }
 
         $rule = false;
@@ -51,9 +56,9 @@ class RedirectMiddleware
 
         try {
             if (CacheManager::cachingEnabledAndSupported()) {
-                $rule = $manager->matchCached($requestUri, $request->getScheme());
+                $rule = $this->redirectManager->matchCached($requestUri, $request->getScheme());
             } else {
-                $rule = $manager->match($requestUri, $request->getScheme());
+                $rule = $this->redirectManager->match($requestUri, $request->getScheme());
             }
         } catch (Exception $e) {
             $logger = resolve(Log::class);
@@ -79,7 +84,7 @@ class RedirectMiddleware
          *
          * Developers can add their own conditions. If a condition does not pass the redirect will be ignored.
          */
-        foreach ($manager->getConditions() as $condition) {
+        foreach ($this->redirectManager->getConditions() as $condition) {
             /** @var RedirectConditionInterface $condition */
             $condition = app($condition);
 
@@ -88,7 +93,7 @@ class RedirectMiddleware
             }
         }
 
-        $manager->redirectWithRule($rule, $requestUri);
+        $this->redirectManager->redirectWithRule($rule, $requestUri);
 
         return $next($request);
     }

@@ -6,8 +6,9 @@ namespace Vdlp\Redirect\Classes;
 
 use Cms;
 use Illuminate\Http\Request;
-use October\Rain\Events\Dispatcher;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
+use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\TesterInterface;
 
 /**
@@ -123,13 +124,12 @@ abstract class TesterBase implements TesterInterface
     }
 
     /**
-     * @return RedirectManager
+     * @return RedirectManagerInterface
      */
-    protected function getRedirectManager(): RedirectManager
+    protected function getRedirectManager(): RedirectManagerInterface
     {
-        $manager = new RedirectManager(resolve(Request::class), resolve(Dispatcher::class));
-
-        return $manager->setLoggingEnabled(false)
-            ->setStatisticsEnabled(false);
+        /** @var RedirectManagerInterface $manager */
+        $manager = resolve(RedirectManagerInterface::class);
+        return $manager->setSettings(new RedirectManagerSettings(false, false));
     }
 }
