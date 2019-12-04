@@ -34,14 +34,14 @@ class RedirectMatch extends TesterBase
         $match = $manager->match($this->testPath, Request::getScheme());
 
         if ($match === false) {
-            return new TesterResult(false, trans('vdlp.redirect::lang.test_lab.not_match_redirect'));
+            return new TesterResult(false, e(trans('vdlp.redirect::lang.test_lab.not_match_redirect')));
         }
 
         $message = sprintf(
             '%s <a href="%s" target="_blank">%s</a>.',
-            trans('vdlp.redirect::lang.test_lab.matched'),
+            e(trans('vdlp.redirect::lang.test_lab.matched')),
             Backend::url('vdlp/redirect/redirects/update/' . $match->getId()),
-            trans('vdlp.redirect::lang.test_lab.redirect')
+            e(trans('vdlp.redirect::lang.test_lab.redirect'))
         );
 
         return new TesterResult(true, $message);

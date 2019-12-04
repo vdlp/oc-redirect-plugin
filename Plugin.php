@@ -317,7 +317,7 @@ class Plugin extends PluginBase
 
         if (Models\Settings::isStatisticsEnabled()) {
             $reportWidgets[TopTenRedirects::class] = [
-                'label' => trans('vdlp.redirect::lang.statistics.top_redirects_this_month', ['top' => 10]),
+                'label' => e(trans('vdlp.redirect::lang.statistics.top_redirects_this_month', ['top' => 10])),
                 'context' => 'dashboard',
             ];
         }
