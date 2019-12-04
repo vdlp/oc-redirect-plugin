@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Updates;
 
-use Exception;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
 use Schema;
-use Vdlp\Redirect\Classes\PublishManager;
 use Vdlp\Redirect\Models\Category;
 use Vdlp\Redirect\Models\Redirect;
 use Vdlp\Redirect\Models\Settings;
@@ -54,7 +52,7 @@ class CreateTables extends Migration
         Category::create(['name' => 'General']);
 
         Schema::create('vdlp_redirect_redirects', static function (Blueprint $table) {
-            // Table configuration
+            // Table MySQL configuration
             $table->engine = 'InnoDB';
 
             // Columns
@@ -94,7 +92,7 @@ class CreateTables extends Migration
         });
 
         Schema::create('vdlp_redirect_clients', static function (Blueprint $table) {
-            // Table configuration
+            // Table MySQL configuration
             $table->engine = 'InnoDB';
 
             // Columns
@@ -118,7 +116,10 @@ class CreateTables extends Migration
         });
 
         Schema::create('vdlp_redirect_redirect_logs', static function (Blueprint $table) {
+            // Table MySQL configuration
             $table->engine = 'InnoDB';
+
+            // Columns
             $table->increments('id');
             $table->unsignedInteger('redirect_id');
             $table->mediumText('from_url');
@@ -129,9 +130,11 @@ class CreateTables extends Migration
             $table->unsignedSmallInteger('year');
             $table->dateTime('date_time');
 
+            // Indexes
             $table->index(['redirect_id', 'day', 'month', 'year'], 'redirect_log_dmy');
             $table->index(['redirect_id', 'month', 'year'], 'redirect_log_my');
 
+            // Foreign keys
             $table->foreign('redirect_id', 'vdlp_redirect_log')
                 ->references('id')
                 ->on('vdlp_redirect_redirects')
@@ -144,22 +147,16 @@ class CreateTables extends Migration
         $settings->statistics_enabled = '1';
         $settings->test_lab_enabled = '1';
         $settings->save();
-
-        try {
-            PublishManager::instance()->publish();
-        } catch (Exception $e) {
-            // ..
-        }
     }
 
     public function down()
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::dropIfExists('vdlp_redirect_categories');
         Schema::dropIfExists('vdlp_redirect_clients');
         Schema::dropIfExists('vdlp_redirect_redirect_logs');
         Schema::dropIfExists('vdlp_redirect_redirects');
+        Schema::dropIfExists('vdlp_redirect_categories');
 
         Schema::enableForeignKeyConstraints();
     }

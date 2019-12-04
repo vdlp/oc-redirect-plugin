@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Updates;
 
-use Illuminate\Contracts\Logging\Log;
 use Illuminate\Database\DatabaseManager;
 use October\Rain\Database\Updates\Migration;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 /** @noinspection AutoloadingIssuesInspection */
@@ -26,8 +26,8 @@ class UpgradeFromAdrenthRedirect extends Migration
         /** @var DatabaseManager $database */
         $database = resolve('db');
 
-        /** @var Log $log */
-        $log = resolve(Log::class);
+        /** @var LoggerInterface $log */
+        $log = resolve(LoggerInterface::class);
 
         $schema = $database->getSchemaBuilder();
 
@@ -95,6 +95,10 @@ class UpgradeFromAdrenthRedirect extends Migration
         if ($database->getDriverName() === 'mysql') {
             $database->raw('SET FOREIGN_KEY_CHECKS = 0;');
         }
+
+        if ($database->getDriverName() === 'pgsql') {
+            $database->raw('SET CONSTRAINTS ALL DEFERRED;');
+        }
     }
 
     /**
@@ -109,6 +113,10 @@ class UpgradeFromAdrenthRedirect extends Migration
 
         if ($database->getDriverName() === 'mysql') {
             $database->raw('SET FOREIGN_KEY_CHECKS = 1;');
+        }
+
+        if ($database->getDriverName() === 'pgsql') {
+            $database->raw('PRAGMA foreign_keys = ON;');
         }
     }
 }
