@@ -30,7 +30,7 @@ class RedirectCount extends TesterBase
         }
 
         if ($error !== null) {
-            return new TesterResult(false, trans('vdlp.redirect::lang.test_lab.result_request_failed'));
+            return new TesterResult(false, e(trans('vdlp.redirect::lang.test_lab.result_request_failed')));
         }
 
         $statusCode = (int) curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
@@ -40,7 +40,7 @@ class RedirectCount extends TesterBase
 
         return new TesterResult(
             $redirectCount === 1 || ($redirectCount === 0 && $statusCode > 400),
-            trans('vdlp.redirect::lang.test_lab.redirects_followed', ['count' => $redirectCount, 'limit' => 10])
+            e(trans('vdlp.redirect::lang.test_lab.redirects_followed', ['count' => $redirectCount, 'limit' => 10]))
         );
     }
 }
