@@ -40,3 +40,5 @@
     - "Fixes a fatal error when running TestLab -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.2"
 1.10.3:
     - "Fix support for Postgres -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.3"
+1.10.4:
+    - "Fixes reported issues #41 and #43 -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.4"
