@@ -19,7 +19,7 @@ class Sparkline extends \Davaxi\Sparkline
      * {@inheritDoc}
      * @throws InvalidArgumentException
      */
-    public function setFillColorHex($color)
+    public function setFillColorHex($color, $seriesIndex = 0)
     {
         list($red, $green, $blue) = $this->colorHexToRGB($color);
 
