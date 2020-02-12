@@ -6,7 +6,7 @@ namespace Vdlp\Redirect\Classes;
 
 use Closure;
 use Exception;
-use Illuminate\Contracts\Logging\Log;
+use Psr\Log\LoggerInterface as Log;
 use Illuminate\Http\Request;
 use October\Rain\Events\Dispatcher;
 use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;

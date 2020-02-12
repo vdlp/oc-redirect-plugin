@@ -10,7 +10,7 @@ use Cms\Classes\Controller;
 use Cms\Classes\Theme;
 use Cms\Helpers\Cms;
 use Exception;
-use Illuminate\Contracts\Logging\Log;
+use Psr\Log\LoggerInterface as Log;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
 use League\Csv\Reader;
