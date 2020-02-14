@@ -91,7 +91,7 @@ class Plugin extends PluginBase
          *
          * When one or more redirects have been changed.
          */
-        Event::listen(['vdlp.redirect.changed', 'vdlp.redirects.changed'], static function () {
+        Event::listen('vdlp.redirect.changed', static function (array $redirectIds) {
             /** @var PublishManagerInterface $publishManager */
             $publishManager = resolve(PublishManagerInterface::class);
             $publishManager->publish();

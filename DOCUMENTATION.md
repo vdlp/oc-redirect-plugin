@@ -98,11 +98,7 @@ Result: /blog/news/general
 | Event | Payload | Description |
 | --- | --- | --- |
 | `vdlp.redirect.match` | none | When a request matched, right before the redirect response.
-| `vdlp.redirect.changed` | int $redirectId | When a specific redirect has been changed.
-| `vdlp.redirects.changed` | int[] $redirectId | When one or more redirects are changed.
-| `vdlp.redirect.beforeRedirectSave` | `Redirect` | Before a redirect is saved (using the backend form).
-| `vdlp.redirect.beforeRedirectUpdate` | `Redirect` | Before a redirect is updated (using the backend form).
-| `vdlp.redirect.afterRedirectUpdate` | `Redirect` | After a redirect is updated (using the backend form).
+| `vdlp.redirect.changed` | int[] $redirectId | When one or more redirects are changed.
 
 ### Listens to events
 

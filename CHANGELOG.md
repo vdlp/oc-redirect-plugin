@@ -4,8 +4,9 @@
 * Most of the classes are made final. For extending use October CMS proposed solutions.
 * Auto-redirect creation for CMS/Static pages has been removed from this plugin.
 * The following events have been removed:
+    * `vdlp.redirects.changed`
     * `vdlp.redirect.beforeRedirectSave`
     * `vdlp.redirect.beforeRedirectUpdate`
     * `vdlp.redirect.afterRedirectUpdate`
 * New events:
-    * `vdlp.redirects.changed` (fired when a redirect record has been updated).
+    * `vdlp.redirect.changed`

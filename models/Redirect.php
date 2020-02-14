@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Models;
 
 use Carbon\Carbon;
-use Eloquent;
 use Exception;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Fluent;
 use Illuminate\Validation\Validator;
 use October\Rain\Database\Builder;
@@ -22,7 +23,10 @@ use Vdlp\Redirect\Classes\OptionHelper;
  */
 final class Redirect extends Model
 {
-    use Sortable;
+    use Sortable {
+        setSortableOrder as traitSetSortableOrder;
+    }
+
     use Validation {
         makeValidator as traitMakeValidator;
     }
@@ -245,6 +249,22 @@ final class Redirect extends Model
     public function clients(): HasMany
     {
         return $this->hasMany(Client::class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSortableOrder($itemIds, array $itemOrders = null): void
+    {
+        $itemIds = array_map(static function ($itemId) {
+            return (int) $itemId;
+        }, Arr::wrap($itemIds));
+
+        /** @var Dispatcher $dispatcher */
+        $dispatcher = resolve(Dispatcher::class);
+        $dispatcher->dispatch('vdlp.redirect.changed', [$itemIds]);
+
+        $this->traitSetSortableOrder($itemIds, $itemOrders);
     }
 
     /**

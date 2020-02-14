@@ -18,11 +18,13 @@ use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use October\Rain\Database\Model;
 use October\Rain\Flash\FlashBag;
 use System\Models\RequestLog;
 use SystemException;
 use Throwable;
+use Vdlp\FeedbackCompany\Classes\TokenStorage\Cache;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\RedirectManager;
 use Vdlp\Redirect\Classes\RedirectRule;
@@ -183,6 +185,11 @@ class Redirects extends Controller
 
     // @codingStandardsIgnoreStart
 
+    public function getCacheManager(): CacheManagerInterface
+    {
+        return $this->cacheManager;
+    }
+
     /**
      * @param string|null $context
      * @return RedirectResponse
@@ -210,7 +217,7 @@ class Redirects extends Controller
 
         Models\Redirect::destroy($redirectIds);
 
-        $this->dispatcher->dispatch('vdlp.redirects.changed', ['redirectIds' => $redirectIds]);
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [$redirectIds]);
 
         return $this->listRefresh();
     }
@@ -228,7 +235,7 @@ class Redirects extends Controller
             ->whereIn('id', $redirectIds)
             ->update(['is_enabled' => 1]);
 
-        $this->dispatcher->dispatch('vdlp.redirects.changed', ['redirectIds' => $redirectIds]);
+        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
 
         return $this->listRefresh();
     }
@@ -246,7 +253,7 @@ class Redirects extends Controller
             ->whereIn('id', $redirectIds)
             ->update(['is_enabled' => 0]);
 
-        $this->dispatcher->dispatch('vdlp.redirects.changed', ['redirectIds' => $redirectIds]);
+        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
 
         return $this->listRefresh();
     }
@@ -269,7 +276,7 @@ class Redirects extends Controller
             ->whereIn('redirect_id', $redirectIds)
             ->delete();
 
-        $this->dispatcher->dispatch('vdlp.redirects.changed', ['redirectIds' => $redirectIds]);
+        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
 
         return $this->listRefresh();
     }
@@ -313,7 +320,7 @@ class Redirects extends Controller
 
         $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.statistics_reset_success'));
 
-        $this->dispatcher->dispatch('vdlp.redirects.changed', ['redirectIds' => $redirectIds]);
+        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
 
         return $this->listRefresh();
     }
@@ -351,7 +358,7 @@ class Redirects extends Controller
 
         $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.disabled_all_redirects_success'));
 
-        $this->dispatcher->dispatch('vdlp.redirects.changed', $redirectIds);
+        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
 
         return $this->listRefresh();
     }
@@ -370,7 +377,7 @@ class Redirects extends Controller
 
         $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.deleted_all_redirects_success'));
 
-        $this->dispatcher->dispatch('vdlp.redirects.changed', ['redirectIds' => $redirectIds]);
+        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
 
         return $this->listRefresh();
     }
@@ -579,7 +586,9 @@ class Redirects extends Controller
             && is_array($checkedIds)
             && count($checkedIds)
         ) {
-            return $checkedIds;
+            return array_map(static function ($checkedId) {
+                return (int) $checkedId;
+            }, $checkedIds);
         }
 
         return [];
