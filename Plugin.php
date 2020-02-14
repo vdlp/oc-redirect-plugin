@@ -11,6 +11,7 @@ use Event;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Contracts\Translation\Translator;
 use System\Classes\PluginBase;
 use Throwable;
 use Validator;
@@ -253,6 +254,9 @@ class Plugin extends PluginBase
      */
     public function registerReportWidgets(): array
     {
+        /** @var Translator $translator */
+        $translator = resolve(Translator::class);
+
         $reportWidgets[CreateRedirect::class] = [
             'label' => 'vdlp.redirect::lang.buttons.create_redirect',
             'context' => 'dashboard'
@@ -260,7 +264,12 @@ class Plugin extends PluginBase
 
         if (Models\Settings::isStatisticsEnabled()) {
             $reportWidgets[TopTenRedirects::class] = [
-                'label' => e(trans('vdlp.redirect::lang.statistics.top_redirects_this_month', ['top' => 10])),
+                'label' => e($translator->trans(
+                    'vdlp.redirect::lang.statistics.top_redirects_this_month',
+                    [
+                        'top' => 10
+                    ]
+                )),
                 'context' => 'dashboard',
             ];
         }
@@ -273,52 +282,55 @@ class Plugin extends PluginBase
      */
     public function registerListColumnTypes(): array
     {
+        /** @var Translator $translator */
+        $translator = resolve(Translator::class);
+
         return [
-            'redirect_switch_color' => static function ($value) {
+            'redirect_switch_color' => static function ($value) use ($translator) {
                 $format = '<div class="oc-icon-circle" style="color: %s">%s</div>';
 
                 if ((int) $value === 1) {
-                    return sprintf($format, '#95b753', e(trans('backend::lang.list.column_switch_true')));
+                    return sprintf($format, '#95b753', e($translator->trans('backend::lang.list.column_switch_true')));
                 }
 
-                return sprintf($format, '#cc3300', e(trans('backend::lang.list.column_switch_false')));
+                return sprintf($format, '#cc3300', e($translator->trans('backend::lang.list.column_switch_false')));
             },
-            'redirect_match_type' => static function ($value) {
+            'redirect_match_type' => static function ($value) use ($translator) {
                 switch ($value) {
                     case Models\Redirect::TYPE_EXACT:
-                        return e(trans('vdlp.redirect::lang.redirect.exact'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.exact'));
                     case Models\Redirect::TYPE_PLACEHOLDERS:
-                        return e(trans('vdlp.redirect::lang.redirect.placeholders'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.placeholders'));
                     case Models\Redirect::TYPE_REGEX:
-                        return e(trans('vdlp.redirect::lang.redirect.regex'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.regex'));
                     default:
                         return e($value);
                 }
             },
-            'redirect_status_code' => static function ($value) {
+            'redirect_status_code' => static function ($value) use ($translator) {
                 switch ($value) {
                     case 301:
-                        return e(trans('vdlp.redirect::lang.redirect.permanent'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.permanent'));
                     case 302:
-                        return e(trans('vdlp.redirect::lang.redirect.temporary'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.temporary'));
                     case 303:
-                        return e(trans('vdlp.redirect::lang.redirect.see_other'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.see_other'));
                     case 404:
-                        return e(trans('vdlp.redirect::lang.redirect.not_found'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.not_found'));
                     case 410:
-                        return e(trans('vdlp.redirect::lang.redirect.gone'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.gone'));
                     default:
                         return e($value);
                 }
             },
-            'redirect_target_type' => static function ($value) {
+            'redirect_target_type' => static function ($value) use ($translator) {
                 switch ($value) {
                     case Models\Redirect::TARGET_TYPE_PATH_URL:
-                        return e(trans('vdlp.redirect::lang.redirect.target_type_path_or_url'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.target_type_path_or_url'));
                     case Models\Redirect::TARGET_TYPE_CMS_PAGE:
-                        return e(trans('vdlp.redirect::lang.redirect.target_type_cms_page'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.target_type_cms_page'));
                     case Models\Redirect::TARGET_TYPE_STATIC_PAGE:
-                        return e(trans('vdlp.redirect::lang.redirect.target_type_static_page'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.target_type_static_page'));
                     default:
                         return e($value);
                 }
@@ -333,7 +345,7 @@ class Plugin extends PluginBase
                 }
                 return e($value);
             },
-            'redirect_system' => static function ($value) {
+            'redirect_system' => static function ($value) use ($translator) {
                 return sprintf(
                     '<span class="%s" title="%s"></span>',
                     $value ? 'oc-icon-magic' : 'oc-icon-user',
