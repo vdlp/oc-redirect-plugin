@@ -362,7 +362,7 @@ class Redirects extends Controller
     public function formExtendRefreshFields(Form $host, $fields)//: void
     {
         if ($fields['status_code']->value
-            && $fields['status_code']->value[0] === '4'
+            && strpos((string) $fields['status_code']->value, '4') === 0
         ) {
             $host->getField('to_url')->hidden = true;
             $host->getField('static_page')->hidden = true;
