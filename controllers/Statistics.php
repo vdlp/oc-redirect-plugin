@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpUnused */
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
@@ -10,10 +12,7 @@ use SystemException;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
 /**
- * Class Statistics
- *
- * @property string pageTitle
- * @package Vdlp\Redirect\Controllers
+ * @property string $pageTitle
  */
 class Statistics extends Controller
 {
@@ -39,27 +38,18 @@ class Statistics extends Controller
         $this->pageTitle = 'vdlp.redirect::lang.title.statistics';
 
         $this->addJs('https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js');
-        $this->addJs('/plugins/vdlp/redirect/assets/javascript/statistics.js');
-
         $this->addCss('https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css');
+        $this->addJs('/plugins/vdlp/redirect/assets/javascript/statistics.js');
         $this->addCss('/plugins/vdlp/redirect/assets/css/statistics.css');
 
         $this->helper = new StatisticsHelper();
     }
 
-    /**
-     * @return void
-     */
-    public function index()//: void
+    public function index(): void
     {
     }
 
-    // @codingStandardsIgnoreStart
-
-    /**
-     * @return string
-     */
-    public function index_onRedirectHitsPerDay(): string
+    public function onRedirectHitsPerDay(): string
     {
         $crawlerHits = $this->helper->getRedirectHitsPerDay(true);
 
@@ -88,10 +78,9 @@ class Statistics extends Controller
     }
 
     /**
-     * @return array
      * @throws SystemException
      */
-    public function index_onLoadTopRedirectsThisMonth(): array
+    public function onLoadTopRedirectsThisMonth(): array
     {
         return [
             '#topRedirectsThisMonth' => $this->makePartial('top-redirects-this-month', [
@@ -101,10 +90,9 @@ class Statistics extends Controller
     }
 
     /**
-     * @return array
      * @throws SystemException
      */
-    public function index_onLoadTopCrawlersThisMonth(): array
+    public function onLoadTopCrawlersThisMonth(): array
     {
         return [
             '#topCrawlersThisMonth' => $this->makePartial('top-crawlers-this-month', [
@@ -114,10 +102,9 @@ class Statistics extends Controller
     }
 
     /**
-     * @return array
      * @throws SystemException
      */
-    public function index_onLoadRedirectHitsPerMonth(): array
+    public function onLoadRedirectHitsPerMonth(): array
     {
         return [
             '#redirectHitsPerMonth' => $this->makePartial('redirect-hits-per-month', [
@@ -127,10 +114,9 @@ class Statistics extends Controller
     }
 
     /**
-     * @return array
      * @throws SystemException
      */
-    public function index_onLoadScoreBoard(): array
+    public function onLoadScoreBoard(): array
     {
         return [
             '#scoreBoard' => $this->makePartial('score-board', [
@@ -144,6 +130,4 @@ class Statistics extends Controller
             ]),
         ];
     }
-
-    // @codingStandardsIgnoreEnd
 }

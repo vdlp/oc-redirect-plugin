@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpUnused */
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
@@ -7,17 +9,14 @@ namespace Vdlp\Redirect\Controllers;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
 use BackendMenu;
-use Exception;
-use Flash;
-use Lang;
+use Illuminate\Contracts\Translation\Translator;
+use Illuminate\Http\Request;
+use October\Rain\Flash\FlashBag;
+use Psr\Log\LoggerInterface;
+use Throwable;
 use Vdlp\Redirect\Models\RedirectLog;
 
-/** @noinspection ClassOverridesFieldOfSuperClassInspection */
-
 /**
- * Class Logs
- *
- * @package Vdlp\Redirect\Controllers
  * @mixin ListController
  */
 class Logs extends Controller
@@ -40,70 +39,77 @@ class Logs extends Controller
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
+     * @var FlashBag
+     */
+    private $flash;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $log;
+
+    /**
      * {@inheritDoc}
      */
-    public function __construct()
+    public function __construct(Request $request, Translator $translator, LoggerInterface $log)
     {
         parent::__construct();
 
         BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'logs');
+
+        $this->request = $request;
+        $this->translator = $translator;
+        $this->flash = resolve('flash');
+        $this->log = $log;
     }
 
-    // @codingStandardsIgnoreStart
-
-    /**
-     * Refresh list.
-     *
-     * @return array
-     */
-    public function index_onRefresh(): array
+    public function onRefresh(): array
     {
         return $this->listRefresh();
     }
 
-    /**
-     * Empty redirect log.
-     *
-     * @return array
-     */
-    public function index_onEmptyLog(): array
+    public function onEmptyLog(): array
     {
-        RedirectLog::truncate();
-        Flash::success(Lang::get('vdlp.redirect::lang.flash.truncate_success'));
+        try {
+            RedirectLog::truncate();
+            $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.truncate_success'));
+        } catch (Throwable $e) {
+            $this->log->warning($e);
+        }
+
         return $this->listRefresh();
     }
 
-    /**
-     * Delete 1 or more checked redirect log items.
-     *
-     * @return array
-     */
-    public function index_onDelete(): array
+    public function onDelete(): array
     {
-        if (($checkedIds = post('checked', []))
+        if (($checkedIds = $this->request->get('checked', []))
             && is_array($checkedIds)
             && count($checkedIds)
         ) {
             foreach ((array) $checkedIds as $recordId) {
-                if (!$record = RedirectLog::find($recordId)) {
-                    continue;
-                }
-
                 try {
+                    $record = RedirectLog::query()->findOrFail($recordId);
                     $record->delete();
-                } catch (Exception $e) {
-                    // Silence is golden...
+                } catch (Throwable $e) {
+                    $this->log->warning($e);
                 }
             }
 
-            Flash::success(Lang::get('vdlp.redirect::lang.flash.delete_selected_success'));
-        }
-        else {
-            Flash::error(Lang::get('backend::lang.list.delete_selected_empty'));
+            $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.delete_selected_success'));
+        } else {
+            $this->flash->error($this->translator->trans('backend::lang.list.delete_selected_empty'));
         }
 
         return $this->listRefresh();
     }
-
-    // @codingStandardsIgnoreEnd
 }

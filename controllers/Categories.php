@@ -4,19 +4,13 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
 
-use Backend\Behaviors\FormController;
-use Backend\Behaviors\ListController;
+use Backend\Behaviors;
 use Backend\Classes\Controller;
 use BackendMenu;
 
-/** @noinspection ClassOverridesFieldOfSuperClassInspection */
-
 /**
- * Class Categories
- *
- * @package Vdlp\Redirect\Controllers
- * @mixin FormController
- * @mixin ListController
+ * @mixin Behaviors\FormController
+ * @mixin Behaviors\ListController
  */
 class Categories extends Controller
 {
@@ -24,8 +18,8 @@ class Categories extends Controller
      * {@inheritDoc}
      */
     public $implement = [
-        FormController::class,
-        ListController::class
+        Behaviors\FormController::class,
+        Behaviors\ListController::class
     ];
 
     /**
