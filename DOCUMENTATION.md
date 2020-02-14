@@ -33,7 +33,7 @@ Example:
 Input path:
 /blog.php?category=cat&id=145
 
-Source path: 
+Source path:
 /blog.php?category={category}&id={id}
 
 Target path:
@@ -58,7 +58,7 @@ The requirement for `{category}` is `(dog|cat|mouse)`, with replacement value `a
 Input path:
 /blog.php?category=mouse&id=1337
 
-Source path: 
+Source path:
 /blog.php?category={category}&id={id}
 
 Target path:
@@ -77,7 +77,7 @@ Result in TestLab:
 
 ## Redirect Target
 
-You can select a CMS Page as a Redirect target. Placeholders are supported. Let's assume there is a page 'Blog' with the following URL: `/blog/:category/:subcategory`. 
+You can select a CMS Page as a Redirect target. Placeholders are supported. Let's assume there is a page 'Blog' with the following URL: `/blog/:category/:subcategory`.
 
 It is possible to create a Redirect with placeholders that has this CMS Page as a target:
 
@@ -97,8 +97,9 @@ Result: /blog/news/general
 
 | Event | Payload | Description |
 | --- | --- | --- |
-| `vdlp.redirect.match` | none | When a request matched, right before the redirect response. 
-| `vdlp.redirect.changed` | none | When one or more redirects are changed.
+| `vdlp.redirect.match` | none | When a request matched, right before the redirect response.
+| `vdlp.redirect.changed` | int $redirectId | When a specific redirect has been changed.
+| `vdlp.redirects.changed` | int[] $redirectId | When one or more redirects are changed.
 | `vdlp.redirect.beforeRedirectSave` | `Redirect` | Before a redirect is saved (using the backend form).
 | `vdlp.redirect.beforeRedirectUpdate` | `Redirect` | Before a redirect is updated (using the backend form).
 | `vdlp.redirect.afterRedirectUpdate` | `Redirect` | After a redirect is updated (using the backend form).

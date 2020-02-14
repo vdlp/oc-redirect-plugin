@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection EfferentObjectCouplingInspection */
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
@@ -10,7 +12,6 @@ use Cms\Classes\Controller;
 use Cms\Classes\Theme;
 use Cms\Helpers\Cms;
 use Exception;
-use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
 use League\Csv\Reader;
@@ -23,12 +24,6 @@ use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Exceptions;
 use Vdlp\Redirect\Models;
 
-/**
- * Class RedirectManager
- *
- * @SuppressWarnings(PHPMD.ExitExpression)
- * @package Vdlp\Redirect\Classes
- */
 final class RedirectManager implements RedirectManagerInterface
 {
     /**

@@ -31,9 +31,3 @@ fields:
         span: full
         type: switch
         default: false
-    auto_redirect_creation_enabled:
-        label: vdlp.redirect::lang.settings.auto_redirect_creation_enabled_label
-        comment: vdlp.redirect::lang.settings.auto_redirect_creation_enabled_comment
-        span: full
-        type: switch
-        default: true

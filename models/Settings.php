@@ -56,9 +56,4 @@ final class Settings extends Model
     {
         return (bool) (new static())->get('caching_enabled', false);
     }
-
-    public static function isAutoRedirectCreationEnabled(): bool
-    {
-        return (bool) (new static())->get('auto_redirect_creation_enabled', false);
-    }
 }

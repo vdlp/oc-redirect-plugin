@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Vdlp\Redirect;
 
 use Backend;
-use Cms\Classes\Page;
 use Event;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
@@ -15,10 +14,9 @@ use Illuminate\Contracts\Http\Kernel;
 use System\Classes\PluginBase;
 use Throwable;
 use Validator;
-use Vdlp\Redirect\Classes\PageHandler;
+use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
 use Vdlp\Redirect\Classes\RedirectObserver;
-use Vdlp\Redirect\Classes\StaticPageHandler;
 use Vdlp\Redirect\Console\PublishRedirects;
 use Vdlp\Redirect\Models;
 use Vdlp\Redirect\ReportWidgets\CreateRedirect;
@@ -65,10 +63,6 @@ class Plugin extends PluginBase
             return;
         }
 
-        if (Models\Settings::isAutoRedirectCreationEnabled()) {
-            $this->initAutoRedirectCreation();
-        }
-
         /*
          * Extensibility:
          *
@@ -96,12 +90,10 @@ class Plugin extends PluginBase
          *
          * When one or more redirects have been changed.
          */
-        Event::listen('vdlp.redirect.changed', static function (int $redirectId) {
-            // TODO
-        });
-
-        Event::listen('vdlp.redirects.changed', static function (array $redirectIds) {
-            // TODO
+        Event::listen(['vdlp.redirect.changed', 'vdlp.redirects.changed'], static function () {
+            /** @var PublishManagerInterface $publishManager */
+            $publishManager = resolve(PublishManagerInterface::class);
+            $publishManager->publish();
         });
     }
 
@@ -113,42 +105,6 @@ class Plugin extends PluginBase
         $this->app->register(ServiceProvider::class);
 
         $this->registerConsoleCommands();
-    }
-
-    /**
-     * Perform initialization for automatic redirect creation.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function initAutoRedirectCreation(): void
-    {
-        Page::extend(static function (Page $page) {
-            $handler = new PageHandler($page);
-
-            $page->bindEvent('model.beforeUpdate', static function () use ($handler) {
-                $handler->onBeforeUpdate();
-            });
-
-            $page->bindEvent('model.afterDelete', static function () use ($handler) {
-                $handler->onAfterDelete();
-            });
-        });
-
-        /** @noinspection ClassConstantCanBeUsedInspection */
-        if (class_exists('\RainLab\Pages\Classes\Page')) {
-            \RainLab\Pages\Classes\Page::extend(static function (\RainLab\Pages\Classes\Page $page) {
-                $handler = new StaticPageHandler($page);
-
-                $page->bindEvent('model.beforeUpdate', static function () use ($handler) {
-                    $handler->onBeforeUpdate();
-                });
-
-                $page->bindEvent('model.afterDelete', static function () use ($handler) {
-                    $handler->onAfterDelete();
-                });
-            });
-        }
     }
 
     /**
