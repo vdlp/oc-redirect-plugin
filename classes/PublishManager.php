@@ -12,11 +12,6 @@ use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 use Vdlp\Redirect\Models\Redirect;
 
-/**
- * Class PublishManager
- *
- * @package Vdlp\Redirect\Classes
- */
 final class PublishManager implements PublishManagerInterface
 {
     /**
@@ -40,8 +35,6 @@ final class PublishManager implements PublishManagerInterface
     }
 
     /**
-     * Publish applicable redirects.
-     *
      * @return int Number of published redirects
      */
     public function publish(): int
@@ -69,7 +62,7 @@ final class PublishManager implements PublishManagerInterface
             ->orderBy('sort_order')
             ->get($columns);
 
-        if (CacheManager::cachingEnabledAndSupported()) {
+        if ($this->cacheManager->cachingEnabledAndSupported()) {
             $this->publishToCache($redirects->toArray());
         } else {
             $this->publishToFilesystem($columns, $redirects->toArray());
@@ -78,10 +71,6 @@ final class PublishManager implements PublishManagerInterface
         return $redirects->count();
     }
 
-    /**
-     * @param array $columns
-     * @param array $redirects
-     */
     private function publishToFilesystem(array $columns, array $redirects): void
     {
         $redirectsFile = storage_path('app/redirects.csv');
@@ -106,9 +95,6 @@ final class PublishManager implements PublishManagerInterface
         }
     }
 
-    /**
-     * @param array $redirects
-     */
     private function publishToCache(array $redirects): void
     {
         foreach ($redirects as &$redirect) {

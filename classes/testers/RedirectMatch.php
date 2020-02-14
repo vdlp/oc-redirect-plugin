@@ -7,16 +7,10 @@ namespace Vdlp\Redirect\Classes\Testers;
 use Backend;
 use Request;
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
-use Vdlp\Redirect\Classes\Exceptions\RulesPathNotReadable;
 use Vdlp\Redirect\Classes\TesterBase;
 use Vdlp\Redirect\Classes\TesterResult;
 
-/**
- * Class RedirectMatch
- *
- * @package Vdlp\Redirect\Classes\Testers
- */
-class RedirectMatch extends TesterBase
+final class RedirectMatch extends TesterBase
 {
     /**
      * {@inheritDoc}
@@ -24,11 +18,7 @@ class RedirectMatch extends TesterBase
      */
     protected function test(): TesterResult
     {
-        try {
-            $manager = $this->getRedirectManager();
-        } catch (RulesPathNotReadable $e) {
-            return new TesterResult(false, $e->getMessage());
-        }
+        $manager = $this->getRedirectManager();
 
         // TODO: Add scheme.
         $match = $manager->match($this->testPath, Request::getScheme());

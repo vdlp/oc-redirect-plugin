@@ -177,6 +177,10 @@ final class RedirectManager implements RedirectManagerInterface
 
         $matchedRule = $this->match($requestPath, $scheme);
 
+        if ($matchedRule === false) {
+            $matchedRule = null;
+        }
+
         return $this->cacheManager->putMatch($cacheKey, $matchedRule);
     }
 
@@ -577,13 +581,12 @@ final class RedirectManager implements RedirectManagerInterface
         $rules = [];
 
         try {
-            if (CacheManager::cachingEnabledAndSupported()) {
+            if ($this->cacheManager->cachingEnabledAndSupported()) {
                 $rules = $this->readRulesFromCache();
             } else {
                 $rules = $this->readRulesFromFilesystem();
             }
         } catch (Throwable $e) {
-            /** @var Log $log */
             $this->log->error('Vdlp.Redirect: Could not load redirect rules: ' . $e->getMessage());
             $this->log->debug($e);
         }
@@ -609,6 +612,7 @@ final class RedirectManager implements RedirectManagerInterface
         /** @var Reader $reader */
         $reader = Reader::createFromPath($rulesPath, 'r');
 
+        // TODO
         // WARNING: this is deprecated method in league/csv:8.0, when league/csv is upgraded to version 9 we should
         // follow the instructions on this page: http://csv.thephpleague.com/upgrading/9.0/
         $results = $reader->fetchAssoc(0);

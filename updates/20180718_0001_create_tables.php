@@ -1,5 +1,8 @@
 <?php
 
+/** @noinspection PhpUnused */
+/** @noinspection AutoloadingIssuesInspection */
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Updates;
@@ -12,16 +15,9 @@ use Vdlp\Redirect\Models\Category;
 use Vdlp\Redirect\Models\Redirect;
 use Vdlp\Redirect\Models\Settings;
 
-/** @noinspection AutoloadingIssuesInspection */
-
-/**
- * Class CreateTables
- *
- * @package Vdlp\Redirect\Updates
- */
 class CreateTables extends Migration
 {
-    public function up()
+    public function up(): void
     {
         /** @var DatabaseManager $database */
         $database = resolve('db');
@@ -32,11 +28,11 @@ class CreateTables extends Migration
         if ($schema->hasTable('adrenth_redirect_redirects')
             && $database->getDriverName() === 'sqlite'
         ) {
-            $database->statement('DROP INDEX redirect_dmy;');
-            $database->statement('DROP INDEX redirect_my;');
-            $database->statement('DROP INDEX redirect_log_dmy;');
-            $database->statement('DROP INDEX redirect_log_my;');
-            $database->statement('DROP INDEX month_year;');
+            $database->statement(/** @lang SQLite */'DROP INDEX redirect_dmy;');
+            $database->statement(/** @lang SQLite */'DROP INDEX redirect_my;');
+            $database->statement(/** @lang SQLite */'DROP INDEX redirect_log_dmy;');
+            $database->statement(/** @lang SQLite */'DROP INDEX redirect_log_my;');
+            $database->statement(/** @lang SQLite */'DROP INDEX month_year;');
         }
 
         Schema::create('vdlp_redirect_categories', static function (Blueprint $table) {
@@ -149,7 +145,7 @@ class CreateTables extends Migration
         $settings->save();
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::disableForeignKeyConstraints();
 

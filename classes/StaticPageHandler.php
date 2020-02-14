@@ -6,27 +6,20 @@ namespace Vdlp\Redirect\Classes;
 
 use Vdlp\Redirect\Models\Redirect;
 
-/**
- * Class StaticPageHandler
- *
- * @package Vdlp\Redirect\Classes
- */
-class StaticPageHandler extends PageHandler
+final class StaticPageHandler extends PageHandler
 {
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * {@inheritDoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function hasUrlChanged(): bool
     {
         return $this->getNewUrl() !== $this->getOriginalUrl();
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * {@inheritDoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function getOriginalUrl(): string
     {
@@ -39,10 +32,9 @@ class StaticPageHandler extends PageHandler
         return '';
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * {@inheritDoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function getNewUrl(): string
     {
@@ -57,10 +49,9 @@ class StaticPageHandler extends PageHandler
         return $this->getOriginalUrl();
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * {@inheritDoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function getTargetType(): string
     {

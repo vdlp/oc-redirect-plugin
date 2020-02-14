@@ -6,11 +6,6 @@ namespace Vdlp\Redirect\Classes\Contracts;
 
 use Vdlp\Redirect\Classes\RedirectRule;
 
-/**
- * Interface CacheManagerInterface
- *
- * @package Vdlp\Redirect\Classes\Contracts
- */
 interface CacheManagerInterface
 {
     /**
@@ -76,4 +71,18 @@ interface CacheManagerInterface
      * @return RedirectRule|null
      */
     public function putMatch(string $cacheKey, ?RedirectRule $matchedRule = null): ?RedirectRule;
+
+    /**
+     * Whether caching is enabled by setting and supported.
+     *
+     * @return bool
+     */
+    public function cachingEnabledAndSupported(): bool;
+
+    /**
+     * Whether caching is enabled but not supported.
+     *
+     * @return bool
+     */
+    public function cachingEnabledButNotSupported(): bool;
 }

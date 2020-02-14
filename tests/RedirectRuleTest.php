@@ -5,18 +5,14 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Tests;
 
 use Carbon\Carbon;
+use PHPUnit_Framework_Exception;
 use PluginTestCase;
 use Vdlp\Redirect\Classes\RedirectRule;
 use Vdlp\Redirect\Models\Redirect;
 
-/**
- * Class RedirectRuleTest
- *
- * @package Vdlp\Redirect\Tests
- */
 class RedirectRuleTest extends PluginTestCase
 {
-    public function testInstance()
+    public function testInstance(): void
     {
         $rule = new RedirectRule([
             'id' => 1,
@@ -46,9 +42,9 @@ class RedirectRuleTest extends PluginTestCase
     }
 
     /**
-     * @throws \PHPUnit_Framework_Exception
+     * @throws PHPUnit_Framework_Exception
      */
-    public function testModel()
+    public function testModel(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,

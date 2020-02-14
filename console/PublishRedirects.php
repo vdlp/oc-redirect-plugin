@@ -7,11 +7,6 @@ namespace Vdlp\Redirect\Console;
 use Illuminate\Console\Command;
 use Vdlp\Redirect\Classes\PublishManager;
 
-/**
- * Class PublishRedirects
- *
- * @package Vdlp\Redirect\Console
- */
 class PublishRedirects extends Command
 {
     /**
@@ -25,13 +20,8 @@ class PublishRedirects extends Command
         parent::__construct();
     }
 
-    /**
-     * Handle the command.
-     *
-     * @return void
-     */
-    public function handle()
+    public function handle(PublishManager $publishManager): void
     {
-        PublishManager::instance()->publish();
+        $publishManager->publish();
     }
 }

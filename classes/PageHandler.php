@@ -9,12 +9,7 @@ use Event;
 use Exception;
 use Vdlp\Redirect\Models\Redirect;
 
-/**
- * Class PageHandler
- *
- * @package Vdlp\Redirect\Classes
- */
-class PageHandler
+final class PageHandler
 {
     /**
      * @var CmsCompoundObject
@@ -68,18 +63,20 @@ class PageHandler
      */
     public function onAfterDelete(): void
     {
-        Redirect::where($this->getTargetType(), '=', $this->page->getBaseFileName())
+        Redirect::query()
+            ->where($this->getTargetType(), '=', $this->page->getBaseFileName())
             ->where('system', '=', 1)
             ->delete();
 
-        Redirect::where($this->getTargetType(), '=', $this->page->getBaseFileName())
+        Redirect::query()
+            ->where($this->getTargetType(), '=', $this->page->getBaseFileName())
             ->where('system', '=', 0)
             ->update([
                 $this->getTargetType() => null,
                 'is_enabled' => false,
             ]);
 
-        Event::fire('vdlp.redirect.changed');
+        Event::fire('vdlp.redirect.changed'); // TODO
     }
 
     /**

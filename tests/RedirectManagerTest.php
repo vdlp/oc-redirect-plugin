@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection DuplicatedCode */
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Tests;
@@ -8,25 +10,23 @@ use Carbon\Carbon;
 use Cms;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
+use PHPUnit_Framework_AssertionFailedError;
+use PHPUnit_Framework_Exception;
 use PluginTestCase;
+use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\RedirectManager;
 use Vdlp\Redirect\Classes\RedirectRule;
 use Vdlp\Redirect\Models\Redirect;
 
-/**
- * Class RedirectManagerTest
- *
- * @package Vdlp\Redirect\Tests
- */
 class RedirectManagerTest extends PluginTestCase
 {
     /**
      * @throws Cms\Classes\CmsException
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidScheme
      */
-    public function testExactRedirect()
+    public function testExactRedirect(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -56,11 +56,11 @@ class RedirectManagerTest extends PluginTestCase
 
     /**
      * @throws Cms\Classes\CmsException
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidScheme
      */
-    public function testRedirectWithIgnoreQueryParametersEnabled()
+    public function testRedirectWithIgnoreQueryParametersEnabled(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -94,11 +94,11 @@ class RedirectManagerTest extends PluginTestCase
 
     /**
      * @throws Cms\Classes\CmsException
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidScheme
      */
-    public function testRedirectWithIgnoreQueryParametersDisabled()
+    public function testRedirectWithIgnoreQueryParametersDisabled(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -131,11 +131,11 @@ class RedirectManagerTest extends PluginTestCase
 
     /**
      * @throws Cms\Classes\CmsException
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidScheme
      */
-    public function testPlaceholderRedirect()
+    public function testPlaceholderRedirect(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_PLACEHOLDERS,
@@ -191,11 +191,11 @@ class RedirectManagerTest extends PluginTestCase
 
     /**
      * @throws Cms\Classes\CmsException
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidScheme
      */
-    public function testTargetCmsPageRedirect()
+    public function testTargetCmsPageRedirect(): void
     {
         $page = Page::load(Theme::getActiveTheme(), 'vdlp-redirect-testpage');
 
@@ -234,11 +234,11 @@ class RedirectManagerTest extends PluginTestCase
     }
 
     /**
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidScheme
      */
-    public function testScheduledRedirectPeriod()
+    public function testScheduledRedirectPeriod(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -293,11 +293,11 @@ class RedirectManagerTest extends PluginTestCase
     }
 
     /**
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidScheme
      */
-    public function testScheduledRedirectOnlyFromDate()
+    public function testScheduledRedirectOnlyFromDate(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -340,11 +340,11 @@ class RedirectManagerTest extends PluginTestCase
     }
 
     /**
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws PHPUnit_Framework_Exception
+     * @throws InvalidScheme
      */
-    public function testScheduledRedirectOnlyToDate()
+    public function testScheduledRedirectOnlyToDate(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -389,7 +389,7 @@ class RedirectManagerTest extends PluginTestCase
     /**
      * @throws Cms\Classes\CmsException
      */
-    public function testRelativeRedirect()
+    public function testRelativeRedirect(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -423,7 +423,7 @@ class RedirectManagerTest extends PluginTestCase
     /**
      * @throws Cms\Classes\CmsException
      */
-    public function testAbsoluteRedirect()
+    public function testAbsoluteRedirect(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -455,10 +455,10 @@ class RedirectManagerTest extends PluginTestCase
 
     /**
      * @throws Cms\Classes\CmsException
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws InvalidScheme
      */
-    public function testSchemeHttpToHttpsRedirect()
+    public function testSchemeHttpToHttpsRedirect(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -505,10 +505,10 @@ class RedirectManagerTest extends PluginTestCase
 
     /**
      * @throws Cms\Classes\CmsException
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws InvalidScheme
      */
-    public function testSchemeHttpsToHttpRedirect()
+    public function testSchemeHttpsToHttpRedirect(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -552,10 +552,10 @@ class RedirectManagerTest extends PluginTestCase
 
     /**
      * @throws Cms\Classes\CmsException
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws InvalidScheme
      */
-    public function testSchemeAutoToAutoRedirect()
+    public function testSchemeAutoToAutoRedirect(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_EXACT,
@@ -598,10 +598,10 @@ class RedirectManagerTest extends PluginTestCase
     }
 
     /**
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     * @throws \Vdlp\Redirect\Classes\Exceptions\InvalidScheme
+     * @throws PHPUnit_Framework_AssertionFailedError
+     * @throws InvalidScheme
      */
-    public function testRegularExpressionRedirect()
+    public function testRegularExpressionRedirect(): void
     {
         $redirect = new Redirect([
             'match_type' => Redirect::TYPE_REGEX,

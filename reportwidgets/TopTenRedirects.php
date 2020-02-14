@@ -9,13 +9,8 @@ use Backend\Classes\ReportWidgetBase;
 use SystemException;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
-/** @noinspection LongInheritanceChainInspection */
-
 /**
- * Class TopTenRedirects
- *
- * @property string alias
- * @package Vdlp\Redirect\ReportWidgets
+ * @property string $alias
  */
 class TopTenRedirects extends ReportWidgetBase
 {
@@ -32,6 +27,7 @@ class TopTenRedirects extends ReportWidgetBase
     /**
      * {@inheritDoc}
      * @throws SystemException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public function render()
     {

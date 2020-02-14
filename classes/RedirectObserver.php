@@ -6,13 +6,10 @@ namespace Vdlp\Redirect\Classes;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Psr\Log\LoggerInterface;
+use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
+use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 use Vdlp\Redirect\Models;
 
-/**
- * Class RedirectObserver
- *
- * @package Vdlp\Redirect\Classes
- */
 final class RedirectObserver
 {
     /**
@@ -26,15 +23,31 @@ final class RedirectObserver
     private $dispatcher;
 
     /**
+     * @var PublishManagerInterface
+     */
+    private $publishManager;
+
+    /**
+     * @var CacheManagerInterface
+     */
+    private $cacheManager;
+
+    /**
      * @param Dispatcher $dispatcher
      * @param LoggerInterface $log
+     * @param PublishManagerInterface $publishManager
+     * @param CacheManagerInterface $cacheManager
      */
     public function __construct(
         Dispatcher $dispatcher,
-        LoggerInterface $log
+        LoggerInterface $log,
+        PublishManagerInterface $publishManager,
+        CacheManagerInterface $cacheManager
     ) {
         $this->dispatcher = $dispatcher;
         $this->log = $log;
+        $this->publishManager = $publishManager;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -84,13 +97,13 @@ final class RedirectObserver
      */
     private function handle(): void
     {
-//        if (CacheManager::cachingEnabledAndSupported()) {
-//            $this->cacheManager->flush();
-//            $this->log->info('Vdlp.Redirect: Redirect cache has been flushed.');
-//        }
-//
-//        $this->publishManager->publish();
-//        $this->log->info('Vdlp.Redirect: Redirect engine has been updated.');
+        if ($this->cacheManager->cachingEnabledAndSupported()) {
+            $this->cacheManager->flush();
+            $this->log->info('Vdlp.Redirect: Redirect cache has been flushed.');
+        }
+
+        $this->publishManager->publish();
+        $this->log->info('Vdlp.Redirect: Redirect engine has been updated.');
     }
 
     /**

@@ -8,11 +8,6 @@ use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\RedirectManagerSettings;
 use Vdlp\Redirect\Classes\RedirectRule;
 
-/**
- * Class RedirectManagerInterface
- *
- * @package Vdlp\Redirect\Classes\Contracts
- */
 interface RedirectManagerInterface
 {
     /**

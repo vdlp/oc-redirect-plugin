@@ -23,13 +23,7 @@ use Vdlp\Redirect\Console\PublishRedirects;
 use Vdlp\Redirect\Models;
 use Vdlp\Redirect\ReportWidgets\CreateRedirect;
 use Vdlp\Redirect\ReportWidgets\TopTenRedirects;
-use Vdlp\Redirect\ServiceProviders;
 
-/**
- * Class Plugin
- *
- * @package Vdlp\Redirect
- */
 class Plugin extends PluginBase
 {
     /**
@@ -116,7 +110,7 @@ class Plugin extends PluginBase
      */
     public function register(): void
     {
-        $this->app->register(ServiceProviders\Redirect::class);
+        $this->app->register(ServiceProvider::class);
 
         $this->registerConsoleCommands();
     }
@@ -141,6 +135,7 @@ class Plugin extends PluginBase
             });
         });
 
+        /** @noinspection ClassConstantCanBeUsedInspection */
         if (class_exists('\RainLab\Pages\Classes\Page')) {
             \RainLab\Pages\Classes\Page::extend(static function (\RainLab\Pages\Classes\Page $page) {
                 $handler = new StaticPageHandler($page);
@@ -283,7 +278,6 @@ class Plugin extends PluginBase
      */
     public function registerSettings(): array
     {
-        /** @noinspection ClassConstantCanBeUsedInspection */
         return [
             'config' => [
                 'label' => 'vdlp.redirect::lang.settings.menu_label',

@@ -5,19 +5,15 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Closure;
-use Exception;
-use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
 use October\Rain\Events\Dispatcher;
+use Psr\Log\LoggerInterface;
+use Throwable;
+use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 
-/**
- * Class RedirectMiddleware
- *
- * @package Vdlp\Redirect\Classes
- */
-class RedirectMiddleware
+final class RedirectMiddleware
 {
     /**
      * @var RedirectManagerInterface
@@ -25,11 +21,30 @@ class RedirectMiddleware
     private $redirectManager;
 
     /**
-     * @param RedirectManagerInterface $redirectManager
+     * @var CacheManagerInterface
      */
-    public function __construct(RedirectManagerInterface $redirectManager)
-    {
+    private $cacheManager;
+
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $log;
+
+    public function __construct(
+        RedirectManagerInterface $redirectManager,
+        CacheManagerInterface $cacheManager,
+        Dispatcher $dispatcher,
+        LoggerInterface $log
+    ) {
         $this->redirectManager = $redirectManager;
+        $this->cacheManager = $cacheManager;
+        $this->dispatcher = $dispatcher;
+        $this->log = $log;
     }
 
     /**
@@ -39,7 +54,7 @@ class RedirectMiddleware
      * @param Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         // Only handle specific request methods.
         if (!in_array($request->method(), ['GET', 'POST', 'HEAD'], true)) {
@@ -55,29 +70,25 @@ class RedirectMiddleware
         $requestUri = str_replace($request->getBasePath(), '', $request->getRequestUri());
 
         try {
-            if (CacheManager::cachingEnabledAndSupported()) {
+            if ($this->cacheManager->cachingEnabledAndSupported()) {
                 $rule = $this->redirectManager->matchCached($requestUri, $request->getScheme());
             } else {
                 $rule = $this->redirectManager->match($requestUri, $request->getScheme());
             }
-        } catch (Exception $e) {
-            $logger = resolve(Log::class);
-            $logger->error("Vdlp.Redirect: Could not perform redirect for $requestUri: " . $e->getMessage());
+        } catch (Throwable $e) {
+            $this->log->error("Vdlp.Redirect: Could not perform redirect for $requestUri: " . $e->getMessage());
         }
 
         if (!$rule) {
             return $next($request);
         }
 
-        /** @var Dispatcher $eventDispatcher */
-        $eventDispatcher = resolve(Dispatcher::class);
-
         /*
          * Extensibility:
          *
          * At this point a positive match was made based on the request URI.
          */
-        $eventDispatcher->fire('vdlp.redirect.match', [$rule, $requestUri]);
+        $this->dispatcher->fire('vdlp.redirect.match', [$rule, $requestUri]);
 
         /*
          * Extensibility:
@@ -86,7 +97,7 @@ class RedirectMiddleware
          */
         foreach ($this->redirectManager->getConditions() as $condition) {
             /** @var RedirectConditionInterface $condition */
-            $condition = app($condition);
+            $condition = resolve($condition);
 
             if (!$condition->passes($rule, $requestUri)) {
                 return $next($request);

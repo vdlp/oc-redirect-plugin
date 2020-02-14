@@ -6,11 +6,6 @@ namespace Vdlp\Redirect\Classes;
 
 use Vdlp\Redirect\Models\Settings;
 
-/**
- * Class RedirectManagerSettings
- *
- * @package Vdlp\Redirect\Classes
- */
 final class RedirectManagerSettings
 {
     /**

@@ -6,7 +6,7 @@ namespace Vdlp\Redirect\Models;
 
 use October\Rain\Database\Model;
 
-class RedirectLog extends Model
+final class RedirectLog extends Model
 {
     /**
      * {@inheritDoc}

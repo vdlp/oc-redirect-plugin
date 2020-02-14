@@ -6,7 +6,7 @@ namespace Vdlp\Redirect\Models;
 
 use October\Rain\Database\Model;
 
-class Category extends Model
+final class Category extends Model
 {
     /**
      * {@inheritDoc}

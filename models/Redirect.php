@@ -17,10 +17,10 @@ use October\Rain\Database\Traits\Validation;
 use Vdlp\Redirect\Classes\OptionHelper;
 
 /**
- * @method static Redirect enabled()
- * @method static Redirect testLabEnabled()
+ * @method static Redirect|Builder enabled()
+ * @method static Redirect|Builder testLabEnabled()
  */
-class Redirect extends Model
+final class Redirect extends Model
 {
     use Sortable;
     use Validation {

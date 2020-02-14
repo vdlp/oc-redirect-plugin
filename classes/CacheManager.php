@@ -4,20 +4,12 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use BadMethodCallException;
-use Cache;
 use Carbon\Carbon;
 use Illuminate\Cache\TaggedCache;
+use Throwable;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Models\Settings;
 
-/**
- * Class CacheManager
- *
- * Wrapper class for managing redirect cache.
- *
- * @package Vdlp\Redirect\Classes
- */
 final class CacheManager implements CacheManagerInterface
 {
     private const CACHE_TAG = 'Vdlp.Redirect';
@@ -120,15 +112,15 @@ final class CacheManager implements CacheManagerInterface
      *
      * @return bool
      */
-    public static function cachingEnabledAndSupported(): bool
+    public function cachingEnabledAndSupported(): bool
     {
         if (!Settings::isCachingEnabled()) {
             return false;
         }
 
         try {
-            Cache::tags([static::CACHE_TAG]);
-        } catch (BadMethodCallException $e) {
+            $this->cache->tags([static::CACHE_TAG]);
+        } catch (Throwable $e) {
             return false;
         }
 
@@ -140,15 +132,15 @@ final class CacheManager implements CacheManagerInterface
      *
      * @return bool
      */
-    public static function cachingEnabledButNotSupported(): bool
+    public function cachingEnabledButNotSupported(): bool
     {
         if (!Settings::isCachingEnabled()) {
             return false;
         }
 
         try {
-            Cache::tags([static::CACHE_TAG]);
-        } catch (BadMethodCallException $e) {
+            $this->cache->tags([static::CACHE_TAG]);
+        } catch (Throwable $e) {
             return true;
         }
 

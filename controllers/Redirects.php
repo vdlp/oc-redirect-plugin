@@ -23,7 +23,6 @@ use October\Rain\Flash\FlashBag;
 use System\Models\RequestLog;
 use SystemException;
 use Throwable;
-use Vdlp\Redirect\Classes\CacheManager;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\RedirectManager;
 use Vdlp\Redirect\Classes\RedirectRule;
@@ -92,6 +91,11 @@ class Redirects extends Controller
     private $dispatcher;
 
     /**
+     * @var CacheManagerInterface
+     */
+    private $cacheManager;
+
+    /**
      * @var FlashBag
      */
     private $flash;
@@ -99,8 +103,12 @@ class Redirects extends Controller
     /**
      * {@inheritDoc}
      */
-    public function __construct(Request $request, Translator $translator, Dispatcher $dispatcher)
-    {
+    public function __construct(
+        Request $request,
+        Translator $translator,
+        Dispatcher $dispatcher,
+        CacheManagerInterface $cacheManager
+    ) {
         parent::__construct();
 
         $sideMenuItemCode = in_array($this->action, ['reorder', 'import', 'export'], true)
@@ -117,6 +125,7 @@ class Redirects extends Controller
         $this->request = $request;
         $this->translator = $translator;
         $this->dispatcher = $dispatcher;
+        $this->cacheManager = $cacheManager;
         $this->flash = resolve('flash');
     }
 
@@ -130,7 +139,7 @@ class Redirects extends Controller
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         parent::index();
 
-        if (CacheManager::cachingEnabledButNotSupported()) {
+        if ($this->cacheManager->cachingEnabledButNotSupported()) {
             $this->vars['warningMessage'] = $this->translator->trans('vdlp.redirect::lang.redirect.cache_warning');
         }
     }
@@ -149,7 +158,7 @@ class Redirects extends Controller
         $this->bodyClass = 'compact-container';
 
         /** @var Models\Redirect $redirect */
-        $redirect = Models\Redirect::findOrFail($recordId);
+        $redirect = Models\Redirect::query()->findOrFail($recordId);
 
         /** @noinspection ClassConstantCanBeUsedInspection */
         if ($redirect->getAttribute('target_type') === Models\Redirect::TARGET_TYPE_STATIC_PAGE

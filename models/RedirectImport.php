@@ -8,7 +8,7 @@ use Backend\Models\ImportModel;
 use Throwable;
 use Vdlp\Redirect\Classes\PublishManager;
 
-class RedirectImport extends ImportModel
+final class RedirectImport extends ImportModel
 {
     /**
      * {@inheritDoc}

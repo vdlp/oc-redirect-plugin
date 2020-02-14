@@ -4,22 +4,17 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Tests;
 
+use PHPUnit_Framework_Exception;
 use PluginTestCase;
 use Vdlp\Redirect\Classes\OptionHelper;
 use Vdlp\Redirect\Models\Redirect;
 
-/**
- * Class OptionHelperTest
- *
- * @package Vdlp\Redirect\Tests
- */
 class OptionHelperTest extends PluginTestCase
 {
-
     /**
-     * @throws \PHPUnit_Framework_Exception
+     * @throws PHPUnit_Framework_Exception
      */
-    public function testTargetTypeOptions()
+    public function testTargetTypeOptions(): void
     {
         self::assertCount(1, OptionHelper::getTargetTypeOptions(404));
         self::assertCount(3, OptionHelper::getTargetTypeOptions(301));

@@ -10,11 +10,6 @@ use System\Classes\PluginManager;
 use Vdlp\Redirect\Models\Category;
 use Vdlp\Redirect\Models\Redirect;
 
-/**
- * Class OptionHelper
- *
- * @package Vdlp\Redirect\Classes
- */
 final class OptionHelper
 {
     /**
@@ -23,7 +18,7 @@ final class OptionHelper
      * @param int $statusCode
      * @return array
      */
-    public static function getTargetTypeOptions($statusCode): array
+    public static function getTargetTypeOptions(int $statusCode): array
     {
         if ($statusCode === 404 || $statusCode === 410) {
             return [
@@ -80,13 +75,11 @@ final class OptionHelper
         return $options;
     }
 
-    /**
-     * Get all categories as an option array.
-     *
-     * @return array
-     */
     public static function getCategoryOptions(): array
     {
-        return (array) Category::all(['id', 'name'])->lists('name', 'key');
+        return Category::query()
+            ->get(['id', 'name'])
+            ->pluck('name', 'key')
+            ->toArray();
     }
 }

@@ -6,7 +6,7 @@ namespace Vdlp\Redirect\Models;
 
 use Backend\Models\ExportModel;
 
-class RedirectExport extends ExportModel
+final class RedirectExport extends ExportModel
 {
     /**
      * {@inheritDoc}

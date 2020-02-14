@@ -2,28 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Vdlp\Redirect\ServiceProviders;
+namespace Vdlp\Redirect;
 
 use Illuminate\Cache\TaggedCache;
 use Illuminate\Cache\TagSet;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Container\Container;
-use October\Rain\Support\ServiceProvider;
+use October\Rain\Support\ServiceProvider as ServiceProviderBase;
 use Vdlp\Redirect\Classes\CacheManager;
 use Vdlp\Redirect\Classes\Contracts;
 use Vdlp\Redirect\Classes\PublishManager;
 use Vdlp\Redirect\Classes\RedirectManager;
 
-/**
- * Class RedirectManager
- *
- * @package Vdlp\Redirect\ServiceProviders
- */
-class Redirect extends ServiceProvider
+final class ServiceProvider extends ServiceProviderBase
 {
-    /**
-     * @return void
-     */
     public function register(): void
     {
         $this->app->bind(Contracts\RedirectManagerInterface::class, RedirectManager::class);
