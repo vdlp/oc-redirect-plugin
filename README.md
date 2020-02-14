@@ -1,6 +1,6 @@
 # Vdlp.Redirect
 
-> **IMPORTANT**: This plugin was formerly known as `Adrenth.Redirect`. The plugin has been renamed to `Vdlp.Redirect`. Please install this plugin which automatically migrates data and settings from `Adrenth.Redirect`. The current version of `Adrenth.Redirect` will stay available for users which have it installed, but will be hidden from the October CMS marketplace. Upgrade to `Vdlp.Redirect` as soon as possible. 
+> **IMPORTANT**: This plugin was formerly known as `Adrenth.Redirect`. The plugin has been renamed to `Vdlp.Redirect`. Please install this plugin which automatically migrates data and settings from `Adrenth.Redirect`. The current version of `Adrenth.Redirect` will stay available for users which have it installed, but will be hidden from the October CMS marketplace. Upgrade to `Vdlp.Redirect` as soon as possible.
 
 ## The #1 Redirect plugin for October CMS
 
@@ -8,7 +8,7 @@ This is the best Redirect-plugin for October CMS. With this plugin installed you
 
 ## History
 
-This plugin was originally build in 2016 by Alwin Drenth a Software Engineer at Van der Let & Partners. 
+This plugin was originally build in 2016 by Alwin Drenth a Software Engineer at Van der Let & Partners.
 As of 2018 this plugin is re-distributed to the October CMS Marketplace with vendor name Vdlp.Redirect (formerly known as Adrenth.Redirect).
 
 The Redirect plugin will now be maintained by Van der Let & Partners and You (the open source community).
@@ -49,7 +49,7 @@ This plugin adds a 'Redirects' section to the main menu of October CMS. This plu
 
 ## PHP requirements
 
-* PHP version 7.0 or higher.
+* PHP version 7.1.3 or higher.
 * PHP extensions: `ext-curl` and `ext-json`.
 
 ## Supported HTTP status codes
@@ -74,7 +74,6 @@ This plugin is designed to be fast and should have no negative effect on the per
 
 To gain maximum performance with this plugin:
 
-* Use the latest version of PHP7 (really you should)
 * Enable redirect caching using a "in-memory" caching method (see Caching).
 * Maintain your redirects frequently to keep the number of redirects as low as possible.
 * Try to use placeholders to keep your number of redirect low (less redirects is better performance).
@@ -82,7 +81,7 @@ To gain maximum performance with this plugin:
 ## Caching
 
 If your website has a lot of redirects it is recommended to enable redirect caching. You can enable redirect caching in the settings panel of this plugin.
- 
+
 Only cache drivers which support tagged cache are supported. So driver `file` and `database` are not supported. For this plugin database and file caching do not increase performance, but can actually have a negative influence on performance. So it is recommended to use an in-memory caching solution like `memcached` or `redis`.
 
 ### How caching works
@@ -97,7 +96,7 @@ This plugin makes advantage of the `symfony/routing` package. So if you need mor
 
 ## Contribution
 
-Please feel free to [contribute](https://github.com/vdlp/oc-redirect-plugin) to this awesome plugin. 
+Please feel free to [contribute](https://github.com/vdlp/oc-redirect-plugin) to this awesome plugin.
 
 ## Questions? Need help?
 
