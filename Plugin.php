@@ -362,7 +362,7 @@ class Plugin extends PluginBase
     public function registerSchedule($schedule): void
     {
         $schedule->command('vdlp:redirect:publish-redirects')
-            ->dailyAt(config('vdlp.redirect::cron.publish-redirects', '00:00'));
+            ->dailyAt(config('vdlp.redirect::cron.publish_redirects', '00:00'));
     }
 
     /**

@@ -15,7 +15,7 @@ return [
 
     'cron' => [
 
-        'publish-redirects' => env('VDLP_REDIRECT_CRON_PUBLISH_REDIRECTS', '00:00'),
+        'publish_redirects' => env('VDLP_REDIRECT_CRON_PUBLISH_REDIRECTS', '00:00'),
 
     ],
 
