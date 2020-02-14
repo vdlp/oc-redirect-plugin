@@ -6,6 +6,7 @@ namespace Vdlp\Redirect\Classes;
 
 use Carbon\Carbon;
 use Illuminate\Cache\TaggedCache;
+use Psr\Log\LoggerInterface;
 use Throwable;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Models\Settings;
@@ -20,11 +21,18 @@ final class CacheManager implements CacheManagerInterface
     private $cache;
 
     /**
-     * @param TaggedCache $cache
+     * @var LoggerInterface
      */
-    public function __construct(TaggedCache $cache)
+    private $log;
+
+    /**
+     * @param TaggedCache $cache
+     * @param LoggerInterface $log
+     */
+    public function __construct(TaggedCache $cache, LoggerInterface $log)
     {
         $this->cache = $cache;
+        $this->log = $log;
     }
 
     /**
@@ -67,6 +75,7 @@ final class CacheManager implements CacheManagerInterface
     public function flush(): void
     {
         $this->cache->flush();
+        $this->log->info('Vdlp.Redirect: Redirect cache has been flushed.');
     }
 
     /**

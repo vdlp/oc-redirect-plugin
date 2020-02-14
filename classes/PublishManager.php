@@ -68,7 +68,14 @@ final class PublishManager implements PublishManagerInterface
             $this->publishToFilesystem($columns, $redirects->toArray());
         }
 
-        return $redirects->count();
+        $count = $redirects->count();
+
+        $this->log->info(sprintf(
+            'Vdlp.Redirect: Redirect engine has been updated with %s redirects.',
+            $count
+        ));
+
+        return $count;
     }
 
     private function publishToFilesystem(array $columns, array $redirects): void
