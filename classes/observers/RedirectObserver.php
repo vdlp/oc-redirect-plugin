@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Vdlp\Redirect\Classes;
+namespace Vdlp\Redirect\Classes\Observers;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Psr\Log\LoggerInterface;
+use Vdlp\Redirect\Classes\Observers\Traits\CanBeDisabled;
 use Vdlp\Redirect\Models;
 
 final class RedirectObserver
 {
+    use CanBeDisabled;
+
     /**
      * @var LoggerInterface
      */
@@ -34,6 +37,10 @@ final class RedirectObserver
      */
     public function created(Models\Redirect $model): void
     {
+        if (!self::canHandleChanges()) {
+            return;
+        }
+
         $this->logChange($model, 'created');
         $this->dispatcher->dispatch('vdlp.redirect.changed', [$model->getKey()]);
     }
@@ -44,6 +51,10 @@ final class RedirectObserver
      */
     public function updated(Models\Redirect $model): void
     {
+        if (!self::canHandleChanges()) {
+            return;
+        }
+
         $this->logChange($model, 'updated');
         $this->dispatcher->dispatch('vdlp.redirect.changed', [$model->getKey()]);
     }
@@ -54,6 +65,10 @@ final class RedirectObserver
      */
     public function deleted(Models\Redirect $model): void
     {
+        if (!self::canHandleChanges()) {
+            return;
+        }
+
         $this->logChange($model, 'deleted');
         $this->dispatcher->dispatch('vdlp.redirect.changed', [$model->getKey()]);
     }

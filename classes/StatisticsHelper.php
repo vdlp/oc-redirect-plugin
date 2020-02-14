@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use DB;
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use October\Rain\Database\Collection;
+use Vdlp\Redirect\Classes\Observers\RedirectObserver;
 use Vdlp\Redirect\Models;
 
 final class StatisticsHelper
@@ -200,13 +201,18 @@ final class StatisticsHelper
 
         $now = Carbon::now();
 
+        RedirectObserver::startHandleChanges();
+
         /** @noinspection PhpUndefinedClassInspection */
         $redirect->forceFill([
             'hits' => DB::raw('hits + 1'),
             'last_used_at' => $now,
         ]);
 
+
         $redirect->forceSave();
+
+        RedirectObserver::stopHandleChanges();
 
         $crawlerDetect = new CrawlerDetect();
 
