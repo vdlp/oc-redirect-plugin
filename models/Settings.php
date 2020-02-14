@@ -39,26 +39,26 @@ final class Settings extends Model
 
     public static function isLoggingEnabled(): bool
     {
-        return (new static())->get('logging_enabled', true);
+        return (bool) (new static())->get('logging_enabled', true);
     }
 
     public static function isStatisticsEnabled(): bool
     {
-        return (new static())->get('statistics_enabled', true);
+        return (bool) (new static())->get('statistics_enabled', true);
     }
 
     public static function isTestLabEnabled(): bool
     {
-        return (new static())->get('test_lab_enabled', true);
+        return (bool) (new static())->get('test_lab_enabled', true);
     }
 
     public static function isCachingEnabled(): bool
     {
-        return (new static())->get('caching_enabled', false);
+        return (bool) (new static())->get('caching_enabled', false);
     }
 
     public static function isAutoRedirectCreationEnabled(): bool
     {
-        return (new static())->get('auto_redirect_creation_enabled', false);
+        return (bool) (new static())->get('auto_redirect_creation_enabled', false);
     }
 }
