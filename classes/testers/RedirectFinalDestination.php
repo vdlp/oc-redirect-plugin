@@ -30,7 +30,7 @@ class RedirectFinalDestination extends TesterBase
         $error = null;
 
         if (curl_exec($curlHandle) === false) {
-            $error = trans('vdlp.redirect::lang.test_lab.not_determinate_destination_url');
+            $error = e(trans('vdlp.redirect::lang.test_lab.not_determinate_destination_url'));
         }
 
         $finalDestination = curl_getinfo($curlHandle, CURLINFO_REDIRECT_URL);
@@ -39,7 +39,7 @@ class RedirectFinalDestination extends TesterBase
         curl_close($curlHandle);
 
         if (empty($finalDestination) && $statusCode > 400) {
-            $message = $error ?? trans('vdlp.redirect::lang.test_lab.no_destination_url');
+            $message = $error ?? e(trans('vdlp.redirect::lang.test_lab.no_destination_url'));
         } else {
             $finalDestination = sprintf(
                 '<a href="%s" target="_blank">%s</a>',
@@ -47,7 +47,8 @@ class RedirectFinalDestination extends TesterBase
                 e($finalDestination)
             );
 
-            $message = $error ?? trans('vdlp.redirect::lang.test_lab.final_destination_is', ['destination' => $finalDestination]);
+            $message = $error
+                ?? e(trans('vdlp.redirect::lang.test_lab.final_destination_is', ['destination' => $finalDestination]));
         }
 
         return new TesterResult($error === null, $message);

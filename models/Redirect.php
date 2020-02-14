@@ -321,7 +321,7 @@ class Redirect extends Model
         $options = [];
 
         foreach (self::$types as $value) {
-            $options[$value] = trans("vdlp.redirect::lang.redirect.$value");
+            $options[$value] = e(trans("vdlp.redirect::lang.redirect.$value"));
         }
 
         return $options;
@@ -373,7 +373,7 @@ class Redirect extends Model
         $options = [];
 
         foreach (self::$types as $value) {
-            $options[$value] = trans("vdlp.redirect::lang.redirect.$value");
+            $options[$value] = e(trans("vdlp.redirect::lang.redirect.$value"));
         }
 
         return $options;
@@ -389,7 +389,7 @@ class Redirect extends Model
         $options = [];
 
         foreach (self::$targetTypes as $value) {
-            $options[$value] = trans("vdlp.redirect::lang.redirect.target_type_$value");
+            $options[$value] = e(trans("vdlp.redirect::lang.redirect.target_type_$value"));
         }
 
         return $options;
@@ -403,7 +403,7 @@ class Redirect extends Model
         $options = [];
 
         foreach (self::$statusCodes as $value => $message) {
-            $options[$value] = trans("vdlp.redirect::lang.redirect.$message");
+            $options[$value] = e(trans("vdlp.redirect::lang.redirect.$message"));
         }
 
         return $options;

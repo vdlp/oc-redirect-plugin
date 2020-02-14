@@ -45,7 +45,7 @@ final class OptionHelper
      */
     public static function getCmsPageOptions(): array
     {
-        return ['' => '-- ' . trans('vdlp.redirect::lang.redirect.none') . ' --' ] + Page::getNameList();
+        return ['' => '-- ' . e(trans('vdlp.redirect::lang.redirect.none')) . ' --' ] + Page::getNameList();
     }
 
     /**
@@ -55,7 +55,7 @@ final class OptionHelper
      */
     public static function getStaticPageOptions(): array
     {
-        $options = ['' => '-- ' . trans('vdlp.redirect::lang.redirect.none') . ' --' ];
+        $options = ['' => '-- ' . e(trans('vdlp.redirect::lang.redirect.none')) . ' --' ];
 
         $hasPagesPlugin = PluginManager::instance()->hasPlugin('RainLab.Pages');
 

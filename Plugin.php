@@ -310,7 +310,7 @@ class Plugin extends PluginBase
 
         if (Models\Settings::isStatisticsEnabled()) {
             $reportWidgets[TopTenRedirects::class] = [
-                'label' => trans('vdlp.redirect::lang.statistics.top_redirects_this_month', ['top' => 10]),
+                'label' => e(trans('vdlp.redirect::lang.statistics.top_redirects_this_month', ['top' => 10])),
                 'context' => 'dashboard',
             ];
         }
@@ -399,7 +399,8 @@ class Plugin extends PluginBase
      */
     public function registerSchedule($schedule): void
     {
-        $schedule->command('vdlp:redirect:publish-redirects')->daily();
+        $schedule->command('vdlp:redirect:publish-redirects')
+            ->dailyAt(config('vdlp.redirect::cron.publish-redirects', '00:00'));
     }
 
     /**

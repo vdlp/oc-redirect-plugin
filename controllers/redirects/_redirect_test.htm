@@ -51,14 +51,29 @@
     <p class="help-block"><?= e(trans('vdlp.redirect::lang.test.test_date_comment')); ?></p>
     <div class="form-group">
         <button type="submit"
+                id="onTestButton"
                 data-request="onTest"
-                data-request-data="inputPath: $('#inputPath').val()"
                 data-hotkey="ctrl+t, cmd+t"
                 data-load-indicator="<?= e(trans('vdlp.redirect::lang.test.testing')); ?>"
-                onclick="$('#testResult').html('');var inputPath=$('#inputPath').focus();inputPath.val(inputPath.val())"
                 style="margin-top: 10px"
-                class="btn btn-success oc-icon-play" data-disposable="">
+                class="btn btn-success oc-icon-play"
+                data-disposable="">
             <?= e(trans('vdlp.redirect::lang.test.run_test')); ?>
         </button>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('#onTestButton').on('click', function (e) {
+            var inputPath = $('#inputPath').focus();
+
+            $(this).data('request-data', {
+                inputPath: inputPath.val()
+            });
+
+            $('#testResult').html('');
+
+            inputPath.val(inputPath.val());
+        });
+    });
+</script>
