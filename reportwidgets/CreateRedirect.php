@@ -23,9 +23,6 @@ class CreateRedirect extends ReportWidgetBase
      */
     private $redirect;
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct(Controller $controller, array $properties = [])
     {
         $this->alias = 'redirectCreateRedirect';
@@ -36,7 +33,6 @@ class CreateRedirect extends ReportWidgetBase
     }
 
     /**
-     * {@inheritDoc}
      * @throws SystemException
      * @noinspection PhpMissingParentCallCommonInspection
      */
@@ -51,9 +47,6 @@ class CreateRedirect extends ReportWidgetBase
         return $this->makePartial('widget');
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function onSubmit(): RedirectResponse
     {
         $redirect = Redirect::create([

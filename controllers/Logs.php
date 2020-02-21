@@ -22,7 +22,7 @@ use Vdlp\Redirect\Models\RedirectLog;
 class Logs extends Controller
 {
     /**
-     * {@inheritDoc}
+     * @var array
      */
     public $implement = [
         ListController::class
@@ -34,7 +34,7 @@ class Logs extends Controller
     public $listConfig = 'config_list.yaml';
 
     /**
-     * {@inheritDoc}
+     * @var array
      */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
@@ -58,9 +58,6 @@ class Logs extends Controller
      */
     private $log;
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct(Request $request, Translator $translator, LoggerInterface $log)
     {
         parent::__construct();
@@ -81,7 +78,7 @@ class Logs extends Controller
     public function onEmptyLog(): array
     {
         try {
-            RedirectLog::truncate();
+            RedirectLog::query()->truncate();
             $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.truncate_success'));
         } catch (Throwable $e) {
             $this->log->warning($e);

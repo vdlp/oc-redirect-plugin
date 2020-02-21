@@ -25,7 +25,7 @@ use Vdlp\Redirect\Models\Redirect;
 class TestLab extends Controller
 {
     /**
-     * {@inheritDoc}
+     * @var array
      */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
@@ -49,9 +49,6 @@ class TestLab extends Controller
      */
     private $flash;
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct(Request $request, Translator $translator)
     {
         $this->bodyClass = 'layout-relative';

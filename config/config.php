@@ -31,4 +31,15 @@ return [
 
     'log_redirect_changes' => env('VDLP_REDIRECT_LOG_REDIRECT_CHANGES', false),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Redirect Rules Path
+    |--------------------------------------------------------------------------
+    |
+    | The path of the redirect rules. Make sure the path is writable.
+    |
+    */
+
+    'rules_path' => env('VDLP_REDIRECT_RULES_PATH', storage_path('app/redirects.csv')),
+
 ];

@@ -12,7 +12,6 @@ use Backend\Classes\FormField;
 use Backend\Widgets\Form;
 use BackendMenu;
 use Carbon\Carbon;
-use Cms\Classes\CmsException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -24,8 +23,8 @@ use October\Rain\Flash\FlashBag;
 use System\Models\RequestLog;
 use SystemException;
 use Throwable;
-use Vdlp\FeedbackCompany\Classes\TokenStorage\Cache;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
+use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
 use Vdlp\Redirect\Classes\RedirectManager;
 use Vdlp\Redirect\Classes\RedirectRule;
 use Vdlp\Redirect\Classes\StatisticsHelper;
@@ -102,9 +101,6 @@ class Redirects extends Controller
      */
     private $flash;
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct(
         Request $request,
         Translator $translator,
@@ -131,11 +127,6 @@ class Redirects extends Controller
         $this->flash = resolve('flash');
     }
 
-    /**
-     * Index Controller action.
-     *
-     * @return void
-     */
     public function index(): void
     {
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */
@@ -147,11 +138,6 @@ class Redirects extends Controller
     }
 
     /**
-     * Edit Controller action.
-     *
-     * @param int $recordId The model primary key to update.
-     * @param string $context Explicitly define a form context.
-     * @return mixed
      * @throws ModelNotFoundException
      * @noinspection PhpStrictTypeCheckingInspection
      */
@@ -190,10 +176,6 @@ class Redirects extends Controller
         return $this->cacheManager;
     }
 
-    /**
-     * @param string|null $context
-     * @return RedirectResponse
-     */
     public function create_onSave(?string $context = null): RedirectResponse
     {
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */
@@ -206,27 +188,19 @@ class Redirects extends Controller
         return $redirect;
     }
 
-    /**
-     * Delete selected redirects.
-     *
-     * @return array
-     */
     public function index_onDelete(): array
     {
         $redirectIds = $this->getCheckedIds();
 
         Models\Redirect::destroy($redirectIds);
 
-        $this->dispatcher->dispatch('vdlp.redirect.changed', [$redirectIds]);
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
 
         return $this->listRefresh();
     }
 
-    /**
-     * Enable selected redirects.
-     *
-     * @return array
-     */
     public function index_onEnable(): array
     {
         $redirectIds = $this->getCheckedIds();
@@ -235,16 +209,13 @@ class Redirects extends Controller
             ->whereIn('id', $redirectIds)
             ->update(['is_enabled' => 1]);
 
-        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
 
         return $this->listRefresh();
     }
 
-    /**
-     * Disable selected redirects.
-     *
-     * @return array
-     */
     public function index_onDisable(): array
     {
         $redirectIds = $this->getCheckedIds();
@@ -253,16 +224,13 @@ class Redirects extends Controller
             ->whereIn('id', $redirectIds)
             ->update(['is_enabled' => 0]);
 
-        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
 
         return $this->listRefresh();
     }
 
-    /**
-     * Reset all statistics for selected redirects.
-     *
-     * @return array
-     */
     public function index_onResetStatistics(): array
     {
         $redirectIds = $this->getCheckedIds();
@@ -276,16 +244,13 @@ class Redirects extends Controller
             ->whereIn('redirect_id', $redirectIds)
             ->delete();
 
-        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
 
         return $this->listRefresh();
     }
 
-    /**
-     * Clears redirect cache.
-     *
-     * @return void
-     */
     public function index_onClearCache(): void
     {
         /** @var CacheManagerInterface $cacheManager */
@@ -296,9 +261,6 @@ class Redirects extends Controller
     }
 
     /**
-     * Renders actions partial.
-     *
-     * @return string
      * @throws SystemException
      */
     public function index_onLoadActions(): string
@@ -306,11 +268,6 @@ class Redirects extends Controller
         return (string) $this->makePartial('popup_actions');
     }
 
-    /**
-     * Resets all statistics.
-     *
-     * @return array
-     */
     public function index_onResetAllStatistics(): array
     {
         $redirectIds = $this->getAllRedirectIds();
@@ -320,35 +277,23 @@ class Redirects extends Controller
 
         $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.statistics_reset_success'));
 
-        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
 
         return $this->listRefresh();
     }
 
-    /**
-     * Enables all redirects.
-     *
-     * @return array
-     */
     public function index_onEnableAllRedirects(): array
     {
         return $this->toggleRedirects(true);
     }
 
-    /**
-     * Disables all redirects.
-     *
-     * @return array
-     */
     public function index_onDisableAllRedirects(): array
     {
         return $this->toggleRedirects(false);
     }
 
-    /**
-     * @param bool $enabled
-     * @return array
-     */
     private function toggleRedirects(bool $enabled): array
     {
         $redirectIds = $this->getAllRedirectIds();
@@ -358,16 +303,13 @@ class Redirects extends Controller
 
         $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.disabled_all_redirects_success'));
 
-        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
 
         return $this->listRefresh();
     }
 
-    /**
-     * Deletes all redirects.
-     *
-     * @return array
-     */
     public function index_onDeleteAllRedirects(): array
     {
         $redirectIds = $this->getAllRedirectIds();
@@ -377,7 +319,9 @@ class Redirects extends Controller
 
         $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.deleted_all_redirects_success'));
 
-        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($redirectIds));
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
 
         return $this->listRefresh();
     }
@@ -385,9 +329,6 @@ class Redirects extends Controller
     // @codingStandardsIgnoreEnd
 
     /**
-     * Renders status code information partial.
-     *
-     * @return string
      * @throws SystemException
      */
     public function onShowStatusCodeInfo(): string
@@ -395,13 +336,6 @@ class Redirects extends Controller
         return (string) $this->makePartial('status_code_info', [], false);
     }
 
-    /**
-     * Called after the form fields are defined.
-     *
-     * @param Form $host
-     * @param array $fields
-     * @return void
-     */
     public function formExtendFields(Form $host, array $fields = []): void
     {
         $disableFields = [
@@ -427,14 +361,7 @@ class Redirects extends Controller
         }
     }
 
-    /**
-     * Called when the form is refreshed, giving the opportunity to modify the form fields.
-     *
-     * @param Form $host The hosting form widget
-     * @param array $fields Current form fields
-     * @return void
-     */
-    public function formExtendRefreshFields(Form $host, $fields): void
+    public function formExtendRefreshFields(Form $host, array $fields): void
     {
         if ($fields['status_code']->value
             && strpos((string) $fields['status_code']->value, '4') === 0
@@ -465,12 +392,6 @@ class Redirects extends Controller
         }
     }
 
-    /**
-     * Returns a CSS class name for a list row (<tr class="...">).
-     *
-     * @param Model $record The populated model used for the column.
-     * @return string CSS class name.
-     */
     public function listInjectRowClass(Model $record): string
     {
         if ($record instanceof Models\Redirect
@@ -483,12 +404,8 @@ class Redirects extends Controller
     }
 
     /**
-     * Test Input Path.
-     *
-     * @return array
      * @throws ApplicationException
      * @throws SystemException
-     * @throws CmsException
      */
     public function onTest(): array
     {
@@ -501,6 +418,8 @@ class Redirects extends Controller
             $testDate = Carbon::createFromFormat('Y-m-d', $this->request->get('test_date', date('Y-m-d')));
             $manager->setMatchDate($testDate);
             $match = $manager->match($inputPath, $this->request->get('test_scheme', $this->request->getScheme()));
+        } catch (NoMatchForRequest $e) {
+            $match = false;
         } catch (Throwable $e) {
             throw new ApplicationException($e->getMessage());
         }
@@ -514,9 +433,6 @@ class Redirects extends Controller
     }
 
     /**
-     * Triggers Request Log dialog.
-     *
-     * @return string
      * @throws SystemException
      */
     public function onOpenRequestLog(): string
@@ -527,9 +443,6 @@ class Redirects extends Controller
     }
 
     /**
-     * Create Redirects from Request Log items.
-     *
-     * @return array
      * @throws ModelNotFoundException
      */
     public function onCreateRedirectFromRequestLogItems(): array
@@ -575,11 +488,6 @@ class Redirects extends Controller
         return $this->listRefresh();
     }
 
-    /**
-     * Check checked ID's from POST request.
-     *
-     * @return array
-     */
     private function getCheckedIds(): array
     {
         if (($checkedIds = $this->request->get('checked'))
@@ -594,9 +502,6 @@ class Redirects extends Controller
         return [];
     }
 
-    /**
-     * @return array
-     */
     private function getAllRedirectIds(): array
     {
         return Models\Redirect::query()
@@ -605,10 +510,6 @@ class Redirects extends Controller
             ->toArray();
     }
 
-    /**
-     * @param string $url
-     * @return string
-     */
     private function parseRequestLogItemUrl(string $url): string
     {
         $path = parse_url($url, PHP_URL_PATH);

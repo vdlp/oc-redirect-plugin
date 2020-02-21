@@ -12,9 +12,19 @@ use Throwable;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
+use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
 
 final class RedirectMiddleware
 {
+    /**
+     * @var array
+     */
+    private static $supportedMethods = [
+        'GET',
+        'POST',
+        'HEAD'
+    ];
+
     /**
      * @var RedirectManagerInterface
      */
@@ -57,7 +67,7 @@ final class RedirectMiddleware
     public function handle(Request $request, Closure $next)
     {
         // Only handle specific request methods.
-        if (!in_array($request->method(), ['GET', 'POST', 'HEAD'], true)) {
+        if (!in_array($request->method(), self::$supportedMethods, true)) {
             return $next($request);
         }
 
@@ -75,8 +85,15 @@ final class RedirectMiddleware
             } else {
                 $rule = $this->redirectManager->match($requestUri, $request->getScheme());
             }
+        } catch (NoMatchForRequest $e) {
+            $rule = false;
         } catch (Throwable $e) {
-            $this->log->error("Vdlp.Redirect: Could not perform redirect for $requestUri: " . $e->getMessage());
+            $this->log->error(sprintf(
+                'Vdlp.Redirect: Could not perform redirect for %s (scheme: %s): %s',
+                $requestUri,
+                $request->getScheme(),
+                $e->getMessage()
+            ));
         }
 
         if (!$rule) {

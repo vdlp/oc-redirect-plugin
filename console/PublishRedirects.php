@@ -9,9 +9,6 @@ use Vdlp\Redirect\Classes\PublishManager;
 
 class PublishRedirects extends Command
 {
-    /**
-     * {@inheritDoc}
-     */
     public function __construct()
     {
         $this->name = 'vdlp:redirect:publish-redirects';

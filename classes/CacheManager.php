@@ -25,43 +25,27 @@ final class CacheManager implements CacheManagerInterface
      */
     private $log;
 
-    /**
-     * @param TaggedCache $cache
-     * @param LoggerInterface $log
-     */
     public function __construct(TaggedCache $cache, LoggerInterface $log)
     {
         $this->cache = $cache;
         $this->log = $log;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function get(string $key)
     {
         return $this->cache->get($key);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function forget(string $key): bool
     {
         return $this->cache->forget($key);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function has(string $key): bool
     {
         return $this->cache->has($key);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function cacheKey(string $requestPath, string $scheme): string
     {
         // Most caching backend have no limits on key lengths.
@@ -69,34 +53,22 @@ final class CacheManager implements CacheManagerInterface
         return md5($requestPath . $scheme);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function flush(): void
     {
         $this->cache->flush();
         $this->log->info('Vdlp.Redirect: Redirect cache has been flushed.');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function putRedirectRules(array $redirectRules): void
     {
         $this->cache->forever('Vdlp.Redirect.Rules', $redirectRules);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRedirectRules(): array
     {
         return (array) $this->cache->get('Vdlp.Redirect.Rules', []);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function putMatch(string $cacheKey, ?RedirectRule $matchedRule = null): ?RedirectRule
     {
         if ($matchedRule === null) {
@@ -116,11 +88,6 @@ final class CacheManager implements CacheManagerInterface
         return $matchedRule;
     }
 
-    /**
-     * The user has enabled the cache and the current driver supports cache tags.
-     *
-     * @return bool
-     */
     public function cachingEnabledAndSupported(): bool
     {
         if (!Settings::isCachingEnabled()) {
@@ -136,11 +103,6 @@ final class CacheManager implements CacheManagerInterface
         return true;
     }
 
-    /**
-     * The user has enabled the cache, but the current driver does not support cache tags.
-     *
-     * @return bool
-     */
     public function cachingEnabledButNotSupported(): bool
     {
         if (!Settings::isCachingEnabled()) {

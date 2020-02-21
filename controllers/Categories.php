@@ -15,7 +15,7 @@ use BackendMenu;
 class Categories extends Controller
 {
     /**
-     * {@inheritDoc}
+     * @var array
      */
     public $implement = [
         Behaviors\FormController::class,
@@ -33,13 +33,10 @@ class Categories extends Controller
     public $listConfig = 'config_list.yaml';
 
     /**
-     * {@inheritDoc}
+     * @var array
      */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct()
     {
         parent::__construct();

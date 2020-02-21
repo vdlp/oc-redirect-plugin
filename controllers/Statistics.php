@@ -22,13 +22,10 @@ class Statistics extends Controller
     private $helper;
 
     /**
-     * {@inheritDoc}
+     * @var array
      */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct()
     {
         parent::__construct();

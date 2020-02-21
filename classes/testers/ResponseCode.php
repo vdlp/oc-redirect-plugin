@@ -7,6 +7,7 @@ namespace Vdlp\Redirect\Classes\Testers;
 use InvalidArgumentException;
 use Request;
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
+use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
 use Vdlp\Redirect\Classes\TesterBase;
 use Vdlp\Redirect\Classes\TesterResult;
 use Vdlp\Redirect\Models\Redirect;
@@ -22,8 +23,6 @@ use Vdlp\Redirect\Models\Redirect;
 final class ResponseCode extends TesterBase
 {
     /**
-     * {@inheritDoc}
-     * @throws InvalidScheme
      * @throws InvalidArgumentException
      */
     protected function test(): TesterResult
@@ -51,7 +50,11 @@ final class ResponseCode extends TesterBase
         $manager = $this->getRedirectManager();
 
         // TODO: Add scheme
-        $match = $manager->match($this->testPath, Request::getScheme());
+        try {
+            $match = $manager->match($this->testPath, Request::getScheme());
+        } catch (NoMatchForRequest | InvalidScheme $e) {
+            $match = false;
+        }
 
         if ($match && $match->getStatusCode() !== $statusCode) {
             $message = e(trans('vdlp.redirect::lang.test_lab.matched_not_http_code', [

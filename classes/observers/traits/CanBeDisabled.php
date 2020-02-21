@@ -11,25 +11,16 @@ trait CanBeDisabled
      */
     private static $handleChanges = true;
 
-    /**
-     * @return void
-     */
     public static function startHandleChanges(): void
     {
         self::$handleChanges = true;
     }
 
-    /**
-     * @return void
-     */
     public static function stopHandleChanges(): void
     {
         self::$handleChanges = false;
     }
 
-    /**
-     * @return bool
-     */
     public static function canHandleChanges(): bool
     {
         return self::$handleChanges;

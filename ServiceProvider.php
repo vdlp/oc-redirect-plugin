@@ -36,6 +36,7 @@ final class ServiceProvider extends ServiceProviderBase
             );
         });
 
+
         $this->app->singleton(RedirectManager::class);
         $this->app->singleton(PublishManager::class);
         $this->app->singleton(CacheManager::class);

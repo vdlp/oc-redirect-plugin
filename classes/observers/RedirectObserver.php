@@ -43,7 +43,10 @@ final class RedirectObserver
         }
 
         $this->logChange($model, 'created');
-        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($model->getKey()));
+
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($model->getKey())
+        ]);
     }
 
     /**
@@ -57,7 +60,10 @@ final class RedirectObserver
         }
 
         $this->logChange($model, 'updated');
-        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($model->getKey()));
+
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($model->getKey())
+        ]);
     }
 
     /**
@@ -71,7 +77,10 @@ final class RedirectObserver
         }
 
         $this->logChange($model, 'deleted');
-        $this->dispatcher->dispatch('vdlp.redirect.changed', Arr::wrap($model->getKey()));
+
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($model->getKey())
+        ]);
     }
 
     private function logChange(Models\Redirect $model, string $typeOfChange): void

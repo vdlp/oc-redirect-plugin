@@ -14,9 +14,6 @@ use Vdlp\Redirect\Classes\StatisticsHelper;
  */
 class TopTenRedirects extends ReportWidgetBase
 {
-    /**
-     * {@inheritDoc}
-     */
     public function __construct(Controller $controller, array $properties = [])
     {
         $this->alias = 'redirectTopTenRedirects';
@@ -25,7 +22,6 @@ class TopTenRedirects extends ReportWidgetBase
     }
 
     /**
-     * {@inheritDoc}
      * @throws SystemException
      * @noinspection PhpMissingParentCallCommonInspection
      */

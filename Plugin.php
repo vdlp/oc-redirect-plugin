@@ -10,8 +10,8 @@ use Backend;
 use Event;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Contracts\Translation\Translator;
+use October\Rain\Foundation\Http\Kernel;
 use System\Classes\PluginBase;
 use Throwable;
 use Validator;
@@ -20,35 +20,30 @@ use Vdlp\Redirect\Classes\Observers\RedirectObserver;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
 use Vdlp\Redirect\Console\PublishRedirects;
 use Vdlp\Redirect\Models;
-use Vdlp\Redirect\ReportWidgets\CreateRedirect;
-use Vdlp\Redirect\ReportWidgets\TopTenRedirects;
+use Vdlp\Redirect\ReportWidgets;
 
 class Plugin extends PluginBase
 {
     /**
-     * {@inheritDoc}
+     * @var bool
      */
     public $elevated = true;
 
-    /**
-     * {@inheritDoc}
-     */
     public function pluginDetails(): array
     {
         return [
             'name' => 'vdlp.redirect::lang.plugin.name',
             'description' => 'vdlp.redirect::lang.plugin.description',
-            'author' => 'Alwin Drenth',
+            'author' => 'Van der Let & Partners',
             'icon' => 'icon-link',
             'homepage' => 'https://octobercms.com/plugin/vdlp-redirect',
         ];
     }
 
     /**
-     * {@inheritDoc}
      * @throws Exception
      */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole() || $this->app->runningUnitTests()) {
             return;
@@ -98,9 +93,6 @@ class Plugin extends PluginBase
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function register(): void
     {
         $this->app->register(ServiceProvider::class);
@@ -108,9 +100,6 @@ class Plugin extends PluginBase
         $this->registerConsoleCommands();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function registerPermissions(): array
     {
         return [
@@ -121,9 +110,6 @@ class Plugin extends PluginBase
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function registerNavigation(): array
     {
         $defaultBackendUrl = Backend::url(
@@ -230,9 +216,6 @@ class Plugin extends PluginBase
         return $navigation;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function registerSettings(): array
     {
         return [
@@ -249,21 +232,18 @@ class Plugin extends PluginBase
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function registerReportWidgets(): array
     {
         /** @var Translator $translator */
         $translator = resolve(Translator::class);
 
-        $reportWidgets[CreateRedirect::class] = [
+        $reportWidgets[ReportWidgets\CreateRedirect::class] = [
             'label' => 'vdlp.redirect::lang.buttons.create_redirect',
             'context' => 'dashboard'
         ];
 
         if (Models\Settings::isStatisticsEnabled()) {
-            $reportWidgets[TopTenRedirects::class] = [
+            $reportWidgets[ReportWidgets\TopTenRedirects::class] = [
                 'label' => e($translator->trans(
                     'vdlp.redirect::lang.statistics.top_redirects_this_month',
                     [
@@ -277,9 +257,6 @@ class Plugin extends PluginBase
         return $reportWidgets;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function registerListColumnTypes(): array
     {
         /** @var Translator $translator */
@@ -355,31 +332,18 @@ class Plugin extends PluginBase
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     * @param Schedule $schedule
-     */
     public function registerSchedule($schedule): void
     {
+        /** @var Schedule $schedule */
         $schedule->command('vdlp:redirect:publish-redirects')
             ->dailyAt(config('vdlp.redirect::cron.publish_redirects', '00:00'));
     }
 
-    /**
-     * Register Console Commands.
-     *
-     * @return void
-     */
     private function registerConsoleCommands(): void
     {
         $this->registerConsoleCommand('vdlp.redirect.publish-redirects', PublishRedirects::class);
     }
 
-    /**
-     * Register Custom Validators.
-     *
-     * @return void
-     */
     private function registerCustomValidators(): void
     {
         Validator::extend('is_regex', static function ($attribute, $value) {
@@ -393,9 +357,6 @@ class Plugin extends PluginBase
         });
     }
 
-    /**
-     * @return void
-     */
     private function registerObservers(): void
     {
         Models\Redirect::observe(RedirectObserver::class);

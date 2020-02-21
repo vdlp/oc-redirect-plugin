@@ -9,7 +9,6 @@ use InvalidArgumentException;
 final class Sparkline extends \Davaxi\Sparkline
 {
     /**
-     * {@inheritDoc}
      * @throws InvalidArgumentException
      * @noinspection PhpMissingParentCallCommonInspection
      */

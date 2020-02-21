@@ -12,12 +12,6 @@ use Vdlp\Redirect\Models\Redirect;
 
 final class OptionHelper
 {
-    /**
-     * Returns available target type options based on given status code.
-     *
-     * @param int $statusCode
-     * @return array
-     */
     public static function getTargetTypeOptions(int $statusCode): array
     {
         if ($statusCode === 404 || $statusCode === 410) {
@@ -33,21 +27,11 @@ final class OptionHelper
         ];
     }
 
-    /**
-     * Get all CMS pages as an option array.
-     *
-     * @return array
-     */
     public static function getCmsPageOptions(): array
     {
         return ['' => '-- ' . e(trans('vdlp.redirect::lang.redirect.none')) . ' --' ] + Page::getNameList();
     }
 
-    /**
-     * Get all Static Pages as an option array.
-     *
-     * @return array
-     */
     public static function getStaticPageOptions(): array
     {
         $options = ['' => '-- ' . e(trans('vdlp.redirect::lang.redirect.none')) . ' --' ];
@@ -58,16 +42,11 @@ final class OptionHelper
             return $options;
         }
 
-        /** @noinspection PhpUndefinedClassInspection */
         $pages = \RainLab\Pages\Classes\Page::listInTheme(Theme::getActiveTheme());
 
-        /** @noinspection PhpUndefinedClassInspection */
         /** @var \RainLab\Pages\Classes\Page $page */
         foreach ($pages as $page) {
-            /** @noinspection PhpUndefinedFieldInspection */
             if (array_key_exists('title', $page->viewBag)) {
-                /** @noinspection PhpUndefinedMethodInspection */
-                /** @noinspection PhpUndefinedFieldInspection */
                 $options[$page->getBaseFileName()] = $page->viewBag['title'];
             }
         }

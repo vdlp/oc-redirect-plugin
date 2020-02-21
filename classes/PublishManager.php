@@ -24,10 +24,6 @@ final class PublishManager implements PublishManagerInterface
      */
     private $cacheManager;
 
-    /**
-     * @param LoggerInterface $log
-     * @param CacheManagerInterface $cacheManager
-     */
     public function __construct(LoggerInterface $log, CacheManagerInterface $cacheManager)
     {
         $this->log = $log;

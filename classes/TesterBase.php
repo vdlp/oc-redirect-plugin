@@ -42,9 +42,6 @@ abstract class TesterBase implements TesterInterface
         $this->testUrl = Cms::url($testPath);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     final public function execute(): TesterResult
     {
         $stopwatch = new Stopwatch();
@@ -60,17 +57,11 @@ abstract class TesterBase implements TesterInterface
         return $result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTestPath(): string
     {
         return $this->testPath;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTestUrl(): string
     {
         return $this->testUrl;
@@ -79,8 +70,6 @@ abstract class TesterBase implements TesterInterface
     abstract protected function test(): TesterResult;
 
     /**
-     * @param resource $curlHandle
-     * @return void
      * @throws InvalidArgumentException
      */
     protected function setDefaultCurlOptions($curlHandle): void
