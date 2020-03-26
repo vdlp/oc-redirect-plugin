@@ -6,11 +6,6 @@ namespace Vdlp\Redirect\Classes\Contracts;
 
 use Vdlp\Redirect\Classes\TesterResult;
 
-/**
- * Interface TesterInterface
- *
- * @package Vdlp\Redirect\Classes\Contracts
- */
 interface TesterInterface
 {
     /**

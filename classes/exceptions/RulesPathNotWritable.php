@@ -6,10 +6,10 @@ namespace Vdlp\Redirect\Classes\Exceptions;
 
 use RuntimeException;
 
-final class RulesPathNotReadable extends RuntimeException
+final class RulesPathNotWritable extends RuntimeException
 {
     public static function withPath(string $path): self
     {
-        return new static("Rules path $path is not readable.");
+        return new static("Rules path $path is not writable.");
     }
 }

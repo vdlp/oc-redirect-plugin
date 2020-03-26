@@ -1,16 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes\Contracts;
 
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
+use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
+use Vdlp\Redirect\Classes\RedirectManagerSettings;
 use Vdlp\Redirect\Classes\RedirectRule;
 
-/**
- * Class RedirectManagerInterface
- *
- * @package Vdlp\Redirect\Classes\Contracts
- */
 interface RedirectManagerInterface
 {
     /**
@@ -26,10 +24,11 @@ interface RedirectManagerInterface
      *
      * @param string $requestPath
      * @param string $scheme 'http' or 'https'
-     * @return RedirectRule|false
+     * @return RedirectRule
      * @throws InvalidScheme
+     * @throws NoMatchForRequest
      */
-    public function match(string $requestPath, string $scheme);
+    public function match(string $requestPath, string $scheme): RedirectRule;
 
     /**
      * Redirect with specific rule.
@@ -38,7 +37,7 @@ interface RedirectManagerInterface
      * @param string $requestUri
      * @return void
      */
-    public function redirectWithRule(RedirectRule $rule, string $requestUri);
+    public function redirectWithRule(RedirectRule $rule, string $requestUri): void;
 
     /**
      * Get Location URL to redirect to.
@@ -60,7 +59,13 @@ interface RedirectManagerInterface
      *
      * @param string $conditionClass
      * @param int $priority
-     * @return void
+     * @return RedirectManagerInterface
      */
-    public function addCondition(string $conditionClass, int $priority);
+    public function addCondition(string $conditionClass, int $priority): RedirectManagerInterface;
+
+    /**
+     * @param RedirectManagerSettings $settings
+     * @return mixed
+     */
+    public function setSettings(RedirectManagerSettings $settings): RedirectManagerInterface;
 }

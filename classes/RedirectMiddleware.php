@@ -5,44 +5,74 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Closure;
-use Exception;
-use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
 use October\Rain\Events\Dispatcher;
+use Psr\Log\LoggerInterface;
+use Throwable;
+use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
-use Vdlp\Redirect\Models\Settings;
+use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
 
-/**
- * Class RedirectMiddleware
- *
- * @package Vdlp\Redirect\Classes
- */
-class RedirectMiddleware
+final class RedirectMiddleware
 {
+    /**
+     * @var array
+     */
+    private static $supportedMethods = [
+        'GET',
+        'POST',
+        'HEAD'
+    ];
+
+    /**
+     * @var RedirectManagerInterface
+     */
+    private $redirectManager;
+
+    /**
+     * @var CacheManagerInterface
+     */
+    private $cacheManager;
+
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $log;
+
+    public function __construct(
+        RedirectManagerInterface $redirectManager,
+        CacheManagerInterface $cacheManager,
+        Dispatcher $dispatcher,
+        LoggerInterface $log
+    ) {
+        $this->redirectManager = $redirectManager;
+        $this->cacheManager = $cacheManager;
+        $this->dispatcher = $dispatcher;
+        $this->log = $log;
+    }
+
     /**
      * Run the request filter.
      *
      * @param Request $request
      * @param Closure $next
      * @return mixed
-     * @throws \Cms\Classes\CmsException
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         // Only handle specific request methods.
-        if (!in_array($request->method(), ['GET', 'POST', 'HEAD'], true)) {
+        if (!in_array($request->method(), self::$supportedMethods, true)) {
             return $next($request);
         }
 
-        /** @var RedirectManager $manager */
-        $manager = resolve(RedirectManagerInterface::class);
-        $manager->setLoggingEnabled(Settings::isLoggingEnabled())
-            ->setStatisticsEnabled(Settings::isStatisticsEnabled());
-
         if ($request->header('X-Vdlp-Redirect') === 'Tester') {
-            $manager->setStatisticsEnabled(false)
-                ->setLoggingEnabled(false);
+            $this->redirectManager->setSettings(new RedirectManagerSettings(false, false));
         }
 
         $rule = false;
@@ -50,45 +80,48 @@ class RedirectMiddleware
         $requestUri = str_replace($request->getBasePath(), '', $request->getRequestUri());
 
         try {
-            if (CacheManager::cachingEnabledAndSupported()) {
-                $rule = $manager->matchCached($requestUri, $request->getScheme());
+            if ($this->cacheManager->cachingEnabledAndSupported()) {
+                $rule = $this->redirectManager->matchCached($requestUri, $request->getScheme());
             } else {
-                $rule = $manager->match($requestUri, $request->getScheme());
+                $rule = $this->redirectManager->match($requestUri, $request->getScheme());
             }
-        } catch (Exception $e) {
-            $logger = resolve(Log::class);
-            $logger->error("Vdlp.Redirect: Could not perform redirect for $requestUri: " . $e->getMessage());
+        } catch (NoMatchForRequest $e) {
+            $rule = false;
+        } catch (Throwable $e) {
+            $this->log->error(sprintf(
+                'Vdlp.Redirect: Could not perform redirect for %s (scheme: %s): %s',
+                $requestUri,
+                $request->getScheme(),
+                $e->getMessage()
+            ));
         }
 
         if (!$rule) {
             return $next($request);
         }
 
-        /** @var Dispatcher $eventDispatcher */
-        $eventDispatcher = resolve(Dispatcher::class);
-
         /*
          * Extensibility:
          *
          * At this point a positive match was made based on the request URI.
          */
-        $eventDispatcher->fire('vdlp.redirect.match', [$rule, $requestUri]);
+        $this->dispatcher->fire('vdlp.redirect.match', [$rule, $requestUri]);
 
         /*
          * Extensibility:
          *
          * Developers can add their own conditions. If a condition does not pass the redirect will be ignored.
          */
-        foreach ($manager->getConditions() as $condition) {
+        foreach ($this->redirectManager->getConditions() as $condition) {
             /** @var RedirectConditionInterface $condition */
-            $condition = app($condition);
+            $condition = resolve($condition);
 
             if (!$condition->passes($rule, $requestUri)) {
                 return $next($request);
             }
         }
 
-        $manager->redirectWithRule($rule, $requestUri);
+        $this->redirectManager->redirectWithRule($rule, $requestUri);
 
         return $next($request);
     }

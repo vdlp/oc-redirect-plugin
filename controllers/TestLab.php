@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpUnused */
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
@@ -7,41 +9,47 @@ namespace Vdlp\Redirect\Controllers;
 use Backend\Classes\Controller;
 use BackendMenu;
 use Carbon\Carbon;
-use Exception;
-use Flash;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Input;
+use Illuminate\Http\Request;
 use October\Rain\Database\Collection;
+use October\Rain\Flash\FlashBag;
 use SystemException;
-use Vdlp\Redirect\Classes\Testers\RedirectCount;
-use Vdlp\Redirect\Classes\Testers\RedirectFinalDestination;
-use Vdlp\Redirect\Classes\Testers\RedirectLoop;
-use Vdlp\Redirect\Classes\Testers\RedirectMatch;
-use Vdlp\Redirect\Classes\Testers\ResponseCode;
+use Throwable;
+use Vdlp\Redirect\Classes\Testers;
 use Vdlp\Redirect\Models\Redirect;
 
 /**
- * Class Test
- *
- * @property string bodyClass
- * @package Vdlp\Redirect\Controllers
+ * @property string $bodyClass
  */
-class TestLab extends Controller
+final class TestLab extends Controller
 {
+    /**
+     * @var array
+     */
+    public $requiredPermissions = ['vdlp.redirect.access_redirects'];
+
     /**
      * @var array
      */
     private $redirects;
 
     /**
-     * {@inheritDoc}
+     * @var Request
      */
-    public $requiredPermissions = ['vdlp.redirect.access_redirects'];
+    private $request;
 
     /**
-     * {@inheritDoc}
+     * @var Translator
      */
-    public function __construct()
+    private $translator;
+
+    /**
+     * @var FlashBag
+     */
+    private $flash;
+
+    public function __construct(Request $request, Translator $translator)
     {
         $this->bodyClass = 'layout-relative';
 
@@ -50,14 +58,13 @@ class TestLab extends Controller
         BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'test_lab');
 
         $this->loadRedirects();
+
+        $this->request = $request;
+        $this->translator = $translator;
+        $this->flash = resolve('flash');
     }
 
-    /**
-     * /index
-     *
-     * @return void
-     */
-    public function index()//: void
+    public function index(): void
     {
         $this->pageTitle = 'vdlp.redirect::lang.title.test_lab';
 
@@ -67,12 +74,7 @@ class TestLab extends Controller
         $this->vars['redirectCount'] = $this->getRedirectCount();
     }
 
-    /**
-     * Load redirects.
-     *
-     * @return void
-     */
-    private function loadRedirects()//: void
+    private function loadRedirects(): void
     {
         /** @var Collection $redirects */
         $this->redirects = array_values(Redirect::enabled()
@@ -85,28 +87,19 @@ class TestLab extends Controller
             ->all());
     }
 
-    /**
-     * @param int $offset
-     * @return Redirect|null
-     */
-    private function offsetGetRedirect($offset)//: ?Redirect
+    private function offsetGetRedirect(int $offset): ?Redirect
     {
-        if (array_key_exists($offset, $this->redirects)) {
-            return $this->redirects[$offset];
-        }
-
-        return null;
+        return $this->redirects[$offset] ?? null;
     }
 
     // @codingStandardsIgnoreStart
 
     /**
-     * @return string
      * @throws SystemException
      */
     public function index_onTest(): string
     {
-        $offset = (int) Input::get('offset');
+        $offset = (int) $this->request->get('offset');
 
         $redirect = $this->offsetGetRedirect($offset);
 
@@ -122,7 +115,7 @@ class TestLab extends Controller
                     'testResults' => $this->getTestResults($redirect),
                 ]
             );
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $partial = (string) $this->makePartial(
                 'tester_failed',
                 [
@@ -136,16 +129,15 @@ class TestLab extends Controller
     }
 
     /**
-     * @return array
      * @throws ModelNotFoundException
      * @throws SystemException
      */
     public function index_onReRun(): array
     {
         /** @var Redirect $redirect */
-        $redirect = Redirect::findOrFail(post('id'));
+        $redirect = Redirect::query()->findOrFail($this->request->get('id'));
 
-        Flash::success(trans('vdlp.redirect::lang.test_lab.flash_test_executed'));
+        $this->flash->success($this->translator->trans('vdlp.redirect::lang.test_lab.flash_test_executed'));
 
         return [
             '#testerResult' . $redirect->getKey() => $this->makePartial(
@@ -156,17 +148,16 @@ class TestLab extends Controller
     }
 
     /**
-     * @return array
      * @throws ModelNotFoundException
      * @throws SystemException
      */
     public function index_onExclude(): array
     {
         /** @var Redirect $redirect */
-        $redirect = Redirect::findOrFail(post('id'));
+        $redirect = Redirect::query()->findOrFail($this->request->get('id'));
         $redirect->update(['test_lab' => false]);
 
-        Flash::success(trans('vdlp.redirect::lang.test_lab.flash_redirect_excluded'));
+        $this->flash->success($this->translator->trans('vdlp.redirect::lang.test_lab.flash_redirect_excluded'));
 
         return [
             '#testButtonWrapper' => $this->makePartial(
@@ -180,10 +171,6 @@ class TestLab extends Controller
 
     // @codingStandardsIgnoreEnd
 
-    /**
-     * @param Redirect $redirect
-     * @return string
-     */
     public function getTestPath(Redirect $redirect): string
     {
         $testPath = '/';
@@ -197,26 +184,19 @@ class TestLab extends Controller
         return $testPath;
     }
 
-    /**
-     * @param Redirect $redirect
-     * @return array
-     */
     public function getTestResults(Redirect $redirect): array
     {
         $testPath = $this->getTestPath($redirect);
 
         return [
-            'maxRedirectsResult' => (new RedirectLoop($testPath))->execute(),
-            'matchedRedirectResult' => (new RedirectMatch($testPath))->execute(),
-            'responseCodeResult' => (new ResponseCode($testPath))->execute(),
-            'redirectCountResult' => (new RedirectCount($testPath))->execute(),
-            'finalDestinationResult' => (new RedirectFinalDestination($testPath))->execute(),
+            'maxRedirectsResult' => (new Testers\RedirectLoop($testPath))->execute(),
+            'matchedRedirectResult' => (new Testers\RedirectMatch($testPath))->execute(),
+            'responseCodeResult' => (new Testers\ResponseCode($testPath))->execute(),
+            'redirectCountResult' => (new Testers\RedirectCount($testPath))->execute(),
+            'finalDestinationResult' => (new Testers\RedirectFinalDestination($testPath))->execute(),
         ];
     }
 
-    /**
-     * @return int
-     */
     private function getRedirectCount(): int
     {
         return count($this->redirects);

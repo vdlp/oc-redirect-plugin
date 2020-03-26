@@ -8,61 +8,83 @@ use Carbon\Carbon;
 use Throwable;
 use Vdlp\Redirect\Models\Redirect;
 
-/**
- * Class RedirectRule
- *
- * @package Vdlp\Redirect\Classes
- */
-class RedirectRule
+final class RedirectRule
 {
-    /** @var int */
+    /**
+     * @var int
+     */
     private $id;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $matchType;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $targetType;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $fromUrl;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $fromScheme;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $toUrl;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $toScheme;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $cmsPage;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $staticPage;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $statusCode;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $requirements;
 
-    /** @var Carbon|null */
+    /**
+     * @var Carbon|null
+     */
     private $fromDate;
 
-    /** @var Carbon|null */
+    /**
+     * @var Carbon|null
+     */
     private $toDate;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $placeholderMatches;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $ignoreQueryParameters;
 
-    /**
-     * @param array $attributes
-     */
     public function __construct(array $attributes)
     {
         $this->ignoreQueryParameters = false;
@@ -100,10 +122,6 @@ class RedirectRule
         }
     }
 
-    /**
-     * @param Redirect $model
-     * @return RedirectRule
-     */
     public static function createWithModel(Redirect $model): RedirectRule
     {
         $attributes = $model->getAttributes();
@@ -112,155 +130,97 @@ class RedirectRule
         return new self($attributes);
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return (int) $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getMatchType(): string
     {
         return (string) $this->matchType;
     }
 
-    /**
-     * @return string
-     */
     public function getTargetType(): string
     {
         return (string) $this->targetType;
     }
 
-    /**
-     * @return string
-     */
     public function getFromUrl(): string
     {
         return (string) $this->fromUrl;
     }
 
-    /**
-     * @return string
-     */
     public function getFromScheme(): string
     {
         return (string) $this->fromScheme;
     }
 
-    /**
-     * @return string
-     */
     public function getToUrl(): string
     {
         return (string) $this->toUrl;
     }
 
-    /**
-     * @return string
-     */
     public function getToScheme(): string
     {
         return (string) $this->toScheme;
     }
 
-    /**
-     * @return string
-     */
     public function getCmsPage(): string
     {
         return (string) $this->cmsPage;
     }
 
-    /**
-     * @return string
-     */
     public function getStaticPage(): string
     {
         return (string) $this->staticPage;
     }
 
-    /**
-     * @return int
-     */
     public function getStatusCode(): int
     {
         return (int) $this->statusCode;
     }
 
-    /**
-     * @return array
-     */
     public function getRequirements(): array
     {
         return (array) $this->requirements;
     }
 
-    /**
-     * @return Carbon|null
-     */
-    public function getFromDate()//: ?Carbon
+    public function getFromDate(): ?Carbon
     {
         return $this->fromDate;
     }
 
-    /**
-     * @return Carbon|null
-     */
-    public function getToDate()//: ?Carbon
+    public function getToDate(): ?Carbon
     {
         return $this->toDate;
     }
 
-    /**
-     * @return bool
-     */
     public function isExactMatchType(): bool
     {
         return $this->matchType === Redirect::TYPE_EXACT;
     }
 
-    /**
-     * @return bool
-     */
     public function isPlaceholdersMatchType(): bool
     {
         return $this->matchType === Redirect::TYPE_PLACEHOLDERS;
     }
 
-    /**
-     * @return bool
-     */
     public function isRegexMatchType(): bool
     {
         return $this->matchType === Redirect::TYPE_REGEX;
     }
 
-    /**
-     * @return array
-     */
     public function getPlaceholderMatches(): array
     {
         return (array) $this->placeholderMatches;
     }
 
-    /**
-     * @param array $placeholderMatches
-     * @return RedirectRule
-     */
     public function setPlaceholderMatches(array $placeholderMatches = []): RedirectRule
     {
         $this->placeholderMatches = $placeholderMatches;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isIgnoreQueryParameters(): bool
     {
         return (bool) $this->ignoreQueryParameters;

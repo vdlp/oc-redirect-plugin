@@ -12,35 +12,31 @@ use Backend\Classes\FormField;
 use Backend\Widgets\Form;
 use BackendMenu;
 use Carbon\Carbon;
-use Cms\Classes\CmsException;
-use Event;
-use Exception;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Lang;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use October\Rain\Database\Model;
 use October\Rain\Flash\FlashBag;
-use Request;
 use System\Models\RequestLog;
 use SystemException;
-use Vdlp\Redirect\Classes\CacheManager;
-use Vdlp\Redirect\Classes\PublishManager;
+use Throwable;
+use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
+use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
 use Vdlp\Redirect\Classes\RedirectManager;
 use Vdlp\Redirect\Classes\RedirectRule;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 use Vdlp\Redirect\Models;
 
-/** @noinspection ClassOverridesFieldOfSuperClassInspection */
-
 /**
- * Class Redirects
- *
- * @property array requiredPermissions
- * @package Vdlp\Redirect\Controllers
  * @mixin Behaviors\FormController
  * @mixin Behaviors\ListController
  * @mixin Behaviors\ReorderController
  * @mixin Behaviors\ImportExportController
  */
-class Redirects extends Controller
+final class Redirects extends Controller
 {
     /**
      * {@inheritDoc}
@@ -78,28 +74,39 @@ class Redirects extends Controller
     /**
      * {@inheritDoc}
      */
-    //public $bodyClass = 'compact-container';
-
-    /**
-     * @var PublishManager
-     */
-    public $publishManager;
-
-    /**
-     * {@inheritDoc}
-     */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
+
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
+
+    /**
+     * @var CacheManagerInterface
+     */
+    private $cacheManager;
 
     /**
      * @var FlashBag
      */
-    private $flashBag;
+    private $flash;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function __construct()
-    {
+    public function __construct(
+        Request $request,
+        Translator $translator,
+        Dispatcher $dispatcher,
+        CacheManagerInterface $cacheManager
+    ) {
         parent::__construct();
 
         $sideMenuItemCode = in_array($this->action, ['reorder', 'import', 'export'], true)
@@ -108,146 +115,152 @@ class Redirects extends Controller
 
         BackendMenu::setContext('Vdlp.Redirect', 'redirect', $sideMenuItemCode);
 
-        $this->requiredPermissions = ['vdlp.redirect.access_redirects'];
-
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css', 'Vdlp.Redirect');
 
         $this->vars['match'] = null;
         $this->vars['statisticsHelper'] = new StatisticsHelper();
 
-        $this->flashBag = resolve(FlashBag::class);
+        $this->request = $request;
+        $this->translator = $translator;
+        $this->dispatcher = $dispatcher;
+        $this->cacheManager = $cacheManager;
+        $this->flash = resolve('flash');
     }
 
-    /**
-     * Index Controller action.
-     *
-     * @return void
-     */
-    public function index()//: void
+    public function index(): void
     {
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         parent::index();
 
-        if (CacheManager::cachingEnabledButNotSupported()) {
-            $this->vars['warningMessage'] = Lang::get('vdlp.redirect::lang.redirect.cache_warning');
+        if ($this->cacheManager->cachingEnabledButNotSupported()) {
+            $this->vars['warningMessage'] = $this->translator->trans('vdlp.redirect::lang.redirect.cache_warning');
         }
     }
 
     /**
-     * Edit Controller action.
-     *
-     * @param int $recordId The model primary key to update.
-     * @param string $context Explicitly define a form context.
-     * @return mixed
      * @throws ModelNotFoundException
+     * @noinspection PhpStrictTypeCheckingInspection
      */
     public function update($recordId = null, $context = null)
     {
         $this->bodyClass = 'compact-container';
 
         /** @var Models\Redirect $redirect */
-        $redirect = Models\Redirect::findOrFail($recordId);
+        $redirect = Models\Redirect::query()->findOrFail($recordId);
 
+        /** @noinspection ClassConstantCanBeUsedInspection */
         if ($redirect->getAttribute('target_type') === Models\Redirect::TARGET_TYPE_STATIC_PAGE
             && !class_exists('\RainLab\Pages\Classes\Page')
         ) {
-            $this->flashBag->error(Lang::get('vdlp.redirect::lang.flash.static_page_redirect_not_supported'));
+            $this->flash->error(
+                $this->translator->trans('vdlp.redirect::lang.flash.static_page_redirect_not_supported')
+            );
+
             return redirect()->back();
         }
 
         if (!$redirect->isActiveOnDate(Carbon::now())) {
-            $this->vars['warningMessage'] = Lang::get('vdlp.redirect::lang.scheduling.not_active_warning');
+            $this->vars['warningMessage'] = $this->translator->trans(
+                'vdlp.redirect::lang.scheduling.not_active_warning'
+            );
         }
 
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         parent::update($recordId, $context);
     }
 
     // @codingStandardsIgnoreStart
 
-    /**
-     * @param string|null $context
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function create_onSave($context = null)
+    public function getCacheManager(): CacheManagerInterface
     {
+        return $this->cacheManager;
+    }
+
+    public function create_onSave(?string $context = null): RedirectResponse
+    {
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $redirect = parent::create_onSave($context);
 
-        if (post('new')) {
+        if ($this->request->has('new')) {
             return Backend::redirect('vdlp/redirect/redirects/create');
         }
 
         return $redirect;
     }
 
-    /**
-     * Delete selected redirects.
-     *
-     * @return array
-     */
     public function index_onDelete(): array
     {
-        Models\Redirect::destroy($this->getCheckedIds());
-        Event::fire('vdlp.redirect.changed'); // TODO: This event will be removed soon.
+        $redirectIds = $this->getCheckedIds();
+
+        Models\Redirect::destroy($redirectIds);
+
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
+
         return $this->listRefresh();
     }
 
-    /**
-     * Enable selected redirects.
-     *
-     * @return array
-     */
     public function index_onEnable(): array
     {
-        Models\Redirect::whereIn('id', $this->getCheckedIds())->update(['is_enabled' => 1]);
-        Event::fire('vdlp.redirect.changed');  // TODO: This event will be removed soon.
+        $redirectIds = $this->getCheckedIds();
+
+        Models\Redirect::query()
+            ->whereIn('id', $redirectIds)
+            ->update(['is_enabled' => 1]);
+
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
+
         return $this->listRefresh();
     }
 
-    /**
-     * Disable selected redirects.
-     *
-     * @return array
-     */
     public function index_onDisable(): array
     {
-        Models\Redirect::whereIn('id', $this->getCheckedIds())->update(['is_enabled' => 0]);
-        Event::fire('vdlp.redirect.changed');  // TODO: This event will be removed soon.
+        $redirectIds = $this->getCheckedIds();
+
+        Models\Redirect::query()
+            ->whereIn('id', $redirectIds)
+            ->update(['is_enabled' => 0]);
+
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
+
         return $this->listRefresh();
     }
 
-    /**
-     * Reset all statistics for selected redirects.
-     *
-     * @return array
-     */
     public function index_onResetStatistics(): array
     {
-        $checkedIds = $this->getCheckedIds();
+        $redirectIds = $this->getCheckedIds();
 
-        foreach ($checkedIds as $checkedId) {
-            /** @var Models\Redirect $redirect */
-            $redirect = Models\Redirect::find($checkedId);
-            $redirect->update(['hits' => 0]);
-            $redirect->clients()->delete();
-        }
+        Models\Redirect::query()
+            ->whereIn('id', $redirectIds)
+            ->update(['hits' => 0]);
+
+        // When DB does not support cascading delete.
+        Models\Client::query()
+            ->whereIn('redirect_id', $redirectIds)
+            ->delete();
+
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
 
         return $this->listRefresh();
     }
 
-    /**
-     * Clears redirect cache.
-     *
-     * @return void
-     */
-    public function index_onClearCache()//: void
+    public function index_onClearCache(): void
     {
-        CacheManager::instance()->flush();
-        $this->flashBag->success(Lang::get('vdlp.redirect::lang.flash.cache_cleared_success'));
+        /** @var CacheManagerInterface $cacheManager */
+        $cacheManager = resolve(CacheManagerInterface::class);
+        $cacheManager->flush();
+
+        $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.cache_cleared_success'));
     }
 
     /**
-     * Renders actions partial.
-     *
-     * @return string
      * @throws SystemException
      */
     public function index_onLoadActions(): string
@@ -255,64 +268,67 @@ class Redirects extends Controller
         return (string) $this->makePartial('popup_actions');
     }
 
-    /**
-     * Resets all statistics.
-     *
-     * @return array
-     */
     public function index_onResetAllStatistics(): array
     {
+        $redirectIds = $this->getAllRedirectIds();
+
         Models\Redirect::query()->update(['hits' => 0]);
         Models\Client::query()->delete();
-        $this->flashBag->success(Lang::get('vdlp.redirect::lang.flash.statistics_reset_success'));
+
+        $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.statistics_reset_success'));
+
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
+
         return $this->listRefresh();
     }
 
-    /**
-     * Enables all redirects.
-     *
-     * @return array
-     */
     public function index_onEnableAllRedirects(): array
     {
-        Models\Redirect::query()->update(['is_enabled' => 1]);
-        $this->flashBag->success(Lang::get('vdlp.redirect::lang.flash.enabled_all_redirects_success'));
-        Event::fire('vdlp.redirect.changed');
-        return $this->listRefresh();
+        return $this->toggleRedirects(true);
     }
 
-    /**
-     * Disables all redirects.
-     *
-     * @return array
-     */
     public function index_onDisableAllRedirects(): array
     {
-        Models\Redirect::query()->update(['is_enabled' => 0]);
-        $this->flashBag->success(Lang::get('vdlp.redirect::lang.flash.disabled_all_redirects_success'));
-        Event::fire('vdlp.redirect.changed');
+        return $this->toggleRedirects(false);
+    }
+
+    private function toggleRedirects(bool $enabled): array
+    {
+        $redirectIds = $this->getAllRedirectIds();
+
+        Models\Redirect::query()
+            ->update(['is_enabled' => $enabled]);
+
+        $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.disabled_all_redirects_success'));
+
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
+
         return $this->listRefresh();
     }
 
-    /**
-     * Deletes all redirects.
-     *
-     * @return array
-     */
     public function index_onDeleteAllRedirects(): array
     {
-        Models\Redirect::query()->delete();
-        $this->flashBag->success(Lang::get('vdlp.redirect::lang.flash.deleted_all_redirects_success'));
-        Event::fire('vdlp.redirect.changed');
+        $redirectIds = $this->getAllRedirectIds();
+
+        Models\Redirect::query()
+            ->delete();
+
+        $this->flash->success($this->translator->trans('vdlp.redirect::lang.flash.deleted_all_redirects_success'));
+
+        $this->dispatcher->dispatch('vdlp.redirect.changed', [
+            'redirectIds' => Arr::wrap($redirectIds)
+        ]);
+
         return $this->listRefresh();
     }
 
     // @codingStandardsIgnoreEnd
 
     /**
-     * Renders status code information partial.
-     *
-     * @return string
      * @throws SystemException
      */
     public function onShowStatusCodeInfo(): string
@@ -320,14 +336,7 @@ class Redirects extends Controller
         return (string) $this->makePartial('status_code_info', [], false);
     }
 
-    /**
-     * Called after the form fields are defined.
-     *
-     * @param Form $host
-     * @param array $fields
-     * @return void
-     */
-    public function formExtendFields(Form $host, array $fields = [])//: void
+    public function formExtendFields(Form $host, array $fields = []): void
     {
         $disableFields = [
             'from_url',
@@ -347,19 +356,12 @@ class Redirects extends Controller
             $host->removeTab('vdlp.redirect::lang.tab.tab_test_lab');
         }
 
-        if (Request::method() === 'GET') {
+        if ($this->request->isMethod(Request::METHOD_GET)) {
             $this->formExtendRefreshFields($host, $fields);
         }
     }
 
-    /**
-     * Called when the form is refreshed, giving the opportunity to modify the form fields.
-     *
-     * @param Form $host The hosting form widget
-     * @param array $fields Current form fields
-     * @return void
-     */
-    public function formExtendRefreshFields(Form $host, $fields)//: void
+    public function formExtendRefreshFields(Form $host, array $fields): void
     {
         if ($fields['status_code']->value
             && strpos((string) $fields['status_code']->value, '4') === 0
@@ -390,13 +392,7 @@ class Redirects extends Controller
         }
     }
 
-    /**
-     * Returns a CSS class name for a list row (<tr class="...">).
-     *
-     * @param mixed $record The populated model used for the column
-     * @return string CSS class name
-     */
-    public function listInjectRowClass($record): string
+    public function listInjectRowClass(Model $record): string
     {
         if ($record instanceof Models\Redirect
             && !$record->isActiveOnDate(Carbon::now())
@@ -408,25 +404,23 @@ class Redirects extends Controller
     }
 
     /**
-     * Test Input Path.
-     *
-     * @return array
      * @throws ApplicationException
      * @throws SystemException
-     * @throws CmsException
      */
     public function onTest(): array
     {
-        $inputPath = Request::get('inputPath');
-        $redirect = new Models\Redirect(Request::get('Redirect'));
+        $inputPath = $this->request->get('inputPath');
+        $redirect = new Models\Redirect($this->request->get('Redirect'));
 
         try {
             $rule = RedirectRule::createWithModel($redirect);
             $manager = RedirectManager::createWithRule($rule);
-            $testDate = Carbon::createFromFormat('Y-m-d', Request::get('test_date', date('Y-m-d')));
+            $testDate = Carbon::createFromFormat('Y-m-d', $this->request->get('test_date', date('Y-m-d')));
             $manager->setMatchDate($testDate);
-            $match = $manager->match($inputPath, Request::get('test_scheme', Request::getScheme()));
-        } catch (Exception $e) {
+            $match = $manager->match($inputPath, $this->request->get('test_scheme', $this->request->getScheme()));
+        } catch (NoMatchForRequest $e) {
+            $match = false;
+        } catch (Throwable $e) {
             throw new ApplicationException($e->getMessage());
         }
 
@@ -439,21 +433,17 @@ class Redirects extends Controller
     }
 
     /**
-     * Triggers Request Log dialog.
-     *
-     * @return string
      * @throws SystemException
      */
     public function onOpenRequestLog(): string
     {
         $this->makeLists();
+
         return $this->makePartial('request-log/modal');
     }
 
     /**
-     * Create Redirects from Request Log items.
-     *
-     * @return array
+     * @throws ModelNotFoundException
      */
     public function onCreateRedirectFromRequestLogItems(): array
     {
@@ -462,9 +452,9 @@ class Redirects extends Controller
 
         foreach ($checkedIds as $checkedId) {
             /** @var RequestLog $requestLog */
-            $requestLog = RequestLog::find($checkedId);
+            $requestLog = RequestLog::query()->findOrFail($checkedId);
 
-            $url = $this->parseRequestLogItemUrl($requestLog->getAttribute('url'));
+            $url = $this->parseRequestLogItemUrl((string) $requestLog->getAttribute('url'));
 
             if ($url === '') {
                 continue;
@@ -482,14 +472,12 @@ class Redirects extends Controller
             $redirectsCreated++;
         }
 
-        if ((bool) Request::get('andDelete', false)) {
+        if ((bool) $this->request->get('andDelete', false)) {
             RequestLog::destroy($checkedIds);
         }
 
         if ($redirectsCreated > 0) {
-            Event::fire('vdlp.redirect.changed');  // TODO: This event will be removed soon.
-
-            $this->flashBag->success(Lang::get(
+            $this->flash->success($this->translator->trans(
                 'vdlp.redirect::lang.flash.success_created_redirects',
                 [
                     'count' => $redirectsCreated,
@@ -500,28 +488,29 @@ class Redirects extends Controller
         return $this->listRefresh();
     }
 
-    /**
-     * Check checked ID's from POST request.
-     *
-     * @return array
-     */
     private function getCheckedIds(): array
     {
-        if (($checkedIds = post('checked'))
+        if (($checkedIds = $this->request->get('checked'))
             && is_array($checkedIds)
             && count($checkedIds)
         ) {
-            return $checkedIds;
+            return array_map(static function ($checkedId) {
+                return (int) $checkedId;
+            }, $checkedIds);
         }
 
         return [];
     }
 
-    /**
-     * @param string $url
-     * @return string
-     */
-    private function parseRequestLogItemUrl($url): string
+    private function getAllRedirectIds(): array
+    {
+        return Models\Redirect::query()
+            ->get()
+            ->pluck('id')
+            ->toArray();
+    }
+
+    private function parseRequestLogItemUrl(string $url): string
     {
         $path = parse_url($url, PHP_URL_PATH);
 
@@ -539,45 +528,5 @@ class Redirects extends Controller
         }
 
         return $path;
-    }
-
-    /**
-     * @param Models\Redirect $model
-     */
-    public function formBeforeSave(Models\Redirect $model)//: void
-    {
-        Event::fire('vdlp.redirect.beforeRedirectSave', [$model]);
-    }
-
-    /**
-     * @param Models\Redirect $model
-     */
-    public function formBeforeUpdate(Models\Redirect $model)//: void
-    {
-        Event::fire('vdlp.redirect.beforeRedirectUpdate', [$model]);
-    }
-
-    /**
-     * @param Models\Redirect $model
-     */
-    public function formAfterSave(Models\Redirect $model)//: void
-    {
-        Event::fire('vdlp.redirect.afterRedirectSave', [$model]);
-    }
-
-    /**
-     * @param Models\Redirect $model
-     */
-    public function formAfterUpdate(Models\Redirect $model)//: void
-    {
-        Event::fire('vdlp.redirect.afterRedirectUpdate', [$model]);
-    }
-
-    /**
-     * @param Models\Redirect $model
-     */
-    public function formAfterDelete(Models\Redirect $model)//: void
-    {
-        Event::fire('vdlp.redirect.afterRedirectDelete', [$model]);
     }
 }

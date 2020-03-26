@@ -5,17 +5,8 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Models;
 
 use Backend\Models\ExportModel;
-use Eloquent;
 
-/** @noinspection LongInheritanceChainInspection */
-
-/**
- * Class RedirectExport
- *
- * @package Vdlp\Redirect\Models
- * @mixin Eloquent
- */
-class RedirectExport extends ExportModel
+final class RedirectExport extends ExportModel
 {
     /**
      * {@inheritDoc}
@@ -25,9 +16,9 @@ class RedirectExport extends ExportModel
     /**
      * {@inheritDoc}
      */
-    public function exportData($columns, $sessionKey = null): array
+    public function exportData($columns, $sessionKey = null)
     {
-        return self::make()
+        return static::make()
             ->get()
             ->toArray();
     }

@@ -9,19 +9,11 @@ use Backend\Classes\ReportWidgetBase;
 use SystemException;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
-/** @noinspection LongInheritanceChainInspection */
-
 /**
- * Class TopTenRedirects
- *
- * @property string alias
- * @package Vdlp\Redirect\ReportWidgets
+ * @property string $alias
  */
-class TopTenRedirects extends ReportWidgetBase
+final class TopTenRedirects extends ReportWidgetBase
 {
-    /**
-     * {@inheritDoc}
-     */
     public function __construct(Controller $controller, array $properties = [])
     {
         $this->alias = 'redirectTopTenRedirects';
@@ -30,8 +22,8 @@ class TopTenRedirects extends ReportWidgetBase
     }
 
     /**
-     * {@inheritDoc}
      * @throws SystemException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public function render()
     {

@@ -1,77 +1,62 @@
 <?php
 
+/** @noinspection PhpMissingParentCallCommonInspection */
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect;
 
-use App;
 use Backend;
-use Cms\Classes\Page;
 use Event;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Contracts\Translation\Translator;
+use October\Rain\Foundation\Http\Kernel;
 use System\Classes\PluginBase;
 use Throwable;
 use Validator;
-use Vdlp\Redirect\Classes\CacheManager;
-use Vdlp\Redirect\Classes\PageHandler;
-use Vdlp\Redirect\Classes\PublishManager;
+use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
+use Vdlp\Redirect\Classes\Observers\RedirectObserver;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
-use Vdlp\Redirect\Classes\StaticPageHandler;
 use Vdlp\Redirect\Console\PublishRedirects;
 use Vdlp\Redirect\Models;
-use Vdlp\Redirect\ReportWidgets\CreateRedirect;
-use Vdlp\Redirect\ReportWidgets\TopTenRedirects;
-use Vdlp\Redirect\ServiceProviders;
+use Vdlp\Redirect\ReportWidgets;
 
-/**
- * Class Plugin
- *
- * @package Vdlp\Redirect
- */
 class Plugin extends PluginBase
 {
     /**
-     * {@inheritDoc}
+     * @var bool
      */
     public $elevated = true;
 
-    /**
-     * {@inheritDoc}
-     */
     public function pluginDetails(): array
     {
         return [
             'name' => 'vdlp.redirect::lang.plugin.name',
             'description' => 'vdlp.redirect::lang.plugin.description',
-            'author' => 'Alwin Drenth',
+            'author' => 'Van der Let & Partners',
             'icon' => 'icon-link',
             'homepage' => 'https://octobercms.com/plugin/vdlp-redirect',
         ];
     }
 
     /**
-     * {@inheritDoc}
      * @throws Exception
      */
-    public function boot()
+    public function boot(): void
     {
-        if (App::runningInConsole() || App::runningUnitTests()) {
+        if ($this->app->runningInConsole() || $this->app->runningUnitTests()) {
             return;
         }
 
         $this->registerCustomValidators();
+        $this->registerObservers();
 
-        if (!App::runningInBackend()) {
+        if (!$this->app->runningInBackend()) {
             /** @var Kernel $kernel */
-            $kernel = $this->app[Kernel::class];
+            $kernel = resolve(Kernel::class);
             $kernel->prependMiddleware(RedirectMiddleware::class);
             return;
-        }
-
-        if (Models\Settings::isAutoRedirectCreationEnabled()) {
-            $this->initAutoRedirectCreation();
         }
 
         /*
@@ -94,8 +79,6 @@ class Plugin extends PluginBase
                     'to_url' => $newUrl,
                     'system' => true
                 ]);
-
-            Event::fire('vdlp.redirect.changed');
         });
 
         /*
@@ -103,69 +86,20 @@ class Plugin extends PluginBase
          *
          * When one or more redirects have been changed.
          */
-        Event::listen([
-            'vdlp.redirect.changed',
-            'vdlp.redirect.afterRedirectSave',
-            'vdlp.redirect.afterRedirectDelete',
-
-        ], static function () {
-            // The caches should be flushed is caching is enabled and supported.
-            if (CacheManager::cachingEnabledAndSupported()) {
-                CacheManager::instance()->flush();
-            }
-
-            // Publish all redirect rules to file or cache repository.
-            PublishManager::instance()->publish();
+        Event::listen('vdlp.redirect.changed', static function (array $redirectIds) {
+            /** @var PublishManagerInterface $publishManager */
+            $publishManager = resolve(PublishManagerInterface::class);
+            $publishManager->publish();
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function register()
+    public function register(): void
     {
-        $this->app->register(ServiceProviders\Redirect::class);
+        $this->app->register(ServiceProvider::class);
+
         $this->registerConsoleCommands();
     }
 
-    /**
-     * Perform initialization for automatic redirect creation.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function initAutoRedirectCreation()//: void
-    {
-        Page::extend(static function (Page $page) {
-            $handler = new PageHandler($page);
-
-            $page->bindEvent('model.beforeUpdate', static function () use ($handler) {
-                $handler->onBeforeUpdate();
-            });
-
-            $page->bindEvent('model.afterDelete', static function () use ($handler) {
-                $handler->onAfterDelete();
-            });
-        });
-
-        if (class_exists('\RainLab\Pages\Classes\Page')) {
-            \RainLab\Pages\Classes\Page::extend(static function (\RainLab\Pages\Classes\Page $page) {
-                $handler = new StaticPageHandler($page);
-
-                $page->bindEvent('model.beforeUpdate', static function () use ($handler) {
-                    $handler->onBeforeUpdate();
-                });
-
-                $page->bindEvent('model.afterDelete', static function () use ($handler) {
-                    $handler->onAfterDelete();
-                });
-            });
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function registerPermissions(): array
     {
         return [
@@ -176,9 +110,6 @@ class Plugin extends PluginBase
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function registerNavigation(): array
     {
         $defaultBackendUrl = Backend::url(
@@ -285,12 +216,8 @@ class Plugin extends PluginBase
         return $navigation;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function registerSettings(): array
     {
-        /** @noinspection ClassConstantCanBeUsedInspection */
         return [
             'config' => [
                 'label' => 'vdlp.redirect::lang.settings.menu_label',
@@ -305,19 +232,24 @@ class Plugin extends PluginBase
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function registerReportWidgets(): array
     {
-        $reportWidgets[CreateRedirect::class] = [
+        /** @var Translator $translator */
+        $translator = resolve(Translator::class);
+
+        $reportWidgets[ReportWidgets\CreateRedirect::class] = [
             'label' => 'vdlp.redirect::lang.buttons.create_redirect',
             'context' => 'dashboard'
         ];
 
         if (Models\Settings::isStatisticsEnabled()) {
-            $reportWidgets[TopTenRedirects::class] = [
-                'label' => e(trans('vdlp.redirect::lang.statistics.top_redirects_this_month', ['top' => 10])),
+            $reportWidgets[ReportWidgets\TopTenRedirects::class] = [
+                'label' => e($translator->trans(
+                    'vdlp.redirect::lang.statistics.top_redirects_this_month',
+                    [
+                        'top' => 10
+                    ]
+                )),
                 'context' => 'dashboard',
             ];
         }
@@ -325,57 +257,57 @@ class Plugin extends PluginBase
         return $reportWidgets;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function registerListColumnTypes(): array
     {
+        /** @var Translator $translator */
+        $translator = resolve(Translator::class);
+
         return [
-            'redirect_switch_color' => static function ($value) {
+            'redirect_switch_color' => static function ($value) use ($translator) {
                 $format = '<div class="oc-icon-circle" style="color: %s">%s</div>';
 
                 if ((int) $value === 1) {
-                    return sprintf($format, '#95b753', e(trans('backend::lang.list.column_switch_true')));
+                    return sprintf($format, '#95b753', e($translator->trans('backend::lang.list.column_switch_true')));
                 }
 
-                return sprintf($format, '#cc3300', e(trans('backend::lang.list.column_switch_false')));
+                return sprintf($format, '#cc3300', e($translator->trans('backend::lang.list.column_switch_false')));
             },
-            'redirect_match_type' => static function ($value) {
+            'redirect_match_type' => static function ($value) use ($translator) {
                 switch ($value) {
                     case Models\Redirect::TYPE_EXACT:
-                        return e(trans('vdlp.redirect::lang.redirect.exact'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.exact'));
                     case Models\Redirect::TYPE_PLACEHOLDERS:
-                        return e(trans('vdlp.redirect::lang.redirect.placeholders'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.placeholders'));
                     case Models\Redirect::TYPE_REGEX:
-                        return e(trans('vdlp.redirect::lang.redirect.regex'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.regex'));
                     default:
                         return e($value);
                 }
             },
-            'redirect_status_code' => static function ($value) {
+            'redirect_status_code' => static function ($value) use ($translator) {
                 switch ($value) {
                     case 301:
-                        return e(trans('vdlp.redirect::lang.redirect.permanent'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.permanent'));
                     case 302:
-                        return e(trans('vdlp.redirect::lang.redirect.temporary'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.temporary'));
                     case 303:
-                        return e(trans('vdlp.redirect::lang.redirect.see_other'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.see_other'));
                     case 404:
-                        return e(trans('vdlp.redirect::lang.redirect.not_found'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.not_found'));
                     case 410:
-                        return e(trans('vdlp.redirect::lang.redirect.gone'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.gone'));
                     default:
                         return e($value);
                 }
             },
-            'redirect_target_type' => static function ($value) {
+            'redirect_target_type' => static function ($value) use ($translator) {
                 switch ($value) {
                     case Models\Redirect::TARGET_TYPE_PATH_URL:
-                        return e(trans('vdlp.redirect::lang.redirect.target_type_path_or_url'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.target_type_path_or_url'));
                     case Models\Redirect::TARGET_TYPE_CMS_PAGE:
-                        return e(trans('vdlp.redirect::lang.redirect.target_type_cms_page'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.target_type_cms_page'));
                     case Models\Redirect::TARGET_TYPE_STATIC_PAGE:
-                        return e(trans('vdlp.redirect::lang.redirect.target_type_static_page'));
+                        return e($translator->trans('vdlp.redirect::lang.redirect.target_type_static_page'));
                     default:
                         return e($value);
                 }
@@ -390,7 +322,7 @@ class Plugin extends PluginBase
                 }
                 return e($value);
             },
-            'redirect_system' => static function ($value) {
+            'redirect_system' => static function ($value) use ($translator) {
                 return sprintf(
                     '<span class="%s" title="%s"></span>',
                     $value ? 'oc-icon-magic' : 'oc-icon-user',
@@ -400,32 +332,19 @@ class Plugin extends PluginBase
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     * @param Schedule $schedule
-     */
-    public function registerSchedule($schedule)
+    public function registerSchedule($schedule): void
     {
+        /** @var Schedule $schedule */
         $schedule->command('vdlp:redirect:publish-redirects')
-            ->dailyAt(config('vdlp.redirect::cron.publish-redirects', '00:00'));
+            ->dailyAt(config('vdlp.redirect::cron.publish_redirects', '00:00'));
     }
 
-    /**
-     * Register Console Commands.
-     *
-     * @return void
-     */
-    private function registerConsoleCommands()
+    private function registerConsoleCommands(): void
     {
         $this->registerConsoleCommand('vdlp.redirect.publish-redirects', PublishRedirects::class);
     }
 
-    /**
-     * Register Custom Validators.
-     *
-     * @return void
-     */
-    private function registerCustomValidators()
+    private function registerCustomValidators(): void
     {
         Validator::extend('is_regex', static function ($attribute, $value) {
             try {
@@ -436,5 +355,10 @@ class Plugin extends PluginBase
 
             return true;
         });
+    }
+
+    private function registerObservers(): void
+    {
+        Models\Redirect::observe(RedirectObserver::class);
     }
 }

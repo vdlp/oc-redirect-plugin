@@ -10,20 +10,9 @@ use System\Classes\PluginManager;
 use Vdlp\Redirect\Models\Category;
 use Vdlp\Redirect\Models\Redirect;
 
-/**
- * Class OptionHelper
- *
- * @package Vdlp\Redirect\Classes
- */
-class OptionHelper
+final class OptionHelper
 {
-    /**
-     * Returns available target type options based on given status code.
-     *
-     * @param int $statusCode
-     * @return array
-     */
-    public static function getTargetTypeOptions($statusCode): array
+    public static function getTargetTypeOptions(int $statusCode): array
     {
         if ($statusCode === 404 || $statusCode === 410) {
             return [
@@ -38,21 +27,11 @@ class OptionHelper
         ];
     }
 
-    /**
-     * Get all CMS pages as an option array.
-     *
-     * @return array
-     */
     public static function getCmsPageOptions(): array
     {
         return ['' => '-- ' . e(trans('vdlp.redirect::lang.redirect.none')) . ' --' ] + Page::getNameList();
     }
 
-    /**
-     * Get all Static Pages as an option array.
-     *
-     * @return array
-     */
     public static function getStaticPageOptions(): array
     {
         $options = ['' => '-- ' . e(trans('vdlp.redirect::lang.redirect.none')) . ' --' ];
@@ -63,16 +42,11 @@ class OptionHelper
             return $options;
         }
 
-        /** @noinspection PhpUndefinedClassInspection */
         $pages = \RainLab\Pages\Classes\Page::listInTheme(Theme::getActiveTheme());
 
-        /** @noinspection PhpUndefinedClassInspection */
         /** @var \RainLab\Pages\Classes\Page $page */
         foreach ($pages as $page) {
-            /** @noinspection PhpUndefinedFieldInspection */
             if (array_key_exists('title', $page->viewBag)) {
-                /** @noinspection PhpUndefinedMethodInspection */
-                /** @noinspection PhpUndefinedFieldInspection */
                 $options[$page->getBaseFileName()] = $page->viewBag['title'];
             }
         }
@@ -80,13 +54,11 @@ class OptionHelper
         return $options;
     }
 
-    /**
-     * Get all categories as an option array.
-     *
-     * @return array
-     */
     public static function getCategoryOptions(): array
     {
-        return (array) Category::all(['id', 'name'])->lists('name', 'key');
+        return Category::query()
+            ->get(['id', 'name'])
+            ->pluck('name', 'key')
+            ->toArray();
     }
 }

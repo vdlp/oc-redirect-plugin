@@ -6,18 +6,9 @@ namespace Vdlp\Redirect\Classes\Exceptions;
 
 use RuntimeException;
 
-/**
- * Class InvalidScheme
- *
- * @package Vdlp\Redirect\Classes\Exceptions
- */
-class InvalidScheme extends RuntimeException
+final class InvalidScheme extends RuntimeException
 {
-    /**
-     * @param string $scheme
-     * @return InvalidScheme
-     */
-    public static function withScheme($scheme): InvalidScheme
+    public static function withScheme(string $scheme): InvalidScheme
     {
         return new static("Scheme '$scheme' is not a valid scheme. Use 'http' or 'https'.");
     }

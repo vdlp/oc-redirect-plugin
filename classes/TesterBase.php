@@ -5,16 +5,11 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Cms;
-use Illuminate\Http\Request;
-use October\Rain\Events\Dispatcher;
+use InvalidArgumentException;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\TesterInterface;
 
-/**
- * Class Tester
- *
- * @package Vdlp\Redirect\Classes
- */
 abstract class TesterBase implements TesterInterface
 {
     /**
@@ -22,14 +17,14 @@ abstract class TesterBase implements TesterInterface
      *
      * @var int
      */
-    const MAX_REDIRECTS = 10;
+    public const MAX_REDIRECTS = 10;
 
     /**
      * Connection timeout in seconds.
      *
      * @var int
      */
-    const CONNECTION_TIMEOUT = 10;
+    public const CONNECTION_TIMEOUT = 10;
 
     /**
      * @var string
@@ -41,18 +36,12 @@ abstract class TesterBase implements TesterInterface
      */
     protected $testPath;
 
-    /**
-     * @param string $testPath
-     */
     public function __construct(string $testPath)
     {
         $this->testPath = $testPath;
         $this->testUrl = Cms::url($testPath);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     final public function execute(): TesterResult
     {
         $stopwatch = new Stopwatch();
@@ -63,42 +52,32 @@ abstract class TesterBase implements TesterInterface
 
         $event = $stopwatch->stop(__FUNCTION__);
 
-        $result->setDuration($event->getDuration());
+        $result->setDuration((int) $event->getDuration());
 
         return $result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTestPath(): string
     {
         return $this->testPath;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTestUrl(): string
     {
         return $this->testUrl;
     }
 
-    /**
-     * Execute test
-     *
-     * @return TesterResult
-     */
     abstract protected function test(): TesterResult;
 
     /**
-     * Set default cURL options.
-     *
-     * @param resource $curlHandle
-     * @return void
+     * @throws InvalidArgumentException
      */
-    protected function setDefaultCurlOptions($curlHandle)//: void
+    protected function setDefaultCurlOptions($curlHandle): void
     {
+        if (!is_resource($curlHandle)) {
+            throw new InvalidArgumentException('Argument must be a valid resource type.');
+        }
+
         curl_setopt($curlHandle, CURLOPT_MAXREDIRS, self::MAX_REDIRECTS);
         curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, self::CONNECTION_TIMEOUT);
         curl_setopt($curlHandle, CURLOPT_AUTOREFERER, true);
@@ -111,7 +90,7 @@ abstract class TesterBase implements TesterInterface
         /** @noinspection CurlSslServerSpoofingInspection */
         curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
 
-        if (PHP_MAJOR_VERSION === 7 && defined('CURLOPT_SSL_VERIFYSTATUS')) {
+        if (defined('CURLOPT_SSL_VERIFYSTATUS')) {
             curl_setopt($curlHandle, CURLOPT_SSL_VERIFYSTATUS, false);
         }
 
@@ -123,13 +102,12 @@ abstract class TesterBase implements TesterInterface
     }
 
     /**
-     * @return RedirectManager
+     * @return RedirectManagerInterface
      */
-    protected function getRedirectManager(): RedirectManager
+    protected function getRedirectManager(): RedirectManagerInterface
     {
-        $manager = new RedirectManager(resolve(Request::class), resolve(Dispatcher::class));
-
-        return $manager->setLoggingEnabled(false)
-            ->setStatisticsEnabled(false);
+        /** @var RedirectManagerInterface $manager */
+        $manager = resolve(RedirectManagerInterface::class);
+        return $manager->setSettings(new RedirectManagerSettings(false, false));
     }
 }

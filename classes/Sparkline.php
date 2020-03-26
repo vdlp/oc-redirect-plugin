@@ -6,22 +6,15 @@ namespace Vdlp\Redirect\Classes;
 
 use InvalidArgumentException;
 
-/**
- * Class Sparkline
- *
- * @package Vdlp\Redirect\Classes
- */
-class Sparkline extends \Davaxi\Sparkline
+final class Sparkline extends \Davaxi\Sparkline
 {
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
-     * {@inheritDoc}
      * @throws InvalidArgumentException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
-    public function setFillColorHex($color, $seriesIndex = 0)
+    public function setFillColorHex($color, $seriesIndex = 0): void
     {
-        list($red, $green, $blue) = $this->colorHexToRGB($color);
+        [$red, $green, $blue] = $this->colorHexToRGB($color);
 
         $baseRed = $baseGreen = $baseBlue = 255;
 
