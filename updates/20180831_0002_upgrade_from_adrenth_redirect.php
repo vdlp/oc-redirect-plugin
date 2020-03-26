@@ -1,27 +1,24 @@
 <?php
 
+/** @noinspection PhpUnused */
+/** @noinspection AutoloadingIssuesInspection */
+
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Updates;
 
+use Exception;
 use Illuminate\Database\DatabaseManager;
 use October\Rain\Database\Updates\Migration;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-/** @noinspection AutoloadingIssuesInspection */
-
-/**
- * Class UpgradeFromAdrenthRedirect
- *
- * @package Vdlp\Redirect\Updates
- */
 class UpgradeFromAdrenthRedirect extends Migration
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function up()
+    public function up(): void
     {
         /** @var DatabaseManager $database */
         $database = resolve('db');
@@ -77,7 +74,7 @@ class UpgradeFromAdrenthRedirect extends Migration
         }
     }
 
-    public function down()
+    public function down(): void
     {
         // No migrations to reverse.
     }
@@ -86,7 +83,7 @@ class UpgradeFromAdrenthRedirect extends Migration
      * @param DatabaseManager $database
      * @return void
      */
-    private function disableForeignKeyCheck(DatabaseManager $database)
+    private function disableForeignKeyCheck(DatabaseManager $database): void
     {
         if ($database->getDriverName() === 'sqlite') {
             $database->raw('PRAGMA foreign_keys = OFF;');
@@ -105,7 +102,7 @@ class UpgradeFromAdrenthRedirect extends Migration
      * @param DatabaseManager $database
      * @return void
      */
-    private function enableForeignKeyCheck(DatabaseManager $database)
+    private function enableForeignKeyCheck(DatabaseManager $database): void
     {
         if ($database->getDriverName() === 'sqlite') {
             $database->raw('PRAGMA foreign_keys = ON;');

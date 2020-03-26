@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes\Testers;
 
+use InvalidArgumentException;
 use Vdlp\Redirect\Classes\TesterBase;
 use Vdlp\Redirect\Classes\TesterResult;
 
-/**
- * Class RedirectCount
- *
- * @package Vdlp\Redirect\Classes\Testers
- */
-class RedirectCount extends TesterBase
+final class RedirectCount extends TesterBase
 {
     /**
-     * {@inheritDoc}
+     * @throws InvalidArgumentException
      */
     protected function test(): TesterResult
     {

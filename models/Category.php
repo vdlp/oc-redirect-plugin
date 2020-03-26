@@ -4,18 +4,9 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Models;
 
-use Eloquent;
 use October\Rain\Database\Model;
 
-/** @noinspection ClassOverridesFieldOfSuperClassInspection */
-
-/**
- * Class Category
- *
- * @package Vdlp\Redirect\Models
- * @mixin Eloquent
- */
-class Category extends Model
+final class Category extends Model
 {
     /**
      * {@inheritDoc}

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Models;
 
 use Carbon\Carbon;
-use Eloquent;
+use Exception;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Fluent;
 use Illuminate\Validation\Validator;
 use October\Rain\Database\Builder;
@@ -15,45 +17,48 @@ use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use Vdlp\Redirect\Classes\OptionHelper;
 
-/** @noinspection ClassOverridesFieldOfSuperClassInspection */
-
 /**
- * Class Redirect
- *
- * @package Vdlp\Redirect\Models
- * @mixin Eloquent
+ * @method static Redirect|Builder enabled()
+ * @method static Redirect|Builder testLabEnabled()
  */
-class Redirect extends Model
+final class Redirect extends Model
 {
-    use Sortable;
+    use Sortable {
+        setSortableOrder as traitSetSortableOrder;
+    }
+
     use Validation {
         makeValidator as traitMakeValidator;
     }
 
     // Types
-    const TYPE_EXACT = 'exact';
-    const TYPE_PLACEHOLDERS = 'placeholders';
-    const TYPE_REGEX = 'regex';
+    public const TYPE_EXACT = 'exact';
+    public const TYPE_PLACEHOLDERS = 'placeholders';
+    public const TYPE_REGEX = 'regex';
 
     // Target Types
-    const TARGET_TYPE_PATH_URL = 'path_or_url';
-    const TARGET_TYPE_CMS_PAGE = 'cms_page';
-    const TARGET_TYPE_STATIC_PAGE = 'static_page';
-    const TARGET_TYPE_NONE = 'none';
+    public const TARGET_TYPE_PATH_URL = 'path_or_url';
+    public const TARGET_TYPE_CMS_PAGE = 'cms_page';
+    public const TARGET_TYPE_STATIC_PAGE = 'static_page';
+    public const TARGET_TYPE_NONE = 'none';
 
     // Scheme options
-    const SCHEME_HTTP = 'http';
-    const SCHEME_HTTPS = 'https';
-    const SCHEME_AUTO = 'auto';
+    public const SCHEME_HTTP = 'http';
+    public const SCHEME_HTTPS = 'https';
+    public const SCHEME_AUTO = 'auto';
 
-    /** @var array */
+    /**
+     * @var array
+     */
     public static $types = [
         self::TYPE_EXACT,
         self::TYPE_PLACEHOLDERS,
         self::TYPE_REGEX,
     ];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     public static $targetTypes = [
         self::TARGET_TYPE_PATH_URL,
         self::TARGET_TYPE_CMS_PAGE,
@@ -61,7 +66,9 @@ class Redirect extends Model
         self::TARGET_TYPE_NONE,
     ];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     public static $statusCodes = [
         301 => 'permanent',
         302 => 'temporary',
@@ -81,7 +88,7 @@ class Redirect extends Model
     protected $guarded = [];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
@@ -99,7 +106,7 @@ class Redirect extends Model
     ];
 
     /**
-     * Custom validation messages
+     * Custom validation messages.
      *
      * @var array
      */
@@ -118,7 +125,7 @@ class Redirect extends Model
     ];
 
     /**
-     * Custom attribute names
+     * Custom attribute names.
      *
      * @var array
      */
@@ -172,15 +179,6 @@ class Redirect extends Model
         'category' => Category::class,
     ];
 
-    /** @noinspection MoreThanThreeArgumentsInspection */
-
-    /**
-     * @param array $data
-     * @param array $rules
-     * @param array $customMessages
-     * @param array $attributeNames
-     * @return Validator
-     */
     protected static function makeValidator(
         array $data,
         array $rules,
@@ -212,8 +210,7 @@ class Redirect extends Model
     }
 
     /**
-     * @param Builder $builder
-     * @return Builder
+     * @noinspection PhpUnused
      */
     public function scopeEnabled(Builder $builder): Builder
     {
@@ -221,24 +218,20 @@ class Redirect extends Model
     }
 
     /**
-     * @param Builder $builder
-     * @return Builder
+     * @noinspection PhpUnused
      */
     public function scopeTestLabEnabled(Builder $builder): Builder
     {
         return $builder->where('test_lab', '=', true);
     }
 
-    /**
-     * @return bool
-     */
     public function isMatchTypeExact(): bool
     {
         return $this->attributes['match_type'] === self::TYPE_EXACT;
     }
 
     /**
-     * @return bool
+     * @noinspection PhpUnused
      */
     public function isMatchTypePlaceholders(): bool
     {
@@ -246,48 +239,54 @@ class Redirect extends Model
     }
 
     /**
-     * @return bool
+     * @noinspection PhpUnused
      */
     public function isMatchTypeRegex(): bool
     {
         return $this->attributes['match_type'] === self::TYPE_REGEX;
     }
 
-    /**
-     * @return HasMany
-     */
     public function clients(): HasMany
     {
         return $this->hasMany(Client::class);
     }
 
     /**
-     * Mutator for 'from_url' attribute; make sure the value is URL decoded.
-     *
-     * @param string $value
+     * {@inheritDoc}
      */
-    public function setFromUrlAttribute($value)//: void
+    public function setSortableOrder($itemIds, array $itemOrders = null): void
     {
-        $this->attributes['from_url'] = urldecode($value);
+        $itemIds = array_map(static function ($itemId) {
+            return (int) $itemId;
+        }, Arr::wrap($itemIds));
+
+        /** @var Dispatcher $dispatcher */
+        $dispatcher = resolve(Dispatcher::class);
+        $dispatcher->dispatch('vdlp.redirect.changed', ['redirectIds' => $itemIds]);
+
+        $this->traitSetSortableOrder($itemIds, $itemOrders);
     }
 
     /**
-     * Mutator for 'sort_order' attribute; make sure the value is an integer.
-     *
-     * @param mixed $value
+     * @noinspection PhpUnused
      */
-    public function setSortOrderAttribute($value)//: void
+    public function setFromUrlAttribute($value): void
+    {
+        $this->attributes['from_url'] = urldecode((string) $value);
+    }
+
+    /**
+     * @noinspection PhpUnused
+     */
+    public function setSortOrderAttribute($value): void
     {
         $this->attributes['sort_order'] = (int) $value;
     }
 
     /**
-     * FromDate mutator
-     *
-     * @param mixed $value
-     * @return Carbon|null
+     * @noinspection PhpUnused
      */
-    public function getFromDateAttribute($value)//: ?Carbon
+    public function getFromDateAttribute($value): ?Carbon
     {
         if ($value === '' || $value === null) {
             return null;
@@ -297,12 +296,9 @@ class Redirect extends Model
     }
 
     /**
-     * ToDate mutator
-     *
-     * @param mixed $value
-     * @return Carbon|null
+     * @noinspection PhpUnused
      */
-    public function getToDateAttribute($value)//: ?Carbon
+    public function getToDateAttribute($value): ?Carbon
     {
         if ($value === '' || $value === null) {
             return null;
@@ -312,9 +308,7 @@ class Redirect extends Model
     }
 
     /**
-     * Dropdown options for Match Type.
-     *
-     * @return array
+     * @noinspection PhpUnused
      */
     public function getMatchTypeOptions(): array
     {
@@ -328,8 +322,7 @@ class Redirect extends Model
     }
 
     /**
-     * @see OptionHelper::getTargetTypeOptions()
-     * @return array
+     * @noinspection PhpUnused
      */
     public function getTargetTypeOptions(): array
     {
@@ -337,8 +330,7 @@ class Redirect extends Model
     }
 
     /**
-     * @see OptionHelper::getCmsPageOptions()
-     * @return array
+     * @noinspection PhpUnused
      */
     public function getCmsPageOptions(): array
     {
@@ -346,8 +338,7 @@ class Redirect extends Model
     }
 
     /**
-     * @see OptionHelper::getStaticPageOptions()
-     * @return array
+     * @noinspection PhpUnused
      */
     public function getStaticPageOptions(): array
     {
@@ -355,8 +346,7 @@ class Redirect extends Model
     }
 
     /**
-     * @see OptionHelper::getCategoryOptions()
-     * @return array
+     * @noinspection PhpUnused
      */
     public function getCategoryOptions(): array
     {
@@ -364,9 +354,7 @@ class Redirect extends Model
     }
 
     /**
-     * Filter options for Match Type.
-     *
-     * @return array
+     * @noinspection PhpUnused
      */
     public function filterMatchTypeOptions(): array
     {
@@ -380,9 +368,7 @@ class Redirect extends Model
     }
 
     /**
-     * Filter options for Target Type.
-     *
-     * @return array
+     * @noinspection PhpUnused
      */
     public function filterTargetTypeOptions(): array
     {
@@ -396,7 +382,7 @@ class Redirect extends Model
     }
 
     /**
-     * @return array
+     * @noinspection PhpUnused
      */
     public function filterStatusCodeOptions(): array
     {
@@ -413,11 +399,12 @@ class Redirect extends Model
      * Triggered before the model is saved, either created or updated.
      * Make sure target fields are correctly set after saving.
      *
-     * @return void
-     * @throws \Exception
+     * @throws Exception
      */
-    public function beforeSave()//: void
+    public function beforeSave(): void
     {
+        parent::beforeSave();
+
         switch ($this->getAttribute('target_type')) {
             case self::TARGET_TYPE_NONE:
                 $this->setAttribute('to_url', null);
@@ -440,12 +427,6 @@ class Redirect extends Model
         }
     }
 
-    /**
-     * Check if this redirect is active on certain date.
-     *
-     * @param Carbon $date
-     * @return bool
-     */
     public function isActiveOnDate(Carbon $date): bool
     {
         if ($this->getAttribute('from_date') instanceof Carbon

@@ -9,31 +9,32 @@ use Backend\Classes\Controller;
 use Backend\Classes\ReportWidgetBase;
 use Backend\Widgets\Form;
 use Illuminate\Http\RedirectResponse;
-use Redirect as RedirectFacade;
+use Illuminate\Routing\Redirector;
+use SystemException;
 use Vdlp\Redirect\Models\Redirect;
 
-/** @noinspection LongInheritanceChainInspection */
-
 /**
- * Class CreateRedirect
- *
- * @property string alias
- * @package Vdlp\Redirect\ReportWidgets
+ * @property string $alias
  */
-class CreateRedirect extends ReportWidgetBase
+final class CreateRedirect extends ReportWidgetBase
 {
     /**
-     * {@inheritDoc}
+     * @var Redirector
      */
+    private $redirect;
+
     public function __construct(Controller $controller, array $properties = [])
     {
         $this->alias = 'redirectCreateRedirect';
 
         parent::__construct($controller, $properties);
+
+        $this->redirect = resolve(Redirector::class);
     }
 
     /**
-     * {@inheritDoc}
+     * @throws SystemException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public function render()
     {
@@ -46,9 +47,6 @@ class CreateRedirect extends ReportWidgetBase
         return $this->makePartial('widget');
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function onSubmit(): RedirectResponse
     {
         $redirect = Redirect::create([
@@ -63,6 +61,6 @@ class CreateRedirect extends ReportWidgetBase
             'status_code' => 302,
         ]);
 
-        return RedirectFacade::to(Backend::url('vdlp/redirect/redirects/update/' . $redirect->getKey()));
+        return $this->redirect->to(Backend::url('vdlp/redirect/redirects/update/' . $redirect->getKey()));
     }
 }

@@ -5,19 +5,10 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Models;
 
 use Backend\Models\ImportModel;
-use Eloquent;
-use Event;
-use Exception;
+use Throwable;
+use Vdlp\Redirect\Classes\PublishManager;
 
-/** @noinspection LongInheritanceChainInspection */
-
-/**
- * Class RedirectImport
- *
- * @package Vdlp\Redirect\Models
- * @mixin Eloquent
- */
-class RedirectImport extends ImportModel
+final class RedirectImport extends ImportModel
 {
     /**
      * {@inheritDoc}
@@ -37,6 +28,9 @@ class RedirectImport extends ImportModel
         'status_code' => 'required|in:301,302,303,404,410',
     ];
 
+    /**
+     * @var array
+     */
     private static $nullableAttributes = [
         'category_id',
         'from_date',
@@ -53,7 +47,7 @@ class RedirectImport extends ImportModel
     /**
      * {@inheritDoc}
      */
-    public function importData($results, $sessionKey = null)//: void
+    public function importData($results, $sessionKey = null)
     {
         foreach ((array) $results as $row => $data) {
             try {
@@ -63,7 +57,7 @@ class RedirectImport extends ImportModel
 
                 foreach (array_except($data, $except) as $attribute => $value) {
                     if ($attribute === 'requirements') {
-                        $value = json_decode($value);
+                        $value = json_decode($value, true);
                     } elseif (empty($value) && in_array($attribute, self::$nullableAttributes, true)) {
                         $value = null;
                     }
@@ -74,11 +68,17 @@ class RedirectImport extends ImportModel
                 $source->save();
 
                 $this->logCreated();
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 $this->logError($row, $e->getMessage());
             }
         }
 
-        Event::fire('vdlp.redirect.changed');
+        $createCount = $this->resultStats['created'] ?? 0;
+
+        if ($createCount > 0) {
+            /** @var PublishManager $publishManager */
+            $publishManager = resolve(PublishManager::class);
+            $publishManager->publish();
+        }
     }
 }

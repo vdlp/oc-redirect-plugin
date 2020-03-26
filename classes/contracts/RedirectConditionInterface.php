@@ -6,14 +6,9 @@ namespace Vdlp\Redirect\Classes\Contracts;
 
 use Vdlp\Redirect\Classes\RedirectRule;
 
-/**
- * Interface RedirectConditionInterface
- *
- * @package Vdlp\Redirect\Classes\Contracts
- */
 interface RedirectConditionInterface
 {
-    const TAB_NAME = 'Conditions';
+    public const TAB_NAME = 'Conditions';
 
     /**
      * A unique code which identifies this redirect condition.

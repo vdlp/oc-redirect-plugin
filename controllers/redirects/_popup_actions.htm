@@ -7,13 +7,13 @@
 </div>
 <div class="modal-body actions">
     <div class="form-group">
-    <?php if (Vdlp\Redirect\Classes\CacheManager::cachingEnabledAndSupported()): ?>
+    <?php if ($this->getCacheManager()->cachingEnabledAndSupported()): ?>
         <button class="btn btn-default btn-block"
                 data-request="onClearCache"
                 data-stripe-load-indicator>
             <?= e(trans('vdlp.redirect::lang.buttons.clear_cache')); ?>
         </button>
-    <?php elseif (Vdlp\Redirect\Classes\CacheManager::cachingEnabledButNotSupported()): ?>
+    <?php elseif ($this->getCacheManager()->cachingEnabledButNotSupported()): ?>
         <button class="btn btn-default btn-block"
                 disabled="disabled">
             <?= e(trans('vdlp.redirect::lang.buttons.clear_cache')); ?>

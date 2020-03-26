@@ -8,13 +8,10 @@ use October\Rain\Database\Model;
 use System\Behaviors\SettingsModel;
 
 /**
- * Class Settings
- *
- * @property array implement
- * @package Vdlp\Redirect\Models
+ * @property array $implement
  * @mixin SettingsModel
  */
-class Settings extends Model
+final class Settings extends Model
 {
     /**
      * The settings code which to save the settings under.
@@ -35,78 +32,28 @@ class Settings extends Model
      */
     public function __construct(array $attributes = [])
     {
-        $this->implement = ['System.Behaviors.SettingsModel'];
+        $this->implement = [SettingsModel::class];
 
         parent::__construct($attributes);
     }
 
-    /**
-     * Whether logging is enabled.
-     *
-     * @return bool
-     */
     public static function isLoggingEnabled(): bool
     {
-        // Please properly document your API/code OctoberCMS!
-        /** @noinspection DynamicInvocationViaScopeResolutionInspection */
-        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        return (bool) self::get('logging_enabled', true);
+        return (bool) (new static())->get('logging_enabled', true);
     }
 
-    /**
-     * Whether gathering of statistics are enabled.
-     *
-     * @return bool
-     */
     public static function isStatisticsEnabled(): bool
     {
-        // Please properly document your API/code OctoberCMS!
-        /** @noinspection DynamicInvocationViaScopeResolutionInspection */
-        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        return (bool) self::get('statistics_enabled', true);
+        return (bool) (new static())->get('statistics_enabled', true);
     }
 
-    /**
-     * Whether the Test Lab functionality is enabled.
-     *
-     * @return bool
-     */
     public static function isTestLabEnabled(): bool
     {
-        // Please properly document your API/code OctoberCMS!
-        /** @noinspection DynamicInvocationViaScopeResolutionInspection */
-        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        return (bool) self::get('test_lab_enabled', true);
+        return (bool) (new static())->get('test_lab_enabled', true);
     }
 
-    /**
-     * Whether redirect caching is enabled.
-     *
-     * @return bool
-     */
     public static function isCachingEnabled(): bool
     {
-        // Please properly document your API/code OctoberCMS!
-        /** @noinspection DynamicInvocationViaScopeResolutionInspection */
-        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        return (bool) self::get('caching_enabled', false);
-    }
-
-    /**
-     * Whether auto redirect creation is enabled.
-     *
-     * @return bool
-     */
-    public static function isAutoRedirectCreationEnabled(): bool
-    {
-        /** @noinspection DynamicInvocationViaScopeResolutionInspection */
-        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        // TODO: As of v2.0 the default value must be FALSE.
-        return (bool) self::get('auto_redirect_creation_enabled', true);
+        return (bool) (new static())->get('caching_enabled', false);
     }
 }

@@ -42,7 +42,8 @@ Route::group(['middleware' => ['web']], static function () {
             return (new StatisticsHelper())->getRedirectHitsSparkline((int) $redirectId, $crawler, $properties['days']);
         });
 
-        $imageData = Cache::remember($cacheKey . '_image', 5, function () use ($crawler, $data, $properties) {
+        // TODO: Generate fallback image data if generating image fails.
+        $imageData = Cache::remember($cacheKey . '_image', 5, static function () use ($crawler, $data, $properties) {
             $primaryColor = BrandSetting::get(
                 $crawler ? 'primary_color' : 'secondary_color',
                 $crawler ? BrandSetting::PRIMARY_COLOR : BrandSetting::SECONDARY_COLOR
@@ -61,7 +62,6 @@ Route::group(['middleware' => ['web']], static function () {
         });
 
         // TODO: Leverage Browser Caching
-
         header('Content-Type: image/png');
         header('Content-Disposition: inline; filename="' . $cacheKey . '.png"');
         header('Accept-Ranges: none');

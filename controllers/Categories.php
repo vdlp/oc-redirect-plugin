@@ -4,28 +4,22 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
 
-use Backend\Behaviors\FormController;
-use Backend\Behaviors\ListController;
+use Backend\Behaviors;
 use Backend\Classes\Controller;
 use BackendMenu;
 
-/** @noinspection ClassOverridesFieldOfSuperClassInspection */
-
 /**
- * Class Categories
- *
- * @package Vdlp\Redirect\Controllers
- * @mixin FormController
- * @mixin ListController
+ * @mixin Behaviors\FormController
+ * @mixin Behaviors\ListController
  */
-class Categories extends Controller
+final class Categories extends Controller
 {
     /**
-     * {@inheritDoc}
+     * @var array
      */
     public $implement = [
-        FormController::class,
-        ListController::class
+        Behaviors\FormController::class,
+        Behaviors\ListController::class
     ];
 
     /**
@@ -39,13 +33,10 @@ class Categories extends Controller
     public $listConfig = 'config_list.yaml';
 
     /**
-     * {@inheritDoc}
+     * @var array
      */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct()
     {
         parent::__construct();
