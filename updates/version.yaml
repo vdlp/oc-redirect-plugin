@@ -42,3 +42,5 @@
     - "Fix support for Postgres -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.3"
 1.10.4:
     - "Fixes reported issues #41 and #43 -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.4"
+1.10.5:
+    - "Fixes reported issues #46 and #49 -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.5"
