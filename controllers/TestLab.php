@@ -22,7 +22,7 @@ use Vdlp\Redirect\Models\Redirect;
 /**
  * @property string $bodyClass
  */
-class TestLab extends Controller
+final class TestLab extends Controller
 {
     /**
      * @var array

@@ -36,7 +36,7 @@ use Vdlp\Redirect\Models;
  * @mixin Behaviors\ReorderController
  * @mixin Behaviors\ImportExportController
  */
-class Redirects extends Controller
+final class Redirects extends Controller
 {
     /**
      * {@inheritDoc}

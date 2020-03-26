@@ -12,7 +12,7 @@ use BackendMenu;
  * @mixin Behaviors\FormController
  * @mixin Behaviors\ListController
  */
-class Categories extends Controller
+final class Categories extends Controller
 {
     /**
      * @var array

@@ -12,7 +12,7 @@ use Vdlp\Redirect\Classes\StatisticsHelper;
 /**
  * @property string $alias
  */
-class TopTenRedirects extends ReportWidgetBase
+final class TopTenRedirects extends ReportWidgetBase
 {
     public function __construct(Controller $controller, array $properties = [])
     {

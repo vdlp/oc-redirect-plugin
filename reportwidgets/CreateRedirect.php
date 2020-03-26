@@ -16,7 +16,7 @@ use Vdlp\Redirect\Models\Redirect;
 /**
  * @property string $alias
  */
-class CreateRedirect extends ReportWidgetBase
+final class CreateRedirect extends ReportWidgetBase
 {
     /**
      * @var Redirector

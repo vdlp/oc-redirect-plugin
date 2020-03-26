@@ -19,7 +19,7 @@ use Vdlp\Redirect\Models\RedirectLog;
 /**
  * @mixin ListController
  */
-class Logs extends Controller
+final class Logs extends Controller
 {
     /**
      * @var array

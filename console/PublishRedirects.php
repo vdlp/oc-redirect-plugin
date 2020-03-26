@@ -7,7 +7,7 @@ namespace Vdlp\Redirect\Console;
 use Illuminate\Console\Command;
 use Vdlp\Redirect\Classes\PublishManager;
 
-class PublishRedirects extends Command
+final class PublishRedirects extends Command
 {
     public function __construct()
     {

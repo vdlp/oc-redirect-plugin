@@ -14,7 +14,7 @@ use Vdlp\Redirect\Classes\StatisticsHelper;
 /**
  * @property string $pageTitle
  */
-class Statistics extends Controller
+final class Statistics extends Controller
 {
     /**
      * @var StatisticsHelper
