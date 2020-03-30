@@ -1,3 +1,7 @@
+# 2.0.1
+
+* Fix Middleware not being invoked in newer PHP versions
+
 # 2.0.0
 
 * Drop support for PHP 7.0, only supports PHP 7.1.3+.
@@ -9,4 +13,5 @@
     * `vdlp.redirect.beforeRedirectUpdate`
     * `vdlp.redirect.afterRedirectUpdate`
 * New events:
+    * `vdlp.redirect.changed`
     * `vdlp.redirect.changed`
