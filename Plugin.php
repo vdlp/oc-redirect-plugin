@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpMissingParentCallCommonInspection */
-
 declare(strict_types=1);
 
 namespace Vdlp\Redirect;
@@ -11,7 +9,6 @@ use Event;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Translation\Translator;
-use October\Rain\Foundation\Http\Kernel;
 use System\Classes\PluginBase;
 use Throwable;
 use Validator;
@@ -53,10 +50,8 @@ class Plugin extends PluginBase
         $this->registerObservers();
 
         if (!$this->app->runningInBackend()) {
-            /** @var Kernel $kernel */
-            $kernel = resolve(Kernel::class);
-            $kernel->prependMiddleware(RedirectMiddleware::class);
-            return;
+            $this->app['Illuminate\Contracts\Http\Kernel']
+                ->prependMiddleware(RedirectMiddleware::class);
         }
 
         /*
