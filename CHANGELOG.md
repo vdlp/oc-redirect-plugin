@@ -1,3 +1,9 @@
+# 2.0.2
+
+* Force type of vdlp.redirect::log_redirect_changes #53
+* Apply config check to prevent log redirect changes #53
+* Convert database column types (char to varchar) #51
+
 # 2.0.1
 
 * Fix Middleware not being invoked in newer PHP versions
