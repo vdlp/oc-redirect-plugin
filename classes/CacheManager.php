@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Carbon\Carbon;
-use Illuminate\Cache\RedisStore;
+use Illuminate\Contracts\Cache\Repository;
 use Psr\Log\LoggerInterface;
 use Throwable;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
@@ -18,7 +18,7 @@ final class CacheManager implements CacheManagerInterface
     private const CACHE_TAG_MATCHES = 'vdlp_redirect_matches';
 
     /**
-     * @var RedisStore
+     * @var Repository
      */
     private $cache;
 
@@ -27,7 +27,7 @@ final class CacheManager implements CacheManagerInterface
      */
     private $log;
 
-    public function __construct(RedisStore $cache, LoggerInterface $log)
+    public function __construct(Repository $cache, LoggerInterface $log)
     {
         $this->cache = $cache;
         $this->log = $log;
