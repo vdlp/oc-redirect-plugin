@@ -11,6 +11,7 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
 use Schema;
+use Throwable;
 use Vdlp\Redirect\Models\Category;
 use Vdlp\Redirect\Models\Redirect;
 use Vdlp\Redirect\Models\Settings;
@@ -28,11 +29,21 @@ class CreateTables extends Migration
         if ($schema->hasTable('adrenth_redirect_redirects')
             && $database->getDriverName() === 'sqlite'
         ) {
-            $database->statement(/** @lang SQLite */'DROP INDEX redirect_dmy;');
-            $database->statement(/** @lang SQLite */'DROP INDEX redirect_my;');
-            $database->statement(/** @lang SQLite */'DROP INDEX redirect_log_dmy;');
-            $database->statement(/** @lang SQLite */'DROP INDEX redirect_log_my;');
-            $database->statement(/** @lang SQLite */'DROP INDEX month_year;');
+            $statements = [
+                'DROP INDEX redirect_dmy;',
+                'DROP INDEX redirect_my;',
+                'DROP INDEX redirect_log_dmy;',
+                'DROP INDEX redirect_log_my;',
+                'DROP INDEX month_year;',
+            ];
+
+            foreach ($statements as $statement) {
+                try {
+                    $database->statement($statement);
+                } catch (Throwable $e) {
+                    continue;
+                }
+            }
         }
 
         Schema::create('vdlp_redirect_categories', static function (Blueprint $table) {
