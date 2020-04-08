@@ -13,7 +13,7 @@ use System\Classes\PluginBase;
 use Throwable;
 use Validator;
 use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
-use Vdlp\Redirect\Classes\Observers\RedirectObserver;
+use Vdlp\Redirect\Classes\Observers;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
 use Vdlp\Redirect\Console\PublishRedirects;
 use Vdlp\Redirect\Models;
@@ -354,6 +354,7 @@ class Plugin extends PluginBase
 
     private function registerObservers(): void
     {
-        Models\Redirect::observe(RedirectObserver::class);
+        Models\Redirect::observe(Observers\RedirectObserver::class);
+        Models\Settings::observe(Observers\SettingsObserver::class);
     }
 }

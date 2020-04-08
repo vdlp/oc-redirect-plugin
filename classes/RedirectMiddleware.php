@@ -99,7 +99,7 @@ final class RedirectMiddleware
             ));
         }
 
-        if (!$rule) {
+        if ($rule === false || $rule === null) {
             return $next($request);
         }
 
