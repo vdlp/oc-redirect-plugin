@@ -65,8 +65,14 @@ class CreateTables extends Migration
             // Columns
             $table->increments('id');
             $table->unsignedInteger('category_id')->nullable();
+
+            // @see 20200408_0008_change_column_types_from_char_to_varchar.php
             $table->char('match_type', 12)->nullable();
+
+            // @see 20200408_0008_change_column_types_from_char_to_varchar.php
             $table->char('target_type', 12)->default(Redirect::TARGET_TYPE_PATH_URL);
+
+            // @see 20200408_0008_change_column_types_from_char_to_varchar.php
             $table->char('from_scheme', 5)->default(Redirect::SCHEME_AUTO);
             $table->mediumText('from_url')->nullable();
             $table->char('to_scheme', 5)->default(Redirect::SCHEME_AUTO);
@@ -75,6 +81,8 @@ class CreateTables extends Migration
             $table->string('cms_page')->nullable();
             $table->string('static_page')->nullable();
             $table->text('requirements')->nullable();
+
+            // @see 20200408_0008_change_column_types_from_char_to_varchar.php
             $table->char('status_code', 3);
             $table->unsignedInteger('hits')->default(0);
             $table->date('from_date')->nullable();
@@ -131,6 +139,8 @@ class CreateTables extends Migration
             $table->unsignedInteger('redirect_id');
             $table->mediumText('from_url');
             $table->mediumText('to_url');
+
+            // @see 20200408_0008_change_column_types_from_char_to_varchar.php
             $table->char('status_code', 3);
             $table->unsignedTinyInteger('day');
             $table->unsignedTinyInteger('month');
