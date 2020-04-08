@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Carbon\Carbon;
-use Illuminate\Cache\TaggedCache;
+use Illuminate\Contracts\Cache\Repository;
 use Psr\Log\LoggerInterface;
 use Throwable;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
@@ -13,10 +13,12 @@ use Vdlp\Redirect\Models\Settings;
 
 final class CacheManager implements CacheManagerInterface
 {
-    private const CACHE_TAG = 'Vdlp.Redirect';
+    private const CACHE_TAG = 'vdlp_redirect';
+    private const CACHE_TAG_RULES = 'vdlp_redirect_rules';
+    private const CACHE_TAG_MATCHES = 'vdlp_redirect_matches';
 
     /**
-     * @var TaggedCache
+     * @var Repository
      */
     private $cache;
 
@@ -25,7 +27,7 @@ final class CacheManager implements CacheManagerInterface
      */
     private $log;
 
-    public function __construct(TaggedCache $cache, LoggerInterface $log)
+    public function __construct(Repository $cache, LoggerInterface $log)
     {
         $this->cache = $cache;
         $this->log = $log;
@@ -33,17 +35,20 @@ final class CacheManager implements CacheManagerInterface
 
     public function get(string $key)
     {
-        return $this->cache->get($key);
+        return $this->cache->tags(self::CACHE_TAG_MATCHES)
+            ->get($key);
     }
 
     public function forget(string $key): bool
     {
-        return $this->cache->forget($key);
+        return $this->cache->tags(self::CACHE_TAG_MATCHES)
+            ->forget($key);
     }
 
     public function has(string $key): bool
     {
-        return $this->cache->has($key);
+        return $this->cache->tags(self::CACHE_TAG_MATCHES)
+            ->has($key);
     }
 
     public function cacheKey(string $requestPath, string $scheme): string
@@ -55,24 +60,38 @@ final class CacheManager implements CacheManagerInterface
 
     public function flush(): void
     {
-        $this->cache->flush();
-        $this->log->info('Vdlp.Redirect: Redirect cache has been flushed.');
+        $this->cache->tags([self::CACHE_TAG, self::CACHE_TAG_RULES, self::CACHE_TAG_MATCHES])
+            ->flush();
+
+        if ((bool) config('vdlp.redirect::log_redirect_changes', false) === true) {
+            $this->log->info('Vdlp.Redirect: Redirect cache has been flushed.');
+        }
     }
 
     public function putRedirectRules(array $redirectRules): void
     {
-        $this->cache->forever('Vdlp.Redirect.Rules', $redirectRules);
+        $this->cache->tags(self::CACHE_TAG_RULES)
+            ->forever('rules', $redirectRules);
     }
 
     public function getRedirectRules(): array
     {
-        return (array) $this->cache->get('Vdlp.Redirect.Rules', []);
+        $data = $this->cache->tags(self::CACHE_TAG_RULES)
+            ->get('rules', []);
+
+        if (is_array($data)) {
+            return $data;
+        }
+
+        return [];
     }
 
     public function putMatch(string $cacheKey, ?RedirectRule $matchedRule = null): ?RedirectRule
     {
         if ($matchedRule === null) {
-            $this->cache->forever($cacheKey, false);
+            $this->cache->tags(self::CACHE_TAG_MATCHES)
+                ->forever($cacheKey, false);
+
             return null;
         }
 
@@ -80,9 +99,12 @@ final class CacheManager implements CacheManagerInterface
 
         if ($matchedRuleToDate instanceof Carbon) {
             $minutes = $matchedRuleToDate->diffInMinutes(Carbon::now());
-            $this->cache->put($cacheKey, $matchedRule, $minutes);
+
+            $this->cache->tags(self::CACHE_TAG_MATCHES)
+                ->put($cacheKey, $matchedRule, $minutes);
         } else {
-            $this->cache->forever($cacheKey, $matchedRule);
+            $this->cache->tags(self::CACHE_TAG_MATCHES)
+                ->forever($cacheKey, $matchedRule);
         }
 
         return $matchedRule;
@@ -95,7 +117,7 @@ final class CacheManager implements CacheManagerInterface
         }
 
         try {
-            $this->cache->tags([static::CACHE_TAG]);
+            $this->cache->tags(self::CACHE_TAG);
         } catch (Throwable $e) {
             return false;
         }
@@ -110,7 +132,7 @@ final class CacheManager implements CacheManagerInterface
         }
 
         try {
-            $this->cache->tags([static::CACHE_TAG]);
+            $this->cache->tags(self::CACHE_TAG);
         } catch (Throwable $e) {
             return true;
         }

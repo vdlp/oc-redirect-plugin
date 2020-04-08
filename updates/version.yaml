@@ -51,3 +51,5 @@
 2.0.2:
     - "Minor database and configuration fixes -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.0.2"
     - 20200408_0008_change_column_types_from_char_to_varchar.php
+2.1.0:
+    - "Added support for October CMS L6 build, improved caching and more -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.1.0"

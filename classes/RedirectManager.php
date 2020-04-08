@@ -12,9 +12,7 @@ use Cms\Classes\Controller;
 use Cms\Classes\Theme;
 use Cms\Helpers\Cms;
 use Illuminate\Http\Request;
-use InvalidArgumentException;
 use League\Csv\Reader;
-use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Routing;
 use Throwable;
@@ -63,11 +61,6 @@ final class RedirectManager implements RedirectManagerInterface
     private $cacheManager;
 
     /**
-     * @var LoggerInterface
-     */
-    private $log;
-
-    /**
      * HTTP 1.1 headers
      *
      * @var array
@@ -88,21 +81,19 @@ final class RedirectManager implements RedirectManagerInterface
         Models\Redirect::SCHEME_HTTPS,
     ];
 
-    public function __construct(Request $request, CacheManagerInterface $cacheManager, LoggerInterface $log)
+    public function __construct(Request $request, CacheManagerInterface $cacheManager)
     {
         $this->matchDate = Carbon::today();
         $this->basePath = $request->getBasePath();
         $this->settings = RedirectManagerSettings::createDefault();
         $this->cacheManager = $cacheManager;
-        $this->log = $log;
     }
 
     public static function createWithRule(RedirectRule $rule): RedirectManagerInterface
     {
         $instance = new self(
             resolve(Request::class),
-            resolve(CacheManagerInterface::class),
-            resolve(LoggerInterface::class)
+            resolve(CacheManagerInterface::class)
         );
 
         $instance->rules[] = $rule;
@@ -110,6 +101,12 @@ final class RedirectManager implements RedirectManagerInterface
         return $instance;
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws Exceptions\InvalidScheme
+     * @throws Exceptions\NoMatchForRequest
+     * @throws Exceptions\UnableToLoadRules
+     */
     public function match(string $requestPath, string $scheme): RedirectRule
     {
         if (!in_array($scheme, self::$schemes, true)) {
@@ -482,33 +479,28 @@ final class RedirectManager implements RedirectManagerInterface
         return null;
     }
 
+    /**
+     * @throws Exceptions\UnableToLoadRules
+     */
     private function loadRedirectRules(): void
     {
         if ($this->rules !== null) {
             return;
         }
 
-        $rules = [];
-
-        try {
-            if ($this->cacheManager->cachingEnabledAndSupported()) {
-                $rules = $this->readRulesFromCache();
-            } else {
-                $rules = $this->readRulesFromFilesystem();
-            }
-        } catch (Throwable $e) {
-            $this->log->warning('Vdlp.Redirect: Could not load redirect rules: ' . $e->getMessage());
+        if ($this->cacheManager->cachingEnabledAndSupported()) {
+            $rules = $this->loadRulesFromCache();
+        } else {
+            $rules = $this->loadRulesFromFilesystem();
         }
 
         $this->rules = $rules;
     }
 
     /**
-     * @throws InvalidArgumentException
-     * @throws Exceptions\RulesPathNotReadable
-     * @throws Exceptions\RulesPathNotWritable
+     * @throws Exceptions\UnableToLoadRules
      */
-    private function readRulesFromFilesystem(): array
+    private function loadRulesFromFilesystem(): array
     {
         $rulesPath = (string) config('vdlp.redirect::rules_path');
 
@@ -523,10 +515,18 @@ final class RedirectManager implements RedirectManagerInterface
         /** @var Reader $reader */
         $reader = Reader::createFromPath($rulesPath, 'r');
 
-        // TODO
-        // WARNING: this is deprecated method in league/csv:8.0, when league/csv is upgraded to version 9 we should
-        // follow the instructions on this page: http://csv.thephpleague.com/upgrading/9.0/
-        $results = $reader->fetchAssoc(0);
+        try {
+            if (method_exists($reader, 'fetchAssoc')) {
+                // Supports league/csv:8.0+
+                $results = $reader->fetchAssoc(0);
+            } else {
+                // Supports league/csv:9.0+
+                $reader->setHeaderOffset(0);
+                $results = $reader->getRecords();
+            }
+        } catch (Throwable $e) {
+            throw Exceptions\UnableToLoadRules::withMessage($e->getMessage(), $e);
+        }
 
         $rules = [];
 
@@ -541,7 +541,7 @@ final class RedirectManager implements RedirectManagerInterface
         return $rules;
     }
 
-    private function readRulesFromCache(): array
+    private function loadRulesFromCache(): array
     {
         $results = $this->cacheManager->getRedirectRules();
 
