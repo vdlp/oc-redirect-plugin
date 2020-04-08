@@ -56,7 +56,10 @@ final class CacheManager implements CacheManagerInterface
     public function flush(): void
     {
         $this->cache->flush();
-        $this->log->info('Vdlp.Redirect: Redirect cache has been flushed.');
+
+        if ((bool) config('vdlp.redirect::log_redirect_changes', false) === true) {
+            $this->log->info('Vdlp.Redirect: Redirect cache has been flushed.');
+        }
     }
 
     public function putRedirectRules(array $redirectRules): void
