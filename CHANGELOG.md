@@ -1,3 +1,15 @@
+# 2.1.1
+
+* Update CHANGELOG
+
+# 2.1.0
+
+* Improve exception handling #52
+* Add support for league/csv:9.0+
+* Improve caching mechanism #54
+* Suppress cache flush log message
+* Skip sparkline routes from being processed
+
 # 2.0.2
 
 * Force type of vdlp.redirect::log_redirect_changes #53
