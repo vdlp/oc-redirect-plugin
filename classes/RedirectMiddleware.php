@@ -6,6 +6,7 @@ namespace Vdlp\Redirect\Classes;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use October\Rain\Events\Dispatcher;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -67,7 +68,9 @@ final class RedirectMiddleware
     public function handle(Request $request, Closure $next)
     {
         // Only handle specific request methods.
-        if (!in_array($request->method(), self::$supportedMethods, true)) {
+        if (!in_array($request->method(), self::$supportedMethods, true)
+            || Str::startsWith($request->getRequestUri(), '/vdlp/redirect/sparkline/')
+        ) {
             return $next($request);
         }
 
