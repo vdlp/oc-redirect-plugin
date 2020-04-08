@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes\Exceptions;
 
-use RuntimeException;
-
-final class RulesPathNotWritable extends RuntimeException
+final class RulesPathNotWritable extends UnableToLoadRules
 {
     public static function withPath(string $path): self
     {
