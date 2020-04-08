@@ -66,10 +66,12 @@ final class PublishManager implements PublishManagerInterface
 
         $count = $redirects->count();
 
-        $this->log->info(sprintf(
-            'Vdlp.Redirect: Redirect engine has been updated with %s redirects.',
-            $count
-        ));
+        if ((bool) config('vdlp.redirect::log_redirect_changes', false) === true) {
+            $this->log->info(sprintf(
+                'Vdlp.Redirect: Redirect engine has been updated with %s redirects.',
+                $count
+            ));
+        }
 
         return $count;
     }
