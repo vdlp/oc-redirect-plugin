@@ -523,10 +523,20 @@ final class RedirectManager implements RedirectManagerInterface
         /** @var Reader $reader */
         $reader = Reader::createFromPath($rulesPath, 'r');
 
-        // TODO
-        // WARNING: this is deprecated method in league/csv:8.0, when league/csv is upgraded to version 9 we should
-        // follow the instructions on this page: http://csv.thephpleague.com/upgrading/9.0/
-        $results = $reader->fetchAssoc(0);
+        $results = [];
+
+        try {
+            if (method_exists($reader, 'fetchAssoc')) {
+                // Supports league/csv:8.0+
+                $results = $reader->fetchAssoc(0);
+            } else {
+                // Supports league/csv:9.0+
+                $reader->setHeaderOffset(0);
+                $results = $reader->getRecords();
+            }
+        } catch (Throwable $e) {
+            $this->log->error('Vdlp.Redirect: Error while reading rules from filesystem (' . $e->getMessage() . ')');
+        }
 
         $rules = [];
 
