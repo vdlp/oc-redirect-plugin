@@ -85,7 +85,7 @@ final class RedirectObserver
 
     private function logChange(Models\Redirect $model, string $typeOfChange): void
     {
-        if (config('vdlp.redirect::log_redirect_changes') === false) {
+        if ((bool) config('vdlp.redirect::log_redirect_changes', false) === false) {
             return;
         }
 

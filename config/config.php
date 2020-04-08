@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'log_redirect_changes' => env('VDLP_REDIRECT_LOG_REDIRECT_CHANGES', false),
+    'log_redirect_changes' => (bool) env('VDLP_REDIRECT_LOG_REDIRECT_CHANGES', false),
 
     /*
     |--------------------------------------------------------------------------
