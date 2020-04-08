@@ -20,5 +20,12 @@
         "jaybizzle/crawler-detect": "^1.2",
         "symfony/stopwatch": "^4.0",
         "davaxi/sparkline": "~1.2.0"
+    },
+    "archive": {
+        "exclude": [
+            ".gitignore",
+            ".gitlab-ci.yml",
+            ".idea/"
+        ]
     }
 }
