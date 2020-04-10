@@ -56,11 +56,11 @@ This plugin adds a 'Redirects' section to the main menu of October CMS. This plu
 
 ## Supported HTTP status codes
 
-* HTTP/1.1 301 Moved Permanently
-* HTTP/1.1 302 Found
-* HTTP/1.1 303 See Other
-* HTTP/1.1 404 Not Found
-* HTTP/1.1 410 Gone
+* `HTTP/1.1 301 Moved Permanently`
+* `HTTP/1.1 302 Found`
+* `HTTP/1.1 303 See Other`
+* `HTTP/1.1 404 Not Found`
+* `HTTP/1.1 410 Gone`
 
 ## Supported HTTP request methods
 
