@@ -60,14 +60,22 @@ fields:
         dependsOn:
             - target_type
             - status_code
-
 tabs:
     defaultTab: vdlp.redirect::lang.tab.tab_general
+    lazy:
+        - vdlp.redirect::lang.tab.tab_logs
+    icons:
+        vdlp.redirect::lang.tab.tab_general: icon-mouse-pointer
+        vdlp.redirect::lang.tab.tab_requirements:
+        vdlp.redirect::lang.tab.tab_test: icon-bug
+        vdlp.redirect::lang.tab.tab_scheduling: icon-calendar-o
+        vdlp.redirect::lang.tab.tab_test_lab: icon-flask
+        vdlp.redirect::lang.tab.tab_advanced: icon-cog
+        vdlp.redirect::lang.tab.tab_logs: icon-file-text-o
     fields:
         #
         # General
         #
-
         is_enabled:
             label: vdlp.redirect::lang.redirect.enabled
             comment: vdlp.redirect::lang.redirect.enabled_comment
@@ -94,7 +102,6 @@ tabs:
             type: text
             span: right
             context: update
-
         #
         # Requirements
         #
@@ -194,6 +201,12 @@ tabs:
                 field: match_type
                 condition: value[placeholders]
         #
+        # Logs
+        #
+        tab_logs:
+            tab: vdlp.redirect::lang.tab.tab_logs
+            type: partial
+        #
         # Advanced
         #
         from_scheme:
@@ -221,7 +234,6 @@ tabs:
                 https: https
                 auto: vdlp.redirect::lang.redirect.scheme_auto
             dependsOn: status_code
-
 secondaryTabs:
     fields:
         _statistics@update:

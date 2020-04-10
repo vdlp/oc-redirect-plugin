@@ -52,3 +52,8 @@ div.actions .btn {
 .scoreboard-item.title-value p {
     font-size: 20px;
 }
+
+ul.nav li a:focus, table.data tr:focus {
+    outline:0 !important;
+    box-shadow: none !important;
+}

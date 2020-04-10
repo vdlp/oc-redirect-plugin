@@ -1,0 +1,13 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+logs:
+    label: Log
+    view:
+        list: $/vdlp/redirect/models/redirectlog/columns.yaml
+        toolbarButtons: delete
+        showSearch: true
+        showSorting: true
+        recordsPerPage: 10
+        defaultSort: date_time

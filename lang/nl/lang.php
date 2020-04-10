@@ -202,7 +202,7 @@ return [
         'categories' => 'Beheer categorieën',
         'create_category' => 'Maak category',
         'edit_category' => 'Bewerk category',
-        'view_redirect_log' => 'Toon redirect log',
+        'view_redirect_log' => 'Logboek',
         'statistics' => 'Statistieken',
         'test_lab' => 'TestLab (beta)',
     ],
@@ -223,8 +223,8 @@ return [
         'categories' => 'Categorieën',
         'new_category' => 'Nieuwe category',
         'reset_statistics' => 'Herstel statistieken',
-        'logs' => 'Redirect log',
-        'empty_redirect_log' => 'Leeg redirect log',
+        'logs' => 'Logboek',
+        'empty_redirect_log' => 'Leeg logboek',
         'clear_cache' => 'Leeg cache',
         'stop' => 'Stop',
         'reset_all' => 'Alle statistische informatie wissen',
@@ -238,6 +238,7 @@ return [
         'tab_scheduling' => 'Tijdschema',
         'tab_test_lab' => 'TestLab',
         'tab_advanced' => 'Geavanceerd',
+        'tab_logs' => 'Logboek',
     ],
     'flash' => [
         'success_created_redirects' => 'Er zijn :count redirect(s) gecreëerd', // since 2.0.3

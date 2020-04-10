@@ -1,3 +1,9 @@
+# 2.2.0
+
+* Add "Cache-Control: no-store" header. This will prevent (modern) web browsers to cache the redirects. Very convenient when testing your redirects.
+* Add extra tab "Event logs" to Redirect update page. This tab shows a list with the related event logs of the redirect.
+* UI improvements
+
 # 2.1.1
 
 * Update CHANGELOG

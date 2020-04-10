@@ -68,8 +68,9 @@ final class TestLab extends Controller
     {
         $this->pageTitle = 'vdlp.redirect::lang.title.test_lab';
 
-        $this->addCss('/plugins/vdlp/redirect/assets/css/test-lab.css', 'Vdlp.Redirect');
-        $this->addJs('/plugins/vdlp/redirect/assets/javascript/test-lab.js', 'Vdlp.Redirect');
+        $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
+        $this->addCss('/plugins/vdlp/redirect/assets/css/test-lab.css');
+        $this->addJs('/plugins/vdlp/redirect/assets/javascript/test-lab.js');
 
         $this->vars['redirectCount'] = $this->getRedirectCount();
     }

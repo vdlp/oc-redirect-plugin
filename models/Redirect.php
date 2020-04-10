@@ -170,6 +170,7 @@ final class Redirect extends Model
      */
     public $hasMany = [
         'clients' => Client::class,
+        'logs' => RedirectLog::class,
     ];
 
     /**
