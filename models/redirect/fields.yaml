@@ -63,6 +63,8 @@ fields:
 
 tabs:
     defaultTab: vdlp.redirect::lang.tab.tab_general
+    lazy:
+        - vdlp.redirect::lang.tab.tab_logs
     fields:
         #
         # General
@@ -221,6 +223,14 @@ tabs:
                 https: https
                 auto: vdlp.redirect::lang.redirect.scheme_auto
             dependsOn: status_code
+
+        #
+        # Logs
+        #
+
+        tab_logs:
+            tab: vdlp.redirect::lang.tab.tab_logs
+            type: partial
 
 secondaryTabs:
     fields:
