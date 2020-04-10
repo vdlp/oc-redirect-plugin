@@ -1,6 +1,8 @@
 # Vdlp.Redirect
 
-> **IMPORTANT**: This plugin was formerly known as `Adrenth.Redirect`. The plugin has been renamed to `Vdlp.Redirect`. Please install this plugin which automatically migrates data and settings from `Adrenth.Redirect`. The current version of `Adrenth.Redirect` will stay available for users which have it installed, but will be hidden from the October CMS marketplace. Upgrade to `Vdlp.Redirect` as soon as possible.
+> **IMPORTANT**: As of version 2.0 PHP 7.0 support is dropped.
+
+> This plugin was formerly known as `Adrenth.Redirect`. The plugin has been renamed to `Vdlp.Redirect`. Please install this plugin which automatically migrates data and settings from `Adrenth.Redirect`. The current version of `Adrenth.Redirect` will stay available for users which have it installed, but will be hidden from the October CMS marketplace. Upgrade to `Vdlp.Redirect` as soon as possible.
 
 ## The #1 Redirect plugin for October CMS
 
@@ -37,14 +39,14 @@ This plugin adds a 'Redirects' section to the main menu of October CMS. This plu
     * Number of redirects per month
     * And more...
 * Multilingual ***(Need help translating! Contact us at octobercms@vdlp.nl)***
-* Supports MySQL, SQLite and PostgreSQL
+* Supports MySQL, SQLite and Postgres
 * HTTP status codes 301, 302, 303, 404, 410
 * Caching
 
 ## Supported database platforms
 
 * MySQL
-* PostgreSQL
+* Postgres
 * SQLite
 
 ## PHP requirements
