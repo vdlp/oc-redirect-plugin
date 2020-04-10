@@ -55,3 +55,5 @@
     - "Added support for October CMS L6 build, improved caching and more -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.1.0"
 2.1.1:
     - "Update CHANGELOG"
+2.2.0:
+    - "Add cache control header and UI improvements -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.2.0"
