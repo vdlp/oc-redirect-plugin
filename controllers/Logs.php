@@ -64,6 +64,8 @@ final class Logs extends Controller
 
         BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'logs');
 
+        $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
+
         $this->request = $request;
         $this->translator = $translator;
         $this->flash = resolve('flash');

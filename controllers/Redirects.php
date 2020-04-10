@@ -122,7 +122,7 @@ final class Redirects extends Controller
 
         BackendMenu::setContext('Vdlp.Redirect', 'redirect', $sideMenuItemCode);
 
-        $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css', 'Vdlp.Redirect');
+        $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
 
         $this->vars['match'] = null;
         $this->vars['statisticsHelper'] = new StatisticsHelper();
