@@ -85,9 +85,21 @@ final class RedirectRule
      */
     private $ignoreQueryParameters;
 
+    /**
+     * @var bool
+     */
+    private $ignoreCase;
+
+    /**
+     * @var bool
+     */
+    private $ignoreTrailingSlash;
+
     public function __construct(array $attributes)
     {
         $this->ignoreQueryParameters = false;
+        $this->ignoreCase = false;
+        $this->ignoreTrailingSlash = false;
 
         foreach ($attributes as $key => $value) {
             $property = camel_case($key);
@@ -224,5 +236,15 @@ final class RedirectRule
     public function isIgnoreQueryParameters(): bool
     {
         return (bool) $this->ignoreQueryParameters;
+    }
+
+    public function isIgnoreCase(): bool
+    {
+        return (bool) $this->ignoreCase;
+    }
+
+    public function isIgnoreTrailingSlash(): bool
+    {
+        return (bool) $this->ignoreTrailingSlash;
     }
 }

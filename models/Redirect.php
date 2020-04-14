@@ -160,6 +160,8 @@ final class Redirect extends Model
      */
     protected $casts = [
         'ignore_query_parameters' => 'boolean',
+        'ignore_case' => 'boolean',
+        'ignore_trailing_slash' => 'boolean',
         'is_enabled' => 'boolean',
         'test_lab' => 'boolean',
         'system' => 'boolean',

@@ -49,7 +49,9 @@ final class PublishManager implements PublishManagerInterface
             'requirements',
             'from_date',
             'to_date',
-            'ignore_query_parameters'
+            'ignore_query_parameters',
+            'ignore_case',
+            'ignore_trailing_slash',
         ];
 
         /** @var Collection $redirects */
