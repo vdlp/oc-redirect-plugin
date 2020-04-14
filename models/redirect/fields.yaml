@@ -170,6 +170,7 @@ tabs:
             type: datepicker
             mode: date
             span: left
+            ignoreTimezone: true
         to_date:
             tab: vdlp.redirect::lang.tab.tab_scheduling
             label: vdlp.redirect::lang.scheduling.to_date
@@ -177,6 +178,7 @@ tabs:
             type: datepicker
             mode: date
             span: right
+            ignoreTimezone: true
         #
         # TestLab
         #
