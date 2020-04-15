@@ -97,11 +97,24 @@ tabs:
             label: vdlp.redirect::lang.redirect.description
             span: right
             type: text
+        ignore_case:
+            label: vdlp.redirect::lang.redirect.ignore_case
+            type: checkbox
+            span: left
+            default: false
+            comment: vdlp.redirect::lang.redirect.ignore_case_comment
         sort_order:
             label: vdlp.redirect::lang.redirect.priority
             type: text
             span: right
             context: update
+        ignore_trailing_slash:
+            label: vdlp.redirect::lang.redirect.ignore_trailing_slash
+            type: checkbox
+            span: left
+            default: false
+            comment: vdlp.redirect::lang.redirect.ignore_trailing_slash_comment
+
         #
         # Requirements
         #
@@ -170,6 +183,7 @@ tabs:
             type: datepicker
             mode: date
             span: left
+            ignoreTimezone: true
         to_date:
             tab: vdlp.redirect::lang.tab.tab_scheduling
             label: vdlp.redirect::lang.scheduling.to_date
@@ -177,6 +191,7 @@ tabs:
             type: datepicker
             mode: date
             span: right
+            ignoreTimezone: true
         #
         # TestLab
         #

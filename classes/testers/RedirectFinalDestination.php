@@ -42,7 +42,7 @@ final class RedirectFinalDestination extends TesterBase
             );
 
             $message = $error
-                ?? e(trans('vdlp.redirect::lang.test_lab.final_destination_is', ['destination' => $finalDestination]));
+                ?? trans('vdlp.redirect::lang.test_lab.final_destination_is', ['destination' => $finalDestination]);
         }
 
         return new TesterResult($error === null, $message);

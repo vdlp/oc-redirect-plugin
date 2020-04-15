@@ -8,14 +8,12 @@
 <?php if (!$this->fatalError): ?>
 
     <?php Block::put('form-contents') ?>
-
-        <?php if (isset($warningMessage)): ?>
-            <?= $this->makePartial('warning', ['warningMessage' => $warningMessage]); ?>
-        <?php endif; ?>
-
         <div class="layout">
 
             <div class="layout-row">
+                <?php if (isset($warningMessage)): ?>
+                    <?= $this->makePartial('warning', ['warningMessage' => $warningMessage]); ?>
+                <?php endif; ?>
                 <?= $this->formRenderOutsideFields() ?>
                 <?= $this->formRenderPrimaryTabs() ?>
             </div>

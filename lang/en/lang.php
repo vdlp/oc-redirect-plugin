@@ -30,9 +30,6 @@ return [
         'caching_enabled_comment' => 'Improves the redirect engine when having a lot of redirects. '
             . 'CAUTION: Cache driver `file` and `database` are NOT supported. '
             . 'Recommended driver is `memcached` or a similar "in-memory" caching driver.',
-        'auto_redirect_creation_enabled_label' => 'Auto redirect creation',
-        'auto_redirect_creation_enabled_comment' => 'Automatically create redirects when the slug of a '
-            . 'Page or Static Page was changed.',
     ],
     'redirect' => [
         'redirect' => 'Redirect',
@@ -108,8 +105,12 @@ return [
         'sparkline_30d' => 'Hits (30d)',
         'has_hits' => 'Has hits',
         'minimum_hits' => 'Minimum # hits',
-        'ignore_query_parameters' => 'Ignore query parameters (recommended).',
-        'ignore_query_parameters_comment' => 'The engine will ignore all query parameters from the Source Path.',
+        'ignore_query_parameters' => 'Ignore query parameters',
+        'ignore_query_parameters_comment' => 'The redirect engine will ignore all query parameters.',
+        'ignore_case' => 'Ignore case',
+        'ignore_case_comment' => 'The redirect engine will do case-insensitive matching.',
+        'ignore_trailing_slash' => 'Ignore trailing slash',
+        'ignore_trailing_slash_comment' => 'The redirect engine will ignore trailing slashes.',
         'last_used_at' => 'Last hit',
         'updated_at' => 'Updated at',
         'invalid_regex' => 'Invalid regular expression.',
@@ -274,7 +275,9 @@ return [
         'to_date' => 'Scheduled date to [to_date] (YYYY-MM-DD or empty)',
         'sort_order' => 'Priority [sort_order]',
         'is_enabled' => 'Enabled [is_enabled] (1 = enable redirect, 0 = disable redirect [default])',
-        'ignore_query_parameters' => 'Ignore Query Parameters [ignore_query_parameters] (1 = ignore query parameters, 0 = include query parameters [default])',
+        'ignore_query_parameters' => 'Ignore Query Parameters [ignore_query_parameters] (1 = yes, 0 = no [default])',
+        'ignore_case' => 'Ignore Case [ignore_case] (1 = yes, 0 = no [default])',
+        'ignore_trailing_slash' => 'Ignore Trailing Slashes [ignore_trailing_slash] (1 = yes, 0 = no [default])',
         'test_lab' => 'Test Lab [test_lab] (1 = enable Test Lab, 0 = disable TestLab [default])',
         'test_lab_path' => 'Test Lab path [test_lab_path] (required if match_type = placeholders)',
         'system' => 'System [system] (1 = system generated redirect, 0 = user generated redirect [default])',

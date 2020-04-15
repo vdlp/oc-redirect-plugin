@@ -17,6 +17,8 @@ columns:
     to_date: vdlp.redirect::lang.import_export.to_date
     sort_order: vdlp.redirect::lang.import_export.sort_order
     ignore_query_parameters: vdlp.redirect::lang.import_export.ignore_query_parameters
+    ignore_case: vdlp.redirect::lang.import_export.ignore_case
+    ignore_trailing_slash: vdlp.redirect::lang.import_export.ignore_trailing_slash
     is_enabled: vdlp.redirect::lang.import_export.is_enabled
     test_lab: vdlp.redirect::lang.import_export.test_lab
     test_lab_path: vdlp.redirect::lang.import_export.test_lab_path

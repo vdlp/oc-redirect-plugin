@@ -20,6 +20,7 @@ use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Exceptions;
+use Vdlp\Redirect\Classes\Util\Str;
 use Vdlp\Redirect\Models;
 
 final class RedirectManager implements RedirectManagerInterface
@@ -361,7 +362,19 @@ final class RedirectManager implements RedirectManagerInterface
      */
     private function matchExact(RedirectRule $rule, string $url): RedirectRule
     {
-        if ($url === $rule->getFromUrl()) {
+        $urlA = $rule->getFromUrl();
+        $urlB = $url;
+
+        if ($rule->isIgnoreTrailingSlash()) {
+            $urlA = Str::removeTrailingSlash($urlA);
+            $urlB = Str::removeTrailingSlash($urlB);
+        }
+
+        if ($rule->isIgnoreCase() && strcasecmp($urlA, $urlB) === 0) {
+            return $rule;
+        }
+
+        if ($urlA === $urlB) {
             return $rule;
         }
 

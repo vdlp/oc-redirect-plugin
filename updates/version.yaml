@@ -57,3 +57,7 @@
     - "Update CHANGELOG"
 2.2.0:
     - "Add cache control header and UI improvements -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.2.0"
+2.3.0:
+    - "Add new redirect options (ignore case and ignore trailing slash) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.3.0"
+    - 20200414_0009_add_ignore_case_to_redirects_table.php
+    - 20200414_0010_add_ignore_trailing_slash_to_redirects_table.php
