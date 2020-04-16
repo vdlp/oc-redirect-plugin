@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes\Observers;
 
+use Throwable;
 use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 
 final class SettingsObserver
@@ -17,6 +18,10 @@ final class SettingsObserver
 
     public function saving(): void
     {
-        $this->publishManager->publish();
+        try {
+            $this->publishManager->publish();
+        } catch (Throwable $e) {
+            // ..
+        }
     }
 }
