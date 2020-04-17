@@ -1,3 +1,7 @@
+# 2.4.0
+
+* Skip requests with header "X-Requested-With: XMLHttpRequest"
+
 # 2.3.2
 
 * Improve error handling in plugin migration process

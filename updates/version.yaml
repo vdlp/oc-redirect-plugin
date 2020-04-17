@@ -65,3 +65,5 @@
     - "Fix SQLSTATE[42S22] error when installing plugin -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.3.1"
 2.3.2:
     - "Improve error handling in plugin migration process -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.3.2"
+2.4.0:
+    - "Skip requests with header 'X-Requested-With: XMLHttpRequest' -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.4.0"
