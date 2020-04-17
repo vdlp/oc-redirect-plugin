@@ -68,7 +68,8 @@ final class RedirectMiddleware
     public function handle(Request $request, Closure $next)
     {
         // Only handle specific request methods.
-        if (!in_array($request->method(), self::$supportedMethods, true)
+        if ($request->isXmlHttpRequest()
+            || !in_array($request->method(), self::$supportedMethods, true)
             || Str::startsWith($request->getRequestUri(), '/vdlp/redirect/sparkline/')
         ) {
             return $next($request);
