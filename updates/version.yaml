@@ -63,3 +63,5 @@
     - 20200414_0010_add_ignore_trailing_slash_to_redirects_table.php
 2.3.1:
     - "Fix SQLSTATE[42S22] error when installing plugin -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.3.1"
+2.3.2:
+    - "Improve error handling in plugin migration process -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.3.2"
