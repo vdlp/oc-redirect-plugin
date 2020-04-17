@@ -1,3 +1,7 @@
+# 2.3.2
+
+* Improve error handling in plugin migration process
+
 # 2.3.1
 
 * Fix SQLSTATE[42S22] error when installing plugin

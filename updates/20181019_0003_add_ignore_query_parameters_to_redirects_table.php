@@ -9,7 +9,9 @@ namespace Vdlp\Redirect\Updates;
 
 use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
+use Psr\Log\LoggerInterface;
 use Schema;
+use Throwable;
 
 class AddIgnoreQueryParametersToRedirectsTable extends Migration
 {
@@ -24,8 +26,17 @@ class AddIgnoreQueryParametersToRedirectsTable extends Migration
 
     public function down(): void
     {
-        Schema::table('vdlp_redirect_redirects', static function (Blueprint $table) {
-            $table->dropColumn('ignore_query_parameters');
-        });
+        try {
+            Schema::table('vdlp_redirect_redirects', static function (Blueprint $table) {
+                $table->dropColumn('ignore_query_parameters');
+            });
+        } catch (Throwable $e) {
+            resolve(LoggerInterface::class)->error(sprintf(
+                'Vdlp.Redirect: Unable to drop column `%s` from table `%s`: %s',
+                'ignore_query_parameters',
+                'vdlp_redirect_redirects',
+                $e->getMessage()
+            ));
+        }
     }
 }
