@@ -70,7 +70,10 @@ class UpgradeFromAdrenthRedirect extends Migration
                 $this->enableForeignKeyCheck($database);
             });
         } catch (Throwable $e) {
-            $log->critical('Could not upgrade plugin Vdlp.Redirect from Adrenth.Redirect: ' . $e->getMessage());
+            $log->error(sprintf(
+                'Vdlp.Redirect: Could not upgrade plugin Vdlp.Redirect from Adrenth.Redirect: %s',
+                $e->getMessage()
+            ));
         }
     }
 

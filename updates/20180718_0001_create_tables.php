@@ -10,6 +10,7 @@ namespace Vdlp\Redirect\Updates;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
+use Psr\Log\LoggerInterface;
 use Schema;
 use Throwable;
 use Vdlp\Redirect\Models\Category;
@@ -41,6 +42,9 @@ class CreateTables extends Migration
                 try {
                     $database->statement($statement);
                 } catch (Throwable $e) {
+                    resolve(LoggerInterface::class)
+                        ->error(sprintf('Vdlp.Redirect: Unable to drop index: %s'. $e->getMessage()));
+
                     continue;
                 }
             }
@@ -158,23 +162,36 @@ class CreateTables extends Migration
             });
         }
 
-        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
-        $settings = Settings::instance();
-        $settings->logging_enabled = '1';
-        $settings->statistics_enabled = '1';
-        $settings->test_lab_enabled = '1';
-        $settings->save();
+        try {
+            /** @noinspection PhpDynamicAsStaticMethodCallInspection */
+            $settings = Settings::instance();
+            $settings->logging_enabled = '1';
+            $settings->statistics_enabled = '1';
+            $settings->test_lab_enabled = '1';
+            $settings->save();
+        } catch (Throwable $e) {
+            resolve(LoggerInterface::class)
+                ->error(sprintf(
+                    'Vdlp.Redirect: Unable to save default settings: %s',
+                    $e->getMessage()
+                ));
+        }
     }
 
     public function down(): void
     {
-        Schema::disableForeignKeyConstraints();
-
-        Schema::dropIfExists('vdlp_redirect_clients');
-        Schema::dropIfExists('vdlp_redirect_redirect_logs');
-        Schema::dropIfExists('vdlp_redirect_redirects');
-        Schema::dropIfExists('vdlp_redirect_categories');
-
-        Schema::enableForeignKeyConstraints();
+        try {
+            Schema::disableForeignKeyConstraints();
+            Schema::dropIfExists('vdlp_redirect_clients');
+            Schema::dropIfExists('vdlp_redirect_redirect_logs');
+            Schema::dropIfExists('vdlp_redirect_redirects');
+            Schema::dropIfExists('vdlp_redirect_categories');
+            Schema::enableForeignKeyConstraints();
+        } catch (Throwable $e) {
+            resolve(LoggerInterface::class)->error(sprintf(
+                'Vdlp.Redirect: Unable to drop all tables: %s',
+                $e->getMessage()
+            ));
+        }
     }
 }

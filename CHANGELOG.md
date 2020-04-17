@@ -1,3 +1,20 @@
+# 2.3.2
+
+* Improve error handling in plugin migration process
+
+# 2.3.1
+
+* Fix SQLSTATE[42S22] error when installing plugin
+
+# 2.3.0
+
+* Add new Redirect options:
+    * Ignore Case
+    * Ignore Trailing Slashes
+* Fix date field timezone issue (scheduled tab)
+* Fix warning dialog position (when scheduled redirect is not active)
+* Minor translation improvements (en, nl).
+
 # 2.2.0
 
 * Add "Cache-Control: no-store" header. This will prevent (modern) web browsers to cache the redirects. Very convenient when testing your redirects.
