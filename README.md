@@ -1,4 +1,22 @@
-# Vdlp.Redirect
+<p align="center">
+	<img height="60px" width="60px" src="https://plugins.vdlp.nl/octobercms/icons/Vdlp.Redirect.svg" >
+	<h1 align="center">Vdlp.Redirect</h1>
+</p>
+
+<p align="center">
+	<em>Manage all your HTTP redirects with an easy to use GUI. This is an essential SEO plugin.</em>
+</p>
+
+<p align="center">
+	<img src="https://badgen.net/packagist/php/vdlp/oc-redirect-plugin">
+	<img src="https://badgen.net/packagist/license/vdlp/oc-redirect-plugin">
+	<img src="https://badgen.net/github/release/vdlp/oc-redirect-plugin">
+	<img src="https://badgen.net/packagist/dt/vdlp/oc-redirect-plugin">
+	<img src="https://badgen.net/badge/cms/October%20CMS">
+	<img src="https://badgen.net/badge/type/plugin">
+</p>
+
+-
 
 > **IMPORTANT**: As of version 2.0 PHP 7.0 support is dropped.
 
