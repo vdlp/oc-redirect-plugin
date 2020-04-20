@@ -10,7 +10,7 @@
 <p align="center">
 	<img src="https://badgen.net/packagist/php/vdlp/oc-redirect-plugin">
 	<img src="https://badgen.net/packagist/license/vdlp/oc-redirect-plugin">
-	<img src="https://badgen.net/github/release/vdlp/oc-redirect-plugin">
+	<img src="https://badgen.net/packagist/v/vdlp/oc-redirect-plugin/latest">
 	<img src="https://badgen.net/packagist/dt/vdlp/oc-redirect-plugin">
 	<img src="https://badgen.net/badge/cms/October%20CMS">
 	<img src="https://badgen.net/badge/type/plugin">
