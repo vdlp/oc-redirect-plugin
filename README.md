@@ -16,8 +16,6 @@
 	<img src="https://badgen.net/badge/type/plugin">
 </p>
 
--
-
 > **IMPORTANT**: As of version 2.0 PHP 7.0 support is dropped.
 
 > This plugin was formerly known as `Adrenth.Redirect`. The plugin has been renamed to `Vdlp.Redirect`. Please install this plugin which automatically migrates data and settings from `Adrenth.Redirect`. The current version of `Adrenth.Redirect` will stay available for users which have it installed, but will be hidden from the October CMS marketplace. Upgrade to `Vdlp.Redirect` as soon as possible.
