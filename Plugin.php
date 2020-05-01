@@ -167,6 +167,15 @@ class Plugin extends PluginBase
                             'vdlp.redirect.access_redirects',
                         ],
                     ],
+                    'extensions' => [
+                        'label' => 'vdlp.redirect::lang.buttons.extensions',
+                        'url' => Backend::url('vdlp/redirect/extensions'),
+                        'icon' => 'icon-cubes',
+                        'order' => 100,
+                        'permissions' => [
+                            'vdlp.redirect.access_redirects',
+                        ],
+                    ]
                 ],
             ],
         ];

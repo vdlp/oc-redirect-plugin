@@ -38,6 +38,7 @@ final class Statistics extends Controller
         $this->addCss('https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css');
         $this->addJs('/plugins/vdlp/redirect/assets/javascript/statistics.js');
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
+        $this->addJs('/plugins/vdlp/redirect/assets/javascript/redirect.js');
         $this->addCss('/plugins/vdlp/redirect/assets/css/statistics.css');
 
         $this->helper = new StatisticsHelper();

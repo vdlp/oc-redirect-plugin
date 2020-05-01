@@ -227,6 +227,7 @@ return [
         'import' => 'Import',
         'settings' => 'Settings',
         'categories' => 'Categories',
+        'extensions' => 'Extensions',
         'new_category' => 'New category',
         'reset_statistics' => 'Reset statistics',
         'logs' => 'Event log',

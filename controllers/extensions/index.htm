@@ -1,0 +1,279 @@
+<div class="redirect-extensions">
+    <div class="row article">
+        <h1>Redirect Extensions</h1>
+
+        <p>Add more Pro-features by installing our Redirect Extensions. These extensions can be installed from the <a href="https://octobercms.com/plugins?search=vdlp+redirect" target="_blank">October CMS marketplace</a>.</p>
+    </div>
+    <div class="row article">
+        <div class="col-xs-4 col-sm-2 col-md-1">
+            <img src="/plugins/vdlp/redirect/assets/images/extensions/Vdlp.RedirectConditions.svg" width="100%">
+        </div>
+        <div class="col-xs-8 col-sm-10 col-md-11">
+            <h2>Redirect Conditions</h2>
+            <?= $this->makePartial('installed', ['installed' => $extensions['Vdlp.RedirectConditions']]) ?>
+            <p>This plugin allows developers to create their own Redirect Conditions.</p>
+
+            <h3>What is a Redirect Condition?</h3>
+            <p>When a positive match occurs in the redirect engine, all registered redirect conditions will be checked if they pass. If one of the conditions does not pass the redirect will not take place.</p>
+
+            <p>A redirect condition must implement <code>RedirectConditionInterface</code>.</p>
+
+            <p>Each redirect condition must have:</p>
+
+            <ul>
+                <li><code>getCode()</code> - A unique code.</li>
+                <li><code>getDescription()</code> - A short description.</li>
+                <li><code>getExplanation()</code> - A brief explanation on when or how to use it.</li>
+                <li><code>getFormConfig()</code> - A form configuration array.</li>
+                <li><code>passes(RedirectRule $rule, string $requestUri)</code> - Logic whether the condition passes with the given $rule and $requestUri.</li>
+            </ul>
+
+            <div class="product-price-and-add">
+                <div class="price">
+                    Free
+                </div>
+                <a class="btn btn-primary"
+                   id="add-to-project-btn"
+                   href="https://octobercms.com/plugin/vdlp-redirectconditions"
+                   target="_blank">
+                    Add to project
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row article">
+        <div class="col-xs-4 col-sm-2 col-md-1">
+            <img src="/plugins/vdlp/redirect/assets/images/extensions/Vdlp.RedirectConditions.svg" width="100%">
+        </div>
+        <div class="col-xs-8 col-sm-10 col-md-11">
+            <h2>Redirect Conditions: Example</h2>
+            <?= $this->makePartial('installed', ['installed' => $extensions['Vdlp.RedirectConditionsExample']]) ?>
+
+            <p>This is an example extension plugin for the Redirect Conditions plugin. This example plugin shows developers how to develop their own condition extensions.</p>
+
+            <div class="product-price-and-add">
+                <div class="price">
+                    Free
+                </div>
+                <a class="btn github btn-primary"
+                   id="add-to-project-btn"
+                   href="https://github.com/vdlp/oc-redirectconditionsexample-plugin"
+                   target="_blank">
+                    <i class="icon icon-github"></i> View on GitHub
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row article">
+        <div class="col-xs-4 col-sm-2 col-md-1">
+            <img src="/plugins/vdlp/redirect/assets/images/extensions/Vdlp.RedirectConditions.svg" width="100%">
+        </div>
+        <div class="col-xs-8 col-sm-10 col-md-11">
+            <h2>Redirect Conditions: UserAgent</h2>
+            <?= $this->makePartial('installed', ['installed' => $extensions['Vdlp.RedirectConditionsUserAgent']]) ?>
+
+            <p>Adds UserAgent specific conditions to the Redirect plugin.</p>
+
+            <div class="product-price-and-add">
+                <div class="price">
+                    $5
+                </div>
+                <a class="btn btn-primary"
+                   id="add-to-project-btn"
+                   href="https://octobercms.com/plugin/vdlp-redirectconditionsuseragent"
+                   target="_blank">
+                    Add to project
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row article">
+        <div class="col-xs-4 col-sm-2 col-md-1">
+            <img src="/plugins/vdlp/redirect/assets/images/extensions/Vdlp.RedirectConditions.svg" width="100%">
+        </div>
+        <div class="col-xs-8 col-sm-10 col-md-11">
+            <h2>Redirect Conditions: Domain</h2>
+            <?= $this->makePartial('installed', ['installed' => $extensions['Vdlp.RedirectConditionsDomain']]) ?>
+
+            <p>Adds Domain conditions to the Redirect plugin.</p>
+
+            <div class="product-price-and-add">
+                <div class="price">
+                    $5
+                </div>
+                <a class="btn btn-primary"
+                   id="add-to-project-btn"
+                   href="https://octobercms.com/plugin/vdlp-redirectconditionsdomain"
+                   target="_blank">
+                    Add to project
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row article">
+        <div class="col-xs-4 col-sm-2 col-md-1">
+            <img src="/plugins/vdlp/redirect/assets/images/extensions/Vdlp.RedirectConditions.svg" width="100%">
+        </div>
+        <div class="col-xs-8 col-sm-10 col-md-11">
+            <h2>Redirect Conditions: Header</h2>
+            <?= $this->makePartial('installed', ['installed' => $extensions['Vdlp.RedirectConditionsHeader']]) ?>
+
+            <p>Adds Header conditions to the Redirect plugin.</p>
+
+            <div class="product-price-and-add">
+                <div class="price">
+                    $5
+                </div>
+                <a class="btn btn-primary"
+                   id="add-to-project-btn"
+                   href="https://octobercms.com/plugin/vdlp-redirectconditionsheader"
+                   target="_blank">
+                    Add to project
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .redirect-extensions {
+        margin: 0 10px 10px 10px;
+    }
+
+    .redirect-extensions p,
+    .redirect-extensions h1,
+    .redirect-extensions h2,
+    .redirect-extensions li {
+        font-family: Helvetica,"Helvetica Neue",Arial,sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #586667;
+    }
+
+    .redirect-extensions code {
+        color: #1F3F50;
+        background-color: #ECF0F1;
+    }
+
+    .redirect-extensions .article {
+        background-color: white;
+        padding: 16px;
+        margin-bottom: 16px;
+        border: 1px solid #ECF0F1;
+    }
+
+    .redirect-extensions .article h1 {
+        margin-top: 0;
+        font-size: 28px;
+    }
+
+    .redirect-extensions .article h2 {
+        font-size: 22px;
+    }
+
+    .redirect-extensions .article h3 {
+        font-size: 18px;
+    }
+
+    .redirect-extensions .article h1, .article h2 {
+        border-bottom: 1px solid #ECF0F1;
+    }
+
+    .redirect-extensions h1, h2 {
+        font-family: inherit;
+        font-weight: 500;
+        color: #1F3F50;
+        margin-top: 0;
+        margin-bottom: 16px;
+        line-height: 180%;
+    }
+
+    .redirect-extensions .pill {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 2px 10px;
+        color: #FFF;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        -webkit-transition: color 1s,background-color 1s;
+        transition: color 1s,background-color 1s;
+        margin-left: 15px;
+        margin-bottom: 6px;
+    }
+    .redirect-extensions .pill.default {
+        background-color: #586667;
+    }
+
+    .redirect-extensions .pill.success {
+        background-color: #6aab55;
+    }
+
+    .redirect-extensions .product-price-and-add {
+        width: 300px;
+        margin-top: 30px;
+        margin-bottom: 40px;
+        background: #EAF0F1;
+        border-radius: 2px;
+        padding-bottom: 10px;
+    }
+
+    .redirect-extensions .product-price-and-add:before,
+    .redirect-extensions .product-price-and-add:after {
+        content: " ";
+        display: table;
+    }
+
+    .redirect-extensions .product-price-and-add .price {
+        background-color: #eaf0f1;
+        width: 39.5%;
+        float: left;
+        color: #213F50;
+        position: relative;
+    }
+
+    .redirect-extensions .product-price-and-add .btn.github {
+        background: black;
+    }
+
+    .redirect-extensions .product-price-and-add .btn {
+        width: 60.4%;
+        float: right;
+        color: white;
+        background: #0084ba;
+        text-decoration: none;
+        -webkit-box-shadow: none;
+        border-radius: 0 2px 2px 0;
+    }
+
+    .redirect-extensions .product-price-and-add .price,
+    .redirect-extensions .product-price-and-add .btn {
+        padding: 12px;
+        height: 43px;
+        font-size: 16px;
+        line-height: 19px;
+        text-align: center;
+    }
+
+    .redirect-extensions .btn.btn-primary {
+        border-color: #0084BA;
+    }
+
+    .redirect-extensions .btn:last-child {
+        margin-right: 0;
+    }
+
+    .redirect-extensions .product-price-and-add .price:after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid #eaf0f1;
+        position: absolute;
+        right: -10px;
+        top: 11px;
+        z-index: 1;
+    }
+</style>
