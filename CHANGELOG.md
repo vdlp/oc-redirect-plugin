@@ -1,3 +1,7 @@
+# 2.4.1
+
+* Add Redirect Extensions promo page
+
 # 2.4.0
 
 * Skip requests with header "X-Requested-With: XMLHttpRequest"
