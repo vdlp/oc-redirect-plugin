@@ -11,9 +11,9 @@
 	<img src="https://badgen.net/packagist/php/vdlp/oc-redirect-plugin">
 	<img src="https://badgen.net/packagist/license/vdlp/oc-redirect-plugin">
 	<img src="https://badgen.net/packagist/v/vdlp/oc-redirect-plugin/latest">
-	<img src="https://badgen.net/packagist/dt/vdlp/oc-redirect-plugin">
 	<img src="https://badgen.net/badge/cms/October%20CMS">
 	<img src="https://badgen.net/badge/type/plugin">
+	<img src="https://plugins.vdlp.nl/octobercms/badge/installations.php?plugin=vdlp-redirect">
 </p>
 
 > **IMPORTANT**: As of version 2.0 PHP 7.0 support is dropped.

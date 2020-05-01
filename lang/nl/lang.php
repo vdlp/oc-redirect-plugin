@@ -226,6 +226,7 @@ return [
         'export' => 'Uitvoer',
         'import' => 'Invoer',
         'settings' => 'Instellingen',
+        'extensions' => 'Extensies',
         'categories' => 'Categorieën',
         'new_category' => 'Nieuwe category',
         'reset_statistics' => 'Herstel statistieken',
