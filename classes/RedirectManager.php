@@ -556,10 +556,9 @@ final class RedirectManager implements RedirectManagerInterface
             throw Exceptions\RulesPathNotReadable::withPath($rulesPath);
         }
 
-        /** @var Reader $reader */
-        $reader = Reader::createFromPath($rulesPath, 'r');
-
         try {
+            $reader = Reader::createFromPath($rulesPath, 'r');
+
             if (method_exists($reader, 'fetchAssoc')) {
                 // Supports league/csv:8.0+
                 $results = $reader->fetchAssoc(0);
