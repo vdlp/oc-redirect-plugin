@@ -14,6 +14,7 @@ use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
+use Vdlp\Redirect\Models\Settings;
 
 final class RedirectMiddleware
 {
@@ -76,7 +77,11 @@ final class RedirectMiddleware
         }
 
         if ($request->header('X-Vdlp-Redirect') === 'Tester') {
-            $this->redirectManager->setSettings(new RedirectManagerSettings(false, false));
+            $this->redirectManager->setSettings(new RedirectManagerSettings(
+                false,
+                false,
+                Settings::isRelativePathsEnabled()
+            ));
         }
 
         $rule = false;

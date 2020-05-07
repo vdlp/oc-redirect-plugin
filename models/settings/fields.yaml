@@ -32,3 +32,9 @@ fields:
         span: left
         type: switch
         default: false
+    relative_paths_enabled:
+        label: vdlp.redirect::lang.settings.relative_paths_enabled_label
+        comment: vdlp.redirect::lang.settings.relative_paths_enabled_command
+        span: left
+        type: switch
+        default: false
