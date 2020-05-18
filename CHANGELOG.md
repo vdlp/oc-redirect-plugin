@@ -1,3 +1,7 @@
+# 2.5.0
+
+* Add support for using relative paths
+
 # 2.4.1
 
 * Add Redirect Extensions promo page
