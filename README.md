@@ -46,6 +46,7 @@ This plugin adds a 'Redirects' section to the main menu of October CMS. This plu
 * **Schedule** redirects (e.g. active for 2 months)
 * Redirect to **external** URLs
 * Redirect to **internal** CMS pages
+* Redirect to relative or absolute URLs
 * Redirect **log**
 * **Categorize** redirects
 * **Statistics**

@@ -30,6 +30,8 @@ return [
         'caching_enabled_comment' => 'Verbetert het redirect mechanisme als er veel redirects zijn. '
             . 'LET OP: Cache driver `file` en `database` zijn NIET ondersteund. '
             . 'Aanbevolen driver is `memcached` of een vergelijkbare "in-memory" caching driver.',
+        'relative_paths_enabled_label' => 'Relatieve paden gebruiken',
+        'relative_paths_enabled_command' => 'Het redirect mechanisme zal relatieve paden gebruiken i.p.v. absolute paden.',
     ],
     'redirect' => [
         'redirect' => 'Redirect',

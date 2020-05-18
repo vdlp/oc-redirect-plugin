@@ -23,13 +23,19 @@ final class RedirectManagerSettings
     private $statisticsEnabled;
 
     /**
+     * @var bool
+     */
+    private $relativePathsEnabled;
+
+    /**
      * @param bool $loggingEnabled
      * @param bool $statisticsEnabled
      */
-    public function __construct(bool $loggingEnabled, bool $statisticsEnabled)
+    public function __construct(bool $loggingEnabled, bool $statisticsEnabled, bool $relativePathsEnabled)
     {
         $this->loggingEnabled = $loggingEnabled;
         $this->statisticsEnabled = $statisticsEnabled;
+        $this->relativePathsEnabled = $relativePathsEnabled;
     }
 
     /**
@@ -37,7 +43,11 @@ final class RedirectManagerSettings
      */
     public static function createDefault(): RedirectManagerSettings
     {
-        return new self(Settings::isLoggingEnabled(), Settings::isStatisticsEnabled());
+        return new self(
+            Settings::isLoggingEnabled(),
+            Settings::isStatisticsEnabled(),
+            Settings::isRelativePathsEnabled()
+        );
     }
 
     /**
@@ -54,5 +64,13 @@ final class RedirectManagerSettings
     public function isStatisticsEnabled(): bool
     {
         return $this->statisticsEnabled;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRelativePathsEnabled(): bool
+    {
+        return $this->relativePathsEnabled;
     }
 }

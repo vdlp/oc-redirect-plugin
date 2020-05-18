@@ -9,6 +9,7 @@ namespace Vdlp\Redirect\Classes;
 use Carbon\Carbon;
 use Cms\Classes\CmsException;
 use Cms\Classes\Controller;
+use Cms\Classes\Router;
 use Cms\Classes\Theme;
 use Cms\Helpers\Cms;
 use Illuminate\Http\Request;
@@ -175,9 +176,13 @@ final class RedirectManager implements RedirectManagerInterface
 
         $toUrl = $this->getLocation($rule);
 
+        $targetIsEqual = $this->settings->isRelativePathsEnabled()
+            ? $requestUri === $toUrl
+            : (new Cms)->url($requestUri) === $toUrl;
+
         if (!$toUrl
             || empty($toUrl)
-            || (new Cms())->url($requestUri) === $toUrl // Prevent redirect loop
+            || $targetIsEqual // Prevent redirect loop
         ) {
             return;
         }
@@ -216,7 +221,9 @@ final class RedirectManager implements RedirectManagerInterface
                 }
 
                 if (strpos($toUrl, '/') === 0) {
-                    $toUrl = (new Cms())->url($toUrl);
+                    $toUrl = $this->settings->isRelativePathsEnabled()
+                        ? $toUrl
+                        : (new Cms())->url($toUrl);
                 }
 
                 break;
@@ -232,7 +239,9 @@ final class RedirectManager implements RedirectManagerInterface
                 break;
         }
 
-        if ($rule->getToScheme() !== Models\Redirect::SCHEME_AUTO) {
+        if ($rule->getToScheme() !== Models\Redirect::SCHEME_AUTO
+            && (strpos($toUrl, 'http://') === 0 || strpos($toUrl, 'https://') === 0)
+        ) {
             $toUrl = str_replace(['https://', 'http://'], $rule->getToScheme() . '://', $toUrl);
         }
 
@@ -294,8 +303,6 @@ final class RedirectManager implements RedirectManagerInterface
      */
     private function redirectToCmsPage(RedirectRule $rule): string
     {
-        $controller = new Controller(Theme::getActiveTheme());
-
         $parameters = [];
 
         // Strip curly braces from keys
@@ -303,20 +310,43 @@ final class RedirectManager implements RedirectManagerInterface
             $parameters[str_replace(['{', '}'], '', (string) $placeholder)] = $value;
         }
 
-        return (string) $controller->pageUrl($rule->getCmsPage(), $parameters);
+        if ($this->settings->isRelativePathsEnabled()) {
+            $router = new Router(Theme::getActiveTheme());
+
+            return $router->findByFile(
+                $rule->getCmsPage(),
+                array_merge($router->getParameters(), $parameters)
+            );
+        }
+
+        return (string) (new Controller(Theme::getActiveTheme()))
+            ->pageUrl($rule->getCmsPage(), $parameters);
     }
 
     /**
      * @throws RuntimeException
+     * @noinspection ClassConstantCanBeUsedInspection
+     * @noinspection PhpFullyQualifiedNameUsageInspection
      */
     private function redirectToStaticPage(RedirectRule $rule): string
     {
-        /** @noinspection ClassConstantCanBeUsedInspection */
-        if (class_exists('\RainLab\Pages\Classes\Page')) {
-            return \RainLab\Pages\Classes\Page::url($rule->getStaticPage());
+        if (!class_exists('\RainLab\Pages\Classes\Page')) {
+            throw new RuntimeException('Cannot create URL to RainLab Page: Plugin not installed.');
         }
 
-        throw new RuntimeException('Cannot create URL to RainLab Page.');
+        /** @var \RainLab\Pages\Classes\Page $page */
+        $page = \RainLab\Pages\Classes\Page::loadCached(
+            Theme::getActiveTheme(),
+            $rule->getStaticPage()
+        );
+
+        if ($page === null) {
+            throw new RuntimeException('Cannot create URL to RainLab Page: Page not found.');
+        }
+
+        return $this->settings->isRelativePathsEnabled()
+            ? (string) array_get($page->attributes, 'viewBag.url')
+            : (string) \RainLab\Pages\Classes\Page::url($rule->getStaticPage());
     }
 
     /**
@@ -526,10 +556,9 @@ final class RedirectManager implements RedirectManagerInterface
             throw Exceptions\RulesPathNotReadable::withPath($rulesPath);
         }
 
-        /** @var Reader $reader */
-        $reader = Reader::createFromPath($rulesPath, 'r');
-
         try {
+            $reader = Reader::createFromPath($rulesPath, 'r');
+
             if (method_exists($reader, 'fetchAssoc')) {
                 // Supports league/csv:8.0+
                 $results = $reader->fetchAssoc(0);

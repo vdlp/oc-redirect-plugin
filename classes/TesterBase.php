@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\TesterInterface;
+use Vdlp\Redirect\Models\Settings;
 
 abstract class TesterBase implements TesterInterface
 {
@@ -108,6 +109,10 @@ abstract class TesterBase implements TesterInterface
     {
         /** @var RedirectManagerInterface $manager */
         $manager = resolve(RedirectManagerInterface::class);
-        return $manager->setSettings(new RedirectManagerSettings(false, false));
+        return $manager->setSettings(new RedirectManagerSettings(
+            false,
+            false,
+            Settings::isRelativePathsEnabled()
+        ));
     }
 }
