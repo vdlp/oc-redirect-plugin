@@ -30,6 +30,8 @@ return [
         'caching_enabled_comment' => 'Improves the redirect engine when having a lot of redirects. '
             . 'CAUTION: Cache driver `file` and `database` are NOT supported. '
             . 'Recommended driver is `memcached` or a similar "in-memory" caching driver.',
+        'relative_paths_enabled_label' => 'Use relative paths',
+        'relative_paths_enabled_command' => 'The redirect engine will generate relative paths instead of absolute paths.',
     ],
     'redirect' => [
         'redirect' => 'Redirect',
