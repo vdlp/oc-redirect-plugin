@@ -71,3 +71,5 @@
     - "Add Redirect Extensions promo page -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.4.1"
 2.5.0:
     - "Add support for using relative paths -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.0"
+2.5.1:
+    - "Fixes issues with redirect rules file not being present -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.1"
