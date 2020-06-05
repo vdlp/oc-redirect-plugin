@@ -80,7 +80,7 @@ final class PublishManager implements PublishManagerInterface
 
     private function publishToFilesystem(array $columns, array $redirects): void
     {
-        $redirectsFile = storage_path('app/redirects.csv');
+        $redirectsFile = config('vdlp.redirect::rules_path');
 
         if (file_exists($redirectsFile)) {
             unlink($redirectsFile);
@@ -98,6 +98,7 @@ final class PublishManager implements PublishManagerInterface
                 $writer->insertOne($row);
             }
         } catch (Throwable $e) {
+            touch($redirectsFile);
             $this->log->error($e);
         }
     }
