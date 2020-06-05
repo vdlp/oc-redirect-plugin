@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
 
-use ApplicationException;
-use Backend;
 use Backend\Behaviors;
 use Backend\Classes\Controller;
 use Backend\Classes\FormField;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Backend\Widgets\Form;
-use BackendMenu;
 use Carbon\Carbon;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Translation\Translator;
@@ -19,12 +18,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use October\Rain\Database\Model;
+use October\Rain\Exception\ApplicationException;
+use October\Rain\Exception\SystemException;
 use October\Rain\Flash\FlashBag;
 use System\Models\RequestLog;
-use SystemException;
 use Throwable;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
+use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
+use Vdlp\Redirect\Classes\Exceptions\UnableToLoadRules;
 use Vdlp\Redirect\Classes\RedirectManager;
 use Vdlp\Redirect\Classes\RedirectRule;
 use Vdlp\Redirect\Classes\StatisticsHelper;
@@ -426,7 +428,7 @@ final class Redirects extends Controller
             $testDate = Carbon::createFromFormat('Y-m-d', $this->request->get('test_date', date('Y-m-d')));
             $manager->setMatchDate($testDate);
             $match = $manager->match($inputPath, $this->request->get('test_scheme', $this->request->getScheme()));
-        } catch (NoMatchForRequest $e) {
+        } catch (NoMatchForRequest | InvalidScheme | UnableToLoadRules $e) {
             $match = false;
         } catch (Throwable $e) {
             throw new ApplicationException($e->getMessage());
@@ -435,7 +437,7 @@ final class Redirects extends Controller
         return [
             '#testResult' => $this->makePartial('redirect_test_result', [
                 'match' => $match,
-                'url' => $match ? $manager->getLocation($match) : '',
+                'url' => $match && isset($manager) ? $manager->getLocation($match) : '',
             ]),
         ];
     }

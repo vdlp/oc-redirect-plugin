@@ -150,7 +150,7 @@ final class RedirectManager implements RedirectManagerInterface
 
         try {
             $matchedRule = $this->match($requestPath, $scheme);
-        } catch (Exceptions\NoMatchForRequest | Exceptions\InvalidScheme $e) {
+        } catch (Exceptions\NoMatchForRequest | Exceptions\InvalidScheme | Exceptions\UnableToLoadRules $e) {
             $matchedRule = null;
         }
 
@@ -564,7 +564,10 @@ final class RedirectManager implements RedirectManagerInterface
                 $results = $reader->fetchAssoc(0);
             } else {
                 // Supports league/csv:9.0+
+                /** @noinspection PhpUndefinedMethodInspection */
                 $reader->setHeaderOffset(0);
+
+                /** @noinspection PhpUndefinedMethodInspection */
                 $results = $reader->getRecords();
             }
         } catch (Throwable $e) {

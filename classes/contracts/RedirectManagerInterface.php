@@ -6,6 +6,7 @@ namespace Vdlp\Redirect\Classes\Contracts;
 
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
+use Vdlp\Redirect\Classes\Exceptions\UnableToLoadRules;
 use Vdlp\Redirect\Classes\RedirectManagerSettings;
 use Vdlp\Redirect\Classes\RedirectRule;
 
@@ -27,6 +28,7 @@ interface RedirectManagerInterface
      * @return RedirectRule
      * @throws InvalidScheme
      * @throws NoMatchForRequest
+     * @throws UnableToLoadRules
      */
     public function match(string $requestPath, string $scheme): RedirectRule;
 
