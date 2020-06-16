@@ -201,7 +201,7 @@ final class StatisticsHelper
 
         $now = Carbon::now();
 
-        RedirectObserver::startHandleChanges();
+        RedirectObserver::stopHandleChanges();
 
         /** @noinspection PhpUndefinedClassInspection */
         $redirect->forceFill([
@@ -209,10 +209,9 @@ final class StatisticsHelper
             'last_used_at' => $now,
         ]);
 
-
         $redirect->forceSave();
 
-        RedirectObserver::stopHandleChanges();
+        RedirectObserver::startHandleChanges();
 
         $crawlerDetect = new CrawlerDetect();
 

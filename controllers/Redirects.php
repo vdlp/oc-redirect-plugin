@@ -27,6 +27,7 @@ use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
 use Vdlp\Redirect\Classes\Exceptions\UnableToLoadRules;
+use Vdlp\Redirect\Classes\Observers\RedirectObserver;
 use Vdlp\Redirect\Classes\RedirectManager;
 use Vdlp\Redirect\Classes\RedirectRule;
 use Vdlp\Redirect\Classes\StatisticsHelper;
@@ -281,6 +282,8 @@ final class Redirects extends Controller
     public function index_onResetAllStatistics(): array
     {
         $redirectIds = $this->getAllRedirectIds();
+
+        RedirectObserver::stopHandleChanges();
 
         Models\Redirect::query()->update(['hits' => 0]);
         Models\Client::query()->delete();
