@@ -1,3 +1,7 @@
+# 2.5.2
+
+* Fix bug that causes re-writing the redirect rules file when hits are updated
+
 # 2.5.1
 
 * Fixes issues with redirect rules file not being present
