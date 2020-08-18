@@ -1,3 +1,9 @@
+# 2.5.3
+
+* Improve / fixes redirect rule caching (thanks to Eric Pfeiffer)
+* Update Spanish language (thanks to Juan David M)
+* Update Language files (help wanted!)
+
 # 2.5.2
 
 * Fix bug that causes re-writing the redirect rules file when hits are updated
