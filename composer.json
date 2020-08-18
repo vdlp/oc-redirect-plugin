@@ -24,7 +24,6 @@
     "archive": {
         "exclude": [
             ".gitignore",
-            ".gitlab-ci.yml",
             ".idea/"
         ]
     }

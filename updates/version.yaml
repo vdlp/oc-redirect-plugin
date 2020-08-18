@@ -75,3 +75,5 @@
     - "Fixes issues with redirect rules file not being present -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.1"
 2.5.2:
     - "Fix bug that causes re-writing the redirect rules file when hits are updated -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.2"
+2.5.3:
+    - "Improve / fixes redirect rule caching -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.3"

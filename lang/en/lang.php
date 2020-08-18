@@ -199,7 +199,7 @@ return [
         'no_data' => 'No data yet',
         'top_crawlers_this_month' => 'Top :top crawlers this month',
         'top_redirects_this_month' => 'Top :top redirects this month',
-        'activity_last_three_months' => 'Activity last 3 months'
+        'activity_last_three_months' => 'Activity last 3 months',
     ],
     'title' => [
         'import' => 'Import',

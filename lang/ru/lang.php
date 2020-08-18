@@ -30,9 +30,8 @@ return [
         'caching_enabled_comment' => 'Улучшает механизм перенаправления при большом количестве перенаправлений. '
             . 'ВНИМАНИЕ: Драйвер кэша `file` и `database` НЕ поддерживаются. '
             . 'Рекомендуемым драйвером является `memcached` или аналогичный драйвер "in-memory" для кеширования в памяти.',
-        'auto_redirect_creation_enabled_label' => 'Автоматическое создание перенаправления',
-        'auto_redirect_creation_enabled_comment' => 'Автоматически создавать перенаправления когда slug для '
-            . 'Page или Static Page был изменён.',
+        'relative_paths_enabled_label' => 'Use relative paths', // TODO
+        'relative_paths_enabled_command' => 'The redirect engine will generate relative paths instead of absolute paths.', // TODO
     ],
     'redirect' => [
         'redirect' => 'Редиректы',
@@ -40,14 +39,14 @@ return [
         'from_url_placeholder' => '/source/path',
         'from_url_comment' => 'Исходный путь относительно корня сайта.',
         'from_scheme' => 'Source scheme', // TODO
-        'from_scheme_comment' => 'Force match on scheme. If HTTP is selected <u>http://domain.com/path</u> will '
+        'from_scheme_comment' => 'Force match on scheme. If HTTP is selected <u>http://domain.com/path</u> will ' // TODO
             . 'match and <u>https://domain.com/path</u> does not match.', // TODO
         'to_url' => 'Путь редиректа или URL',
         'to_url_placeholder' => '/absolute/path, relative/path или http://target.url',
         'to_url_comment' => 'Абсолютный путь, относительный путь или URL для перенаправления.',
         'to_url_required_if' => 'Исходный путь или URL обязателен для заполнения',
         'to_scheme' => 'Target scheme', // TODO
-        'to_scheme_comment' => 'Target scheme will be forced to HTTP or HTTPS '
+        'to_scheme_comment' => 'Target scheme will be forced to HTTP or HTTPS ' // TODO
             . 'or choose AUTOMATIC to use the default scheme of the website.', // TODO
         'scheme_auto' => 'Automatic', // TODO
         'cms_page_required_if' => 'Пожалуйста, выберите страницу CMS для перенаправления',
@@ -73,7 +72,6 @@ return [
         'requirements_prompt' => 'Добавить новый параметр',
         'replacement' => 'Замена',
         'replacement_comment' => 'Пропишите (опционально) замену для текущей метки. В целевом URL метка будет заменена на это значение.',
-
         'permanent' => '301 - перемещено навсегда',
         'temporary' => '302 - перемещено временно',
         'see_other' => '303 - смотреть другое',
@@ -92,7 +90,6 @@ return [
         'system_tip' => 'Системный редирект',
         'user_tip' => 'Пользовательский редирект',
         'type' => 'Тип',
-        'last_used_at' => 'Последнее применение',
         'and_delete_log_item' => 'И удалить выбранные элементы лога',
         'category' => 'Категория',
         'categories' => 'Категории',
@@ -111,6 +108,10 @@ return [
         'minimum_hits' => 'Минимум # хитов',
         'ignore_query_parameters' => 'Игнорировать параметры запроса (рекомендуется).',
         'ignore_query_parameters_comment' => 'Движок будет игнорировать все параметры запроса из исходного пути.',
+        'ignore_case' => 'Ignore case', // TODO
+        'ignore_case_comment' => 'The redirect engine will do case-insensitive matching.', // TODO
+        'ignore_trailing_slash' => 'Ignore trailing slash', // TODO
+        'ignore_trailing_slash_comment' => 'The redirect engine will ignore trailing slashes.', // TODO
         'last_used_at' => 'Последний хит',
         'updated_at' => 'Обновлено',
         'invalid_regex' => 'Неправильное регулярное выражение.',
@@ -226,6 +227,7 @@ return [
         'import' => 'Импорт',
         'settings' => 'Настройки',
         'categories' => 'Категории',
+        'extensions' => 'Extensions', // TODO
         'new_category' => 'Новая категория',
         'reset_statistics' => 'Сбросить статистику',
         'logs' => 'Лог редиректов',
@@ -243,6 +245,7 @@ return [
         'tab_scheduling' => 'Расписание',
         'tab_test_lab' => 'TestLab',
         'tab_advanced' => 'Продвинутый',
+        'tab_logs' => 'Event log', // TODO
     ],
     'flash' => [
         'success_created_redirects' => 'Успешно создано :count редирект(ов)',
@@ -255,7 +258,7 @@ return [
         'disabled_all_redirects_success' => 'Все перенаправления были успешно выключены',
         'deleted_all_redirects_success' => 'Все перенаправления были успешно удалены',
     ],
-    'import_export' => [ // TODO
+    'import_export' => [
         'match_type' => 'Match Type [match_type] (Допустимые значения: exact, placeholders, regex)',
         'category_id' => 'Категория [category_id]',
         'target_type' => 'Target Type [target_type] (Допустимые значения: path_or_url, cms_page, static_page, none)',
@@ -274,6 +277,8 @@ return [
         'sort_order' => 'Приоритет [sort_order]',
         'is_enabled' => 'Включен [is_enabled] (1 = редирект включен, 0 = редирект отключен [default])',
         'ignore_query_parameters' => 'Ignore Query Parameters [ignore_query_parameters] (1 = ignore query parameters, 0 = include query parameters [default])',
+        'ignore_case' => 'Ignore Case [ignore_case] (1 = yes, 0 = no [default])', // TODO
+        'ignore_trailing_slash' => 'Ignore Trailing Slashes [ignore_trailing_slash] (1 = yes, 0 = no [default])', // TODO
         'test_lab' => 'TestLab [test_lab] (1 = TestLab включен, 0 = TestLab выключен [default])',
         'test_lab_path' => 'TestLab path [test_lab_path] (требуется, если match_type = placeholders)',
         'system' => 'System [system] (1 = система сгенерировала редирект, 0 = пользователь создал редирект [default])',

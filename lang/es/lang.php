@@ -18,25 +18,27 @@ return [
         'menu_description' => 'Administra las redirecciones',
     ],
     'settings' => [
-        'menu_label' => 'Redirects', // TODO
-        'menu_description' => 'Manage settings for Redirects.', // TODO
-        'logging_enabled_label' => 'Log redirect events', // TODO
-        'logging_enabled_comment' => 'Store redirect events in the database.', // TODO
-        'statistics_enabled_label' => 'Gather statistics', // TODO
-        'statistics_enabled_comment' => 'Gather statistics of redirected requests to get more insight.', // TODO
-        'test_lab_enabled_label' => 'TestLab (beta)', // TODO
-        'test_lab_enabled_comment' => 'TestLab allows you to mass test your redirects.', // TODO
-        'caching_enabled_label' => 'Caching of redirects (advanced)', // TODO
-        'caching_enabled_comment' => 'Improves the redirect engine when having a lot of redirects. ' // TODO
-            . 'CAUTION: Cache driver `file` and `database` are NOT supported. '
-            . 'Recommended driver is `memcached` or a similar "in-memory" caching driver.',
+        'menu_label' => 'Redirección',
+        'menu_description' => 'Administrar la configuración de las redirecciones.',
+        'logging_enabled_label' => 'Eventos de redireccionamiento',
+        'logging_enabled_comment' => 'Almacena los eventos de redireccionamiento en la base de datos.',
+        'statistics_enabled_label' => 'Recopilar estadísticas',
+        'statistics_enabled_comment' => 'Reúne las estadísticas de las solicitudes redirigidas para obtener más información.',
+        'test_lab_enabled_label' => 'Laboratorio de pruebas(beta)',
+        'test_lab_enabled_comment' => 'El laboratorio de pruebas le permite probar en masa sus redirecciones.',
+        'caching_enabled_label' => 'Caching de redirecciones (avanzado)',
+        'caching_enabled_comment' => 'Mejora el motor de redireccionamiento cuando se tienen muchas redirecciones. '
+            . 'CAUTION: Cache driver `file` and `database` are NOT supported. ' // TODO
+            . 'Recommended driver is `memcached` or a similar "in-memory" caching driver.', // TODO
+        'relative_paths_enabled_label' => 'Use relative paths', // TODO
+        'relative_paths_enabled_command' => 'The redirect engine will generate relative paths instead of absolute paths.', // TODO
     ],
     'redirect' => [
         'redirect' => 'Redirección',
         'from_url' => 'Ruta de origen',
         'from_url_placeholder' => '/tu/ruta',
         'from_url_comment' => 'Ruta de origen a coincidir.',
-        'from_scheme' => 'Source scheme', // TODO
+        'from_scheme' => 'Esquema fuente',
         'from_scheme_comment' => 'Force match on scheme. If HTTP is selected <u>http://domain.com/path</u> will '
             . 'match and <u>https://domain.com/path</u> does not match.', // TODO
         'to_url' => 'Ruta destino o URL',
@@ -46,16 +48,16 @@ return [
         'to_scheme' => 'Target scheme', // TODO
         'to_scheme_comment' => 'Target scheme will be forced to HTTP or HTTPS '
             . 'or choose AUTOMATIC to use the default scheme of the website.', // TODO
-        'scheme_auto' => 'Automatic', // TODO
+        'scheme_auto' => 'Automático',
         'input_path_placeholder' => '/input/path',
         'cms_page_required_if' => 'Por favor ingresa una página del CMS a la cual redirigir',
         'static_page_required_if' => 'Por favor ingresa una página estática a la cual deseas redirigir',
         'match_type' => 'Coincidir Tipo',
         'exact' => 'Exacto',
-        'regex' => 'Regular expression', // TODO
+        'regex' => 'Expresión regular',
         'placeholders' => 'Marcadores',
         'target_type' => 'Tipo de destino',
-        'target_type_none' => 'Not applicable', // TODO
+        'target_type_none' => 'No se aplica.',
         'target_type_path_or_url' => 'Ruta o URL',
         'target_type_cms_page' => 'Página CMS',
         'target_type_static_page' => 'Página estática',
@@ -78,7 +80,7 @@ return [
         'not_found' => '404 - No encontrado',
         'gone' => '410 - Ya no existe',
         'enabled' => 'Activado',
-        'none' => 'none', // TODO
+        'none' => 'ninguno',
         'enabled_comment' => 'Activa este switch para activar esta redirección.',
         'priority' => 'Prioridad',
         'hits' => 'Visitas',
@@ -94,20 +96,28 @@ return [
         'and_delete_log_item' => 'y borra los elementos seleccionados', // since 2.0.3,
         'category' => 'Categoría',
         'categories' => 'Categorías',
-        'description' => 'Description', // TODO
+        'description' => 'Descripción',
         'name' => 'Nombre',
         'date_time' => 'Fecha y Hora',
         'date' => 'Fecha',
         'truncate_confirm' => '¿Estás seguro que deseas borrar todos los registros?',
         'truncating' => 'Borrando...',
-        'warning' => 'Warning', // TODO
+        'warning' => 'Advertencia',
         'cache_warning' => 'You have enabled caching but your caching driver is not supported. ' // TODO
             . 'Redirects will not be cached.',
-        'general_confirm' => 'Are you sure you want to do this?', // TODO
-        'sparkline_30d' => 'Hits (30d)', // TODO
-        'has_hits' => 'Has hits', // TODO
-        'minimum_hits' => 'Minimum # hits', // TODO
-        'invalid_regex' => 'Invalid regular expression.', // TODO
+        'general_confirm' => '¿Estás seguro de que quieres hacer esto?',
+        'sparkline_30d' => 'visitas (30d)',
+        'has_hits' => 'Tiene visitas',
+        'minimum_hits' => 'Mínimo # visitas',
+        'ignore_query_parameters' => 'Ignore query parameters', // TODO
+        'ignore_query_parameters_comment' => 'The redirect engine will ignore all query parameters.', // TODO
+        'ignore_case' => 'Ignore case', // TODO
+        'ignore_case_comment' => 'The redirect engine will do case-insensitive matching.', // TODO
+        'ignore_trailing_slash' => 'Ignore trailing slash', // TODO
+        'ignore_trailing_slash_comment' => 'The redirect engine will ignore trailing slashes.', // TODO
+        'last_used_at' => 'Last hit',  // TODO
+        'updated_at' => 'Updated at',  // TODO
+        'invalid_regex' => 'Expresión regular inválida.',
     ],
     'list' => [
         'no_records' => 'No hay redirecciones en esta vista.',
@@ -121,14 +131,14 @@ return [
         'to_date_comment' => 'La fecha limite de esta redirección, puede ser omitida.',
         'scheduling_comment' => 'Aquí puedes establecer el periodo que durara la redirección. '
             . 'Todo tipo de combinaciones de fechas es posible.',
-        'not_active_warning' => 'Redirect is not available anymore, please check \'Scheduling\' tab.', // TODO
+        'not_active_warning' => 'La redirección ya no está disponible, por favor, compruebe la pestaña \'Scheduling\' .',
     ],
     'test' => [
         'test_comment' => 'Por favor prueba tu redirección antes de guardar la ruta.',
         'input_path' => 'Ruta de entrada',
         'input_path_comment' => 'Ruta de entrada a probar Ej. /old-blog/category/123',
         'input_path_placeholder' => '/ruta/de/entrada',
-        'input_scheme' => 'Input scheme', // TODO
+        'input_scheme' => 'Esquema de entrada',
         'test_date' => 'Fecha de prueba',
         'test_date_comment' => 'Si tu calendarizas esta redirección, tu puedes probar esta redirección en una fecha concreta.',
         'testing' => 'Probando...',
@@ -138,59 +148,60 @@ return [
         'match_success_label' => 'Se encontró una coincidencia!',
     ],
     'test_lab' => [
-        'section_test_lab_comment' => 'TestLab allows you to mass test your redirects.', // TODO
-        'test_lab_label' => 'Include in TestLab', // TODO
-        'test_lab_enable' => 'Flick this switch to allow testing this redirect in the TestLab.', // TODO
-        'test_lab_path_label' => 'Test Path', // TODO
-        'test_lab_path_comment' => 'This path will be used when performing tests. '
-            . 'Replace placeholders with real values.', // TODO
-        'start_tests' => 'Start Tests', // TODO
-        'start_tests_description' => 'Press the \'Start tests\' button to begin.', // TODO
-        'edit' => 'Edit', // TODO
-        'exclude' => 'Exclude', // TODO
-        'exclude_confirm' => 'Are you sure want to exclude this redirect from TestLab?', // TODO
-        'exclude_indicator' => 'Excluding redirect from TestLab', // TODO
-        're_run' => 'Re-run', // TODO
-        're_run_indicator' => 'Running tests, please wait...', // TODO
-        'loop' => 'Loop', // TODO
-        'match' => 'Match', // TODO
-        'response_http_code' => 'Response HTTP code', // TODO
-        'response_http_code_should_be' => 'Response HTTP code should be one of:', // TODO
-        'redirect_count' => 'Redirect count', // TODO
-        'final_destination' => 'Final Destination', // TODO
-        'no_redirects' => 'No redirects have been marked with TestLab enabled. '
-            . 'Please enable the option \'Include in TestLab\' when editing a redirect.', // TODO
-        'test_error' => 'An error occurred when testing this redirect.', // TODO
-        'flash_test_executed' => 'Test has been executed.', // TODO
-        'flash_redirect_excluded' => 'Redirect has been excluded from TestLab and will not show up on next test run.', // TODO
-        'result_request_failed' => 'Could not execute request.', // TODO
-        'redirects_followed' => 'Number of redirects followed: :count (limited to :limit)', // TODO
-        'not_determinate_destination_url' => 'Could not determine final destination URL.', // TODO
-        'no_destination_url' => 'No final destination URL.', // TODO
-        'final_destination_is' => 'Final destination is: :destination', // TODO
-        'possible_loop' => 'Possible redirect loop!', // TODO
-        'no_loop' => 'No redirect loop detected.', // TODO
-        'not_match_redirect' => 'Did not match any redirect.', // TODO
-        'matched' => 'Matched', // TODO
-        'redirect' => 'redirect', // TODO
-        'matched_not_http_code' => 'Matched redirect, but response HTTP code did not match! '
-            . 'Expected :expected but received :received.', // TODO
-        'matched_http_code' => 'Matched redirect, response HTTP code :code.', // TODO
-        'executing_tests' => 'Executing tests...', // TODO
+        'section_test_lab_comment' => 'El laboratorio de pruebas le permite probar en masa sus redirecciones.',
+        'test_lab_label' => 'Incluir en el laboratorio de pruebas',
+        'test_lab_enable' => 'Pulse este interruptor para permitir probar esta redirección en el laboratorio de pruebas.',
+        'test_lab_path_label' => 'Ruta de prueba',
+        'test_lab_path_comment' => 'Esta ruta se usará cuando se realicen pruebas. '
+            . 'Reemplazar los marcadores de posición por valores reales.',
+        'start_tests' => 'Iniciar las pruebas',
+        'start_tests_description' => 'Presione el botón \'Start tests\' para comenzar.',
+        'edit' => 'Editar',
+        'exclude' => 'Excluir',
+        'exclude_confirm' => '¿Está seguro de que quiere excluir esta redirección del laboratorio de pruebas?',
+        'exclude_indicator' => 'Excluyendo la redirección desde el laboratorio de pruebas',
+        're_run' => 'Reejecutar',
+        're_run_indicator' => 'Haciendo pruebas, por favor espere...',
+        'loop' => 'Bucle',
+        'match' => 'Coincidencia',
+        'response_http_code' => 'Respuesta Código HTTP',
+        'response_http_code_should_be' => 'El código HTTP de respuesta debería ser uno de:',
+        'redirect_count' => 'Redirigir el conteo',
+        'final_destination' => 'Destino final',
+        'no_redirects' => 'No se han marcado redirecciones con el laboratorio de pruebas habilitado. '
+            . 'Por favor, habilite la opción \'Include in TestLab\' cuando edite una redirección.',
+        'test_error' => 'Se produjo un error al probar esta redirección.',
+        'flash_test_executed' => 'La prueba ha sido ejecutada.',
+        'flash_redirect_excluded' => 'La redirección ha sido excluida del laboratorio de pruebas y no aparecerá en la próxima prueba.',
+        'result_request_failed' => 'No pudo ejecutar la solicitud.',
+        'redirects_followed' => 'Número de redirecciones seguidas :count (limited to :limit)',
+        'not_determinate_destination_url' => 'No se pudo determinar el URL de destino final.',
+        'no_destination_url' => 'No hay un URL de destino final.',
+        'final_destination_is' => 'El destino final es: :destination',
+        'possible_loop' => '¡Posible bucle de redireccionamiento!',
+        'no_loop' => 'No se detecta ningún bucle de redireccionamiento.',
+        'not_match_redirect' => 'No coincide con ninguna redirección.',
+        'matched' => 'Coincide',
+        'redirect' => 'redirigir',
+        'matched_not_http_code' => '¡Una redirección coincidente, pero el código HTTP de respuesta no coincide! '
+            . 'Esperado :esperado pero recibido :recibido.',
+        'matched_http_code' => 'Redirección coincidente, respuesta código HTTP: código.',
+        'executing_tests' => 'Ejecutando pruebas...',
     ],
     'statistics' => [
-        'hits_per_day' => 'Redirect hits per day', // TODO
-        'click_on_chart' => 'Click on the chart to enable zooming and dragging.', // TODO
-        'requests_redirected' => 'Requests redirected', // TODO
-        'all_time' => 'all time', // TODO
-        'active_redirects' => 'Active redirects', // TODO
-        'redirects_this_month' => 'Redirects this month', // TODO
-        'previous_month' => 'previous month', // TODO
-        'latest_redirected_requests' => 'Latest redirected request', // TODO
-        'redirects_per_month' => 'Redirects per month', // TODO
-        'no_data' => 'No data', // TODO
-        'top_crawlers_this_month' => 'Top :top crawlers this month', // TODO
-        'top_redirects_this_month' => 'Top :top redirects this month', // TODO
+        'hits_per_day' => 'Redireccionar las visitas por día',
+        'click_on_chart' => 'Haga clic en el gráfico para activar el zoom y el desplazamiento.',
+        'requests_redirected' => 'Solicitudes redirigidas',
+        'all_time' => 'todo el tiempo',
+        'active_redirects' => 'Activa las redirecciones',
+        'redirects_this_month' => 'Las redirecciones de este mes',
+        'previous_month' => 'el mes anterior',
+        'latest_redirected_requests' => 'Última solicitud redirigida',
+        'redirects_per_month' => 'Redirecciones por mes',
+        'no_data' => 'No hay datos',
+        'top_crawlers_this_month' => 'Arriba: los principales rastreadores de este mes',
+        'top_redirects_this_month' => 'principales :Principales redirecciones este mes',
+        'activity_last_three_months' => 'Activity last 3 months', // TODO
     ],
     'title' => [
         'import' => 'Importar',
@@ -203,43 +214,53 @@ return [
         'edit_category' => 'Modificar una categoría',
         'view_redirect_log' => 'Ver log de redirecciones',
         'statistics' => 'Estadísticas',
-        'test_lab' => 'TestLab (beta)', // TODO
+        'test_lab' => 'Laboratorio de pruebas (beta)',
     ],
     'buttons' => [
         'add' => 'Agregar', // since 2.0.3
         'from_request_log' => 'Del log de peticiones', // since 2.0.3
         'new_redirect' => 'Nueva redirección', // changed since 2.0.3
         'create_redirects' => 'Crear redirecciones', // since 2.0.3
-        'create_redirect' => 'Create redirect', // TODO
-        'create_and_new' => 'Create and new', // TODO
+        'create_redirect' => 'Crear redirección',
+        'create_and_new' => 'Crear y nuevo',
         'delete' => 'Borrar',
         'enable' => 'Activar',
         'disable' => 'Desactivar',
         'reorder_redirects' => 'Reordenar',
         'export' => 'Exportar',
         'import' => 'Importar',
+        'settings' => 'Settings', // TODO
         'categories' => 'Categorías',
+        'extensions' => 'Extensions', // TODO
         'new_category' => 'Nueva categoría',
         'reset_statistics' => 'Limpiar estadísticas',
         'logs' => 'Log de redirecciones',
         'empty_redirect_log' => 'Vaciar log de redirecciones',
-        'clear_cache' => 'Clear cache', // TODO
-        'stop' => 'Stop', // TODO
+        'clear_cache' => 'Limpiar la memoria caché',
+        'stop' => 'Detener',
+        'reset_all' => 'Reset statistics for all redirects', // TODO
+        'all_redirects' => 'all redirects', // TODO
+        'bulk_actions' => 'Bulk actions', // TODO
     ],
     'tab' => [
-        'tab_general' => 'General',
+        'tab_general' => 'General', // TODO
         'tab_requirements' => 'Requerimientos',
         'tab_test' => 'Probar',
         'tab_scheduling' => 'Calendarizar',
-        'tab_test_lab' => 'TestLab', // TODO
-        'tab_advanced' => 'Advanced', // TODO
+        'tab_test_lab' => 'Laboratorio de pruebas',
+        'tab_advanced' => 'Avanzado',
+        'tab_logs' => 'Event log', // TODO
     ],
     'flash' => [
         'success_created_redirects' => 'Se crearon con éxito :count redirecciones', // since 2.0.3
         'static_page_redirect_not_supported' => 'Esta redirección no puede ser modificada. El Plugin RainLab.Pages es requerido.',
         'truncate_success' => 'Todos los registros han sido borrados con éxito',
         'delete_selected_success' => 'Los registros seleccionados fueron borrados con éxito',
-        'cache_cleared_success' => 'Successfully cleared redirect cache', // TODO
+        'cache_cleared_success' => 'Se ha limpiado con éxito el caché de redireccionamiento',
+        'statistics_reset_success' => 'All statistics have been successfully reset', // TODO
+        'enabled_all_redirects_success' => 'All redirects have been successfully enabled', // TODO
+        'disabled_all_redirects_success' => 'All redirects have been successfully disabled', // TODO
+        'deleted_all_redirects_success' => 'All redirects have been successfully deleted', // TODO
     ],
     'import_export' => [
         'match_type' => 'Match Type [match_type] (Allowed values: exact, placeholders, regex)',
@@ -259,6 +280,9 @@ return [
         'to_date' => 'Scheduled date to [to_date] (YYYY-MM-DD or empty)',
         'sort_order' => 'Priority [sort_order]',
         'is_enabled' => 'Enabled [is_enabled] (1 = enable redirect, 0 = disable redirect [default])',
+        'ignore_query_parameters' => 'Ignore Query Parameters [ignore_query_parameters] (1 = yes, 0 = no [default])',
+        'ignore_case' => 'Ignore Case [ignore_case] (1 = yes, 0 = no [default])',
+        'ignore_trailing_slash' => 'Ignore Trailing Slashes [ignore_trailing_slash] (1 = yes, 0 = no [default])',
         'test_lab' => 'Test Lab [test_lab] (1 = enable Test Lab, 0 = disable TestLab [default])',
         'test_lab_path' => 'Test Lab path [test_lab_path] (required if match_type = placeholders)',
         'system' => 'System [system] (1 = system generated redirect, 0 = user generated redirect [default])',
