@@ -4,14 +4,16 @@
         <?= e(trans('vdlp.redirect::lang.buttons.new_redirect')); ?>
     </a>
 
-    <a href="#"
-       class="btn btn-default oc-icon-plus"
-       data-control="popup"
-       data-size="giant"
-       data-handler="onOpenRequestLog"
-       data-stripe-load-indicator>
-        <?= e(trans('vdlp.redirect::lang.buttons.from_request_log')); ?>
-    </a>
+    <?php if ((int) \System\Models\LogSetting::get('log_requests') === 1): ?>
+        <a href="#"
+           class="btn btn-default oc-icon-plus"
+           data-control="popup"
+           data-size="giant"
+           data-handler="onOpenRequestLog"
+           data-stripe-load-indicator>
+            <?= e(trans('vdlp.redirect::lang.buttons.from_request_log')); ?>
+        </a>
+    <?php endif; ?>
 
     <a class="btn btn-default oc-icon-sort-amount-asc"
        href="<?= Backend::url('vdlp/redirect/redirects/reorder'); ?>">
