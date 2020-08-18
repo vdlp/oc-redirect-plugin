@@ -28,8 +28,10 @@ return [
         'test_lab_enabled_comment' => 'TestLab allows you to mass test your redirects.', // TODO
         'caching_enabled_label' => 'Caching of redirects (advanced)', // TODO
         'caching_enabled_comment' => 'Improves the redirect engine when having a lot of redirects. ' // TODO
-            . 'CAUTION: Cache driver `file` and `database` are NOT supported. '
-            . 'Recommended driver is `memcached` or a similar "in-memory" caching driver.',
+            . 'CAUTION: Cache driver `file` and `database` are NOT supported. '// TODO
+            . 'Recommended driver is `memcached` or a similar "in-memory" caching driver.',// TODO
+        'relative_paths_enabled_label' => 'Use relative paths', // TODO
+        'relative_paths_enabled_command' => 'The redirect engine will generate relative paths instead of absolute paths.',// TODO
     ],
     'redirect' => [
         'redirect' => 'Ompekning',
@@ -87,7 +89,6 @@ return [
         'system_tip' => 'Systemskapad ompekning',
         'user_tip' => 'Andvändargenererad ompekning',
         'type' => 'Typ',
-        'last_used_at' => 'Användes senast',
         'and_delete_log_item' => 'Och radera valda log-filer',
         'category' => 'Kategori',
         'categories' => 'Kategorier',
@@ -104,6 +105,14 @@ return [
         'sparkline_30d' => 'Hits (30d)', // TODO
         'has_hits' => 'Has hits', // TODO
         'minimum_hits' => 'Minimum # hits', // TODO
+        'ignore_query_parameters' => 'Ignore query parameters', // TODO
+        'ignore_query_parameters_comment' => 'The redirect engine will ignore all query parameters.', // TODO
+        'ignore_case' => 'Ignore case', // TODO
+        'ignore_case_comment' => 'The redirect engine will do case-insensitive matching.', // TODO
+        'ignore_trailing_slash' => 'Ignore trailing slash', // TODO
+        'ignore_trailing_slash_comment' => 'The redirect engine will ignore trailing slashes.', // TODO
+        'last_used_at' => 'Användes senast',
+        'updated_at' => 'Updated at', // TODO
         'invalid_regex' => 'Invalid regular expression.', // TODO
     ],
     'list' => [
@@ -187,6 +196,7 @@ return [
         'no_data' => 'No data', // TODO
         'top_crawlers_this_month' => 'Top :top crawlers this month', // TODO
         'top_redirects_this_month' => 'Top :top redirects this month', // TODO
+        'activity_last_three_months' => 'Activity last 3 months', // TODO
     ],
     'title' => [
         'import' => 'Importera',
@@ -206,6 +216,7 @@ return [
         'from_request_log' => 'Från anropslogg',
         'new_redirect' => 'Ny ompekning',
         'create_redirects' => 'Skapa ompekning',
+        'create_redirect' => 'Create redirect', // TODO
         'create_and_new' => 'Create and new', // TODO
         'delete' => 'Radera',
         'enable' => 'Aktivera',
@@ -213,13 +224,18 @@ return [
         'reorder_redirects' => 'Omsortera',
         'export' => 'Exportera',
         'import' => 'Importera',
+        'settings' => 'Settings', // TODO
         'categories' => 'Kategorier',
+        'extensions' => 'Extensions', // TODO
         'new_category' => 'Ny kategori',
         'reset_statistics' => 'Återställ statistik',
         'logs' => 'Redirect log', // TODO
         'empty_redirect_log' => 'Empty redirect log', // TODO
         'clear_cache' => 'Clear cache', // TODO
         'stop' => 'Stop', // TODO
+        'reset_all' => 'Reset statistics for all redirects', // TODO
+        'all_redirects' => 'all redirects', // TODO
+        'bulk_actions' => 'Bulk actions', // TODO
     ],
     'tab' => [
         'tab_general' => 'Allmänt',
@@ -228,6 +244,7 @@ return [
         'tab_scheduling' => 'Schemalägg',
         'tab_test_lab' => 'TestLab', // TODO
         'tab_advanced' => 'Advanced', // TODO
+        'tab_logs' => 'Event log', // TODO
     ],
     'flash' => [
         'success_created_redirects' => 'Skapade :count ompekningar',
@@ -235,8 +252,12 @@ return [
         'truncate_success' => 'Successfully deleted all records', // TODO
         'delete_selected_success' => 'Successfully deleted selected records', // TODO
         'cache_cleared_success' => 'Successfully cleared redirect cache', // TODO
+        'statistics_reset_success' => 'All statistics have been successfully reset', // TODO
+        'enabled_all_redirects_success' => 'All redirects have been successfully enabled', // TODO
+        'disabled_all_redirects_success' => 'All redirects have been successfully disabled', // TODO
+        'deleted_all_redirects_success' => 'All redirects have been successfully deleted', // TODO
     ],
-    'import_export' => [ // TODO
+    'import_export' => [
         'match_type' => 'Match Type [match_type] (Allowed values: exact, placeholders, regex)',
         'category_id' => 'Category [category_id]',
         'target_type' => 'Target Type [target_type] (Allowed values: path_or_url, cms_page, static_page, none)',
@@ -254,6 +275,9 @@ return [
         'to_date' => 'Scheduled date to [to_date] (YYYY-MM-DD or empty)',
         'sort_order' => 'Priority [sort_order]',
         'is_enabled' => 'Enabled [is_enabled] (1 = enable redirect, 0 = disable redirect [default])',
+        'ignore_query_parameters' => 'Ignore Query Parameters [ignore_query_parameters] (1 = yes, 0 = no [default])',
+        'ignore_case' => 'Ignore Case [ignore_case] (1 = yes, 0 = no [default])',
+        'ignore_trailing_slash' => 'Ignore Trailing Slashes [ignore_trailing_slash] (1 = yes, 0 = no [default])',
         'test_lab' => 'Test Lab [test_lab] (1 = enable Test Lab, 0 = disable TestLab [default])',
         'test_lab_path' => 'Test Lab path [test_lab_path] (required if match_type = placeholders)',
         'system' => 'System [system] (1 = system generated redirect, 0 = user generated redirect [default])',
