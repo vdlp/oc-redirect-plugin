@@ -114,6 +114,7 @@ final class PublishManager implements PublishManagerInterface
 
         unset($redirect);
 
+        $this->cacheManager->flush();
         $this->cacheManager->putRedirectRules($redirects);
     }
 }
