@@ -2,6 +2,7 @@
 
 * Add support for symfony/stopwatch:^5.0 (version 4.0 is still supported)
 * Update Spanish language (thanks to Juan David M)
+* Hide button "From Request log" when request logging is disabled
 
 # 2.5.3
 
