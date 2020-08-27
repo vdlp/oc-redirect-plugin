@@ -18,7 +18,7 @@
         "ext-json": "*",
         "ext-curl": "*",
         "jaybizzle/crawler-detect": "^1.2",
-        "symfony/stopwatch": "^4.0",
+        "symfony/stopwatch": "^4.0|^5.0",
         "davaxi/sparkline": "~1.2.0"
     },
     "archive": {

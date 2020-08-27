@@ -77,3 +77,5 @@
     - "Fix bug that causes re-writing the redirect rules file when hits are updated -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.2"
 2.5.3:
     - "Improve / fixes redirect rule caching -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.3"
+2.5.4:
+    - "Add support for symfony/stopwatch:^5.0 (version 4.0 is still supported) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.4"
