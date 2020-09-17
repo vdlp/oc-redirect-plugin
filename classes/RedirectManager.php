@@ -571,6 +571,11 @@ final class RedirectManager implements RedirectManagerInterface
                 $results = $reader->getRecords();
             }
         } catch (Throwable $e) {
+            // Ignore the file being empty, no rules have been created yet
+            if ($e->getMessage() === 'The header record does not exist or is empty at offset: `0`') {
+                return [];
+            }
+            
             throw Exceptions\UnableToLoadRules::withMessage($e->getMessage(), $e);
         }
 
