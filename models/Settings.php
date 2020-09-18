@@ -59,6 +59,6 @@ final class Settings extends Model
 
     public static function isRelativePathsEnabled(): bool
     {
-        return (bool) (new self)->get('relative_paths_enabled', false);
+        return (bool) (new self)->get('relative_paths_enabled', true);
     }
 }
