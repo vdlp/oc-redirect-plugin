@@ -1,3 +1,7 @@
+# 2.5.5
+
+* Suppress logging when redirect rules file is empty
+
 # 2.5.4
 
 * Add support for symfony/stopwatch:^5.0 (version 4.0 is still supported)
