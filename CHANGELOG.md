@@ -1,3 +1,11 @@
+# 3.0.0
+
+* Redirect to relative paths is now enabled by default.
+* Suppress logging when redirect rules file is empty.
+* Add database relation to system request logs.
+* When updating to `3.0.0` the table `vdlp_redirect_redirect_logs` due to schema changes.
+* Improvements to redirect request logs.
+
 # 2.5.4
 
 * Add support for symfony/stopwatch:^5.0 (version 4.0 is still supported)
