@@ -79,3 +79,7 @@
     - "Improve / fixes redirect rule caching -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.3"
 2.5.4:
     - "Add support for symfony/stopwatch:^5.0 (version 4.0 is still supported) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.4"
+3.0.0:
+    - "!!! New major version. See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/3.0.0"
+    - 20200918_0011_refactor_redirects_logs_table.php
+    - 20200918_0012_add_redirect_id_to_system_request_logs_table.php

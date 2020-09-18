@@ -89,7 +89,6 @@ return [
         'system_tip' => 'Systemskapad ompekning',
         'user_tip' => 'Andvändargenererad ompekning',
         'type' => 'Typ',
-        'and_delete_log_item' => 'Och radera valda log-filer',
         'category' => 'Kategori',
         'categories' => 'Kategorier',
         'description' => 'Description', // TODO

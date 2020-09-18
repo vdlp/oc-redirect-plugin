@@ -91,7 +91,6 @@ return [
         'system_tip' => 'Een redirect gegenereerd door het systeem',
         'user_tip' => 'Een door de gebruiker gegenereerde redirect',
         'type' => 'Type',
-        'and_delete_log_item' => 'En verwijder geseletecteerd log items', // since 2.0.3,
         'category' => 'Categorie',
         'categories' => 'Categorieën',
         'description' => 'Omschrijving',
@@ -116,6 +115,7 @@ return [
         'last_used_at' => 'Laatste treffer',
         'updated_at' => 'Bijgewerkt op',
         'invalid_regex' => 'Ongeldige reguliere expressie.',
+        'created_due_to_bad_request' => 'Aangemaakt vanwege een ongeldig verzoek.',
     ],
     'list' => [
         'no_records' => 'Er zijn geen redirects in dit beeld.',

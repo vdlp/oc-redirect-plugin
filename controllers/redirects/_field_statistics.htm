@@ -58,3 +58,11 @@
         </div>
     </div>
 </div>
+
+<?php if ($redirect->systemRequestLog): ?>
+    <hr>
+    <i class="text-info icon-info-circle"></i>
+    <a href="<?= \Backend::url('system/requestlogs/preview/' . $redirect->systemRequestLog->getKey()) ?>">
+        <?= e(trans('vdlp.redirect::lang.redirect.created_due_to_bad_request')) ?>
+    </a>
+<?php endif; ?>

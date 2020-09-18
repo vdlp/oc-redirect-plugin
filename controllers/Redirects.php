@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use October\Rain\Database\Builder;
 use October\Rain\Database\Model;
 use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\SystemException;
@@ -349,6 +350,13 @@ final class Redirects extends Controller
         return (string) $this->makePartial('status_code_info', [], false);
     }
 
+    public function listExtendQuery(Builder $query, $definition = null): void
+    {
+        if ($definition === 'requestLog') {
+            $query->whereNull('vdlp_redirect_redirect_id');
+        }
+    }
+
     public function formExtendFields(Form $host, array $fields = []): void
     {
         $disableFields = [
@@ -465,7 +473,8 @@ final class Redirects extends Controller
 
         foreach ($checkedIds as $checkedId) {
             /** @var RequestLog $requestLog */
-            $requestLog = RequestLog::query()->findOrFail($checkedId);
+            $requestLog = RequestLog::query()
+                ->findOrFail($checkedId);
 
             $url = $this->parseRequestLogItemUrl((string) $requestLog->getAttribute('url'));
 
@@ -473,7 +482,7 @@ final class Redirects extends Controller
                 continue;
             }
 
-            Models\Redirect::create([
+            $redirect = Models\Redirect::create([
                 'match_type' => Models\Redirect::TYPE_EXACT,
                 'target_type' => Models\Redirect::TARGET_TYPE_PATH_URL,
                 'from_url' => $url,
@@ -482,11 +491,11 @@ final class Redirects extends Controller
                 'is_enabled' => false,
             ]);
 
-            $redirectsCreated++;
-        }
+            $requestLog->update([
+                'vdlp_redirect_redirect_id' => $redirect->getKey()
+            ]);
 
-        if ((bool) $this->request->get('andDelete', false)) {
-            RequestLog::destroy($checkedIds);
+            $redirectsCreated++;
         }
 
         if ($redirectsCreated > 0) {

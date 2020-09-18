@@ -93,7 +93,6 @@ return [
         'user_tip' => 'Redirection générée par l\'utilisateur',
         'type' => 'Type',
         'last_used_at' => 'Dernière utilisation à',
-        'and_delete_log_item' => 'Et effacer les éléments selectionnés',
         'category' => 'Catégorie',
         'categories' => 'Catégories',
         'description' => 'Description', // TODO

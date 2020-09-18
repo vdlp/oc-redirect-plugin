@@ -96,8 +96,9 @@ final class Logs extends Controller
             && is_array($checkedIds)
             && count($checkedIds)
         ) {
-            foreach ((array) $checkedIds as $recordId) {
+            foreach ($checkedIds as $recordId) {
                 try {
+                    /** @var RedirectLog $record */
                     $record = RedirectLog::query()->findOrFail($recordId);
                     $record->delete();
                 } catch (Throwable $e) {

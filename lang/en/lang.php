@@ -91,7 +91,6 @@ return [
         'system_tip' => 'System generated redirect',
         'user_tip' => 'User generated redirect',
         'type' => 'Type',
-        'and_delete_log_item' => 'And delete selected log items',
         'category' => 'Category',
         'categories' => 'Categories',
         'description' => 'Description',
@@ -116,6 +115,7 @@ return [
         'last_used_at' => 'Last hit',
         'updated_at' => 'Updated at',
         'invalid_regex' => 'Invalid regular expression.',
+        'created_due_to_bad_request' => 'Created due to bad a request.',
     ],
     'list' => [
         'no_records' => 'There are no redirects in this view.',

@@ -30,7 +30,7 @@ showSorting: true
 
 # Default sorting column
 defaultSort:
-    column: date_time
+    column: updated_at
     direction: desc
 
 # Display checkboxes next to each record

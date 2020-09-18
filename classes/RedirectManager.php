@@ -13,6 +13,7 @@ use Cms\Classes\Router;
 use Cms\Classes\Theme;
 use Cms\Helpers\Cms;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use League\Csv\Reader;
 use RuntimeException;
 use Symfony\Component\Routing;
@@ -610,24 +611,23 @@ final class RedirectManager implements RedirectManagerInterface
             return;
         }
 
-        /** @var Models\Redirect $redirect */
-        $redirect = Models\Redirect::query()->find($rule->getId());
+        try {
+            $fromToHash = sha1($requestUri . $toUrl);
 
-        if ($redirect === null) {
-            return;
+            Models\RedirectLog::query()->updateOrCreate([
+                'redirect_id' => $rule->getId(),
+                'from_to_hash' => $fromToHash,
+            ], [
+                'redirect_id' => $rule->getId(),
+                'from_to_hash' => $fromToHash,
+                'from_url' => $requestUri,
+                'to_url' => $toUrl,
+                'status_code' => $rule->getStatusCode(),
+                'hits' => DB::raw('hits + 1'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+        } catch (Throwable $e) {
+            // Don't report this issue.
         }
-
-        $now = Carbon::now();
-
-        Models\RedirectLog::create([
-            'redirect_id' => $rule->getId(),
-            'from_url' => $requestUri,
-            'to_url' => $toUrl,
-            'status_code' => $rule->getStatusCode(),
-            'day' => $now->day,
-            'month' => $now->month,
-            'year' => $now->year,
-            'date_time' => $now,
-        ]);
     }
 }

@@ -15,11 +15,13 @@ use October\Rain\Database\Model;
 use October\Rain\Database\Relations\HasMany;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use System\Models\RequestLog;
 use Vdlp\Redirect\Classes\OptionHelper;
 
 /**
  * @method static Redirect|Builder enabled()
  * @method static Redirect|Builder testLabEnabled()
+ * @property RequestLog|null $systemRequestLog
  */
 final class Redirect extends Model
 {
@@ -180,6 +182,11 @@ final class Redirect extends Model
      */
     public $belongsTo = [
         'category' => Category::class,
+        'systemRequestLog' => [
+            RequestLog::class,
+            'key' => 'id',
+            'otherKey' => 'vdlp_redirect_redirect_id',
+        ]
     ];
 
     protected static function makeValidator(

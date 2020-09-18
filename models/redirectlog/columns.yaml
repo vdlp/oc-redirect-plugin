@@ -10,9 +10,12 @@ columns:
     to_url:
         label: vdlp.redirect::lang.redirect.to_url
         searchable: true
-    date_time:
-        label: vdlp.redirect::lang.redirect.date_time
-        type: datetime
     status_code:
         label: vdlp.redirect::lang.redirect.status_code
         type: redirect_status_code
+        searchable: true
+    hits:
+        label: vdlp.redirect::lang.redirect.hits
+    updated_at:
+        label: vdlp.redirect::lang.redirect.date_time
+        type: datetime
