@@ -13,7 +13,9 @@ use Throwable;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
+use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
+use Vdlp\Redirect\Classes\Exceptions\UnableToLoadRules;
 use Vdlp\Redirect\Models\Settings;
 
 final class RedirectMiddleware
@@ -94,7 +96,7 @@ final class RedirectMiddleware
             } else {
                 $rule = $this->redirectManager->match($requestUri, $request->getScheme());
             }
-        } catch (NoMatchForRequest $e) {
+        } catch (NoMatchForRequest | UnableToLoadRules | InvalidScheme $e) {
             $rule = false;
         } catch (Throwable $e) {
             $this->log->error(sprintf(
