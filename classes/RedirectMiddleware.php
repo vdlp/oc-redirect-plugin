@@ -11,7 +11,6 @@ use October\Rain\Events\Dispatcher;
 use Psr\Log\LoggerInterface;
 use Throwable;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
-use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
@@ -35,6 +34,11 @@ final class RedirectMiddleware
     private $redirectManager;
 
     /**
+     * @var RedirectConditionManager
+     */
+    private $redirectConditionManager;
+
+    /**
      * @var CacheManagerInterface
      */
     private $cacheManager;
@@ -51,11 +55,13 @@ final class RedirectMiddleware
 
     public function __construct(
         RedirectManagerInterface $redirectManager,
+        RedirectConditionManager $redirectConditionManager,
         CacheManagerInterface $cacheManager,
         Dispatcher $dispatcher,
         LoggerInterface $log
     ) {
         $this->redirectManager = $redirectManager;
+        $this->redirectConditionManager = $redirectConditionManager;
         $this->cacheManager = $cacheManager;
         $this->dispatcher = $dispatcher;
         $this->log = $log;
@@ -123,10 +129,7 @@ final class RedirectMiddleware
          *
          * Developers can add their own conditions. If a condition does not pass the redirect will be ignored.
          */
-        foreach ($this->redirectManager->getConditions() as $condition) {
-            /** @var RedirectConditionInterface $condition */
-            $condition = resolve($condition);
-
+        foreach ($this->redirectConditionManager->getEnabledConditions($rule) as $condition) {
             if (!$condition->passes($rule, $requestUri)) {
                 return $next($request);
             }
