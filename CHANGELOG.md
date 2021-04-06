@@ -2,8 +2,9 @@
 
 * Redirect to relative paths is now enabled by default.
 * Add database relation to system request logs.
-* When updating to `3.0.0` the table `vdlp_redirect_redirect_logs` due to schema changes.
+* When updating to `3.0.0` the table `vdlp_redirect_redirect_logs` will be removed due to schema changes.
 * Improvements to redirect request logs.
+* Improvements to redirect conditions logic.
 
 # 2.5.5
 
