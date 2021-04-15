@@ -11,6 +11,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [ 7.4, 7.3, 7.2, 7.1 ]
+        stability: [ prefer-lowest, prefer-stable ]
+
     steps:
     - uses: actions/checkout@v2
 
