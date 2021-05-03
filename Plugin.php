@@ -9,6 +9,7 @@ use Event;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Translation\Translator;
+use Illuminate\Support\Str;
 use System\Classes\PluginBase;
 use Throwable;
 use Validator;
@@ -19,7 +20,7 @@ use Vdlp\Redirect\Console\PublishRedirects;
 use Vdlp\Redirect\Models;
 use Vdlp\Redirect\ReportWidgets;
 
-class Plugin extends PluginBase
+final class Plugin extends PluginBase
 {
     /**
      * @var bool
@@ -43,6 +44,20 @@ class Plugin extends PluginBase
     public function boot(): void
     {
         if ($this->app->runningInConsole() || $this->app->runningUnitTests()) {
+            return;
+        }
+
+        Backend\Classes\Controller::extend(function (Backend\Classes\Controller $controller) {
+            if (Str::startsWith(get_class($controller), 'Vdlp\Redirect\Controllers')) {
+                abort_if(
+                    self::cmsNotSupported(),
+                    500,
+                    'The Vdlp.Redirect plugin is not compatible with your October CMS version.'
+                );
+            }
+        });
+
+        if (self::cmsNotSupported()) {
             return;
         }
 
@@ -92,11 +107,19 @@ class Plugin extends PluginBase
     {
         $this->app->register(ServiceProvider::class);
 
+        if (self::cmsNotSupported()) {
+            return;
+        }
+
         $this->registerConsoleCommands();
     }
 
     public function registerPermissions(): array
     {
+        if (self::cmsNotSupported()) {
+            return [];
+        }
+
         return [
             'vdlp.redirect.access_redirects' => [
                 'label' => 'vdlp.redirect::lang.permission.access_redirects.label',
@@ -107,6 +130,10 @@ class Plugin extends PluginBase
 
     public function registerNavigation(): array
     {
+        if (self::cmsNotSupported()) {
+            return [];
+        }
+
         $defaultBackendUrl = Backend::url(
             'vdlp/redirect/' . (Models\Settings::isStatisticsEnabled() ? 'statistics' : 'redirects')
         );
@@ -222,6 +249,10 @@ class Plugin extends PluginBase
 
     public function registerSettings(): array
     {
+        if (self::cmsNotSupported()) {
+            return [];
+        }
+
         return [
             'config' => [
                 'label' => 'vdlp.redirect::lang.settings.menu_label',
@@ -238,6 +269,10 @@ class Plugin extends PluginBase
 
     public function registerReportWidgets(): array
     {
+        if (self::cmsNotSupported()) {
+            return [];
+        }
+
         /** @var Translator $translator */
         $translator = resolve(Translator::class);
 
@@ -263,6 +298,10 @@ class Plugin extends PluginBase
 
     public function registerListColumnTypes(): array
     {
+        if (self::cmsNotSupported()) {
+            return [];
+        }
+
         /** @var Translator $translator */
         $translator = resolve(Translator::class);
 
@@ -338,6 +377,10 @@ class Plugin extends PluginBase
 
     public function registerSchedule($schedule): void
     {
+        if (self::cmsNotSupported()) {
+            return;
+        }
+
         /** @var Schedule $schedule */
         $schedule->command('vdlp:redirect:publish-redirects')
             ->dailyAt(config('vdlp.redirect::cron.publish_redirects', '00:00'));
@@ -365,5 +408,10 @@ class Plugin extends PluginBase
     {
         Models\Redirect::observe(Observers\RedirectObserver::class);
         Models\Settings::observe(Observers\SettingsObserver::class);
+    }
+
+    public static function cmsNotSupported(): bool
+    {
+        return !class_exists('System');
     }
 }
