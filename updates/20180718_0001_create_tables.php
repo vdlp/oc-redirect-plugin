@@ -170,11 +170,10 @@ class CreateTables extends Migration
             $settings->test_lab_enabled = '1';
             $settings->save();
         } catch (Throwable $e) {
-            resolve(LoggerInterface::class)
-                ->error(sprintf(
-                    'Vdlp.Redirect: Unable to save default settings: %s',
-                    $e->getMessage()
-                ));
+            resolve(LoggerInterface::class)->error(sprintf(
+                'Vdlp.Redirect: Unable to save default settings: %s',
+                $e->getMessage()
+            ));
         }
     }
 

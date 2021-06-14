@@ -6,6 +6,7 @@ namespace Vdlp\Redirect\Models;
 
 use October\Rain\Database\Model;
 use System\Behaviors\SettingsModel;
+use Throwable;
 
 /**
  * @property array $implement
@@ -39,26 +40,46 @@ final class Settings extends Model
 
     public static function isLoggingEnabled(): bool
     {
-        return (bool) (new self)->get('logging_enabled', true);
+        try {
+            return (bool) (new self)->get('logging_enabled', true);
+        } catch (Throwable $e) {
+            return true;
+        }
     }
 
     public static function isStatisticsEnabled(): bool
     {
-        return (bool) (new self)->get('statistics_enabled', true);
+        try {
+            return (bool) (new self)->get('statistics_enabled', true);
+        } catch (Throwable $e) {
+            return true;
+        }
     }
 
     public static function isTestLabEnabled(): bool
     {
-        return (bool) (new self)->get('test_lab_enabled', true);
+        try {
+            return (bool) (new self)->get('test_lab_enabled', true);
+        } catch (Throwable $e) {
+            return true;
+        }
     }
 
     public static function isCachingEnabled(): bool
     {
-        return (bool) (new self)->get('caching_enabled', false);
+        try {
+            return (bool) (new self)->get('caching_enabled', false);
+        } catch (Throwable $e) {
+            return false;
+        }
     }
 
     public static function isRelativePathsEnabled(): bool
     {
-        return (bool) (new self)->get('relative_paths_enabled', false);
+        try {
+            return (bool) (new self)->get('relative_paths_enabled', false);
+        } catch (Throwable $e) {
+            return false;
+        }
     }
 }
