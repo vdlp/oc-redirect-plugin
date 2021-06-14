@@ -81,6 +81,8 @@
     - "Add support for symfony/stopwatch:^5.0 (version 4.0 is still supported) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.4"
 2.5.5:
     - "Suppress logging when redirect rules file is empty -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.5"
+2.5.6:
+    - "Prevent connection exception when accessing settings in CLI mode -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.6"
 3.0.0:
     - "!!! New major version. See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/3.0.0"
     - 20200918_0011_refactor_redirects_logs_table.php

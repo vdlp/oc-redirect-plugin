@@ -7,6 +7,11 @@
 * When updating to `3.0.0` the table `vdlp_redirect_redirect_logs` will be removed due to schema changes.
 * Improvements to redirect request logs.
 * Improvements to redirect conditions logic.
+* Relative paths setting is now enabled by default.
+
+# 2.5.6
+
+* Prevent connection exception when accessing settings in CLI mode
 
 # 2.5.5
 
