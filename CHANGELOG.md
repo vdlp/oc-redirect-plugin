@@ -1,3 +1,7 @@
+# 2.5.6
+
+* Prevent connection exception when accessing settings in CLI mode
+
 # 2.5.5
 
 * Suppress logging when redirect rules file is empty
