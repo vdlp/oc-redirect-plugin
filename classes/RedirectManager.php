@@ -196,6 +196,13 @@ final class RedirectManager implements RedirectManagerInterface
         header('Cache-Control: no-store');
         header('Location: ' . $toUrl, true, $statusCode);
 
+        // Ensure any headers declared up to this point are sent
+        // before Laravel core or something else has a chance to overwrite them.
+        if (ob_get_level() > 0) {
+            ob_flush();
+            flush();
+        }
+
         exit(0);
     }
 
