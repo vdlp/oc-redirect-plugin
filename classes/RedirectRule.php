@@ -5,196 +5,157 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Carbon\Carbon;
-use Throwable;
+use JsonException;
 use Vdlp\Redirect\Models\Redirect;
 
 final class RedirectRule
 {
-    /**
-     * @var int
-     */
-    private $id;
-
-    /**
-     * @var string
-     */
-    private $matchType;
-
-    /**
-     * @var string
-     */
-    private $targetType;
-
-    /**
-     * @var string
-     */
-    private $fromUrl;
-
-    /**
-     * @var string
-     */
-    private $fromScheme;
-
-    /**
-     * @var string
-     */
-    private $toUrl;
-
-    /**
-     * @var string
-     */
-    private $toScheme;
-
-    /**
-     * @var string
-     */
-    private $cmsPage;
-
-    /**
-     * @var string
-     */
-    private $staticPage;
-
-    /**
-     * @var int
-     */
-    private $statusCode;
-
-    /**
-     * @var array
-     */
-    private $requirements;
-
-    /**
-     * @var Carbon|null
-     */
-    private $fromDate;
-
-    /**
-     * @var Carbon|null
-     */
-    private $toDate;
-
-    /**
-     * @var array
-     */
-    private $placeholderMatches;
-
-    /**
-     * @var bool
-     */
-    private $ignoreQueryParameters;
-
-    /**
-     * @var bool
-     */
-    private $ignoreCase;
-
-    /**
-     * @var bool
-     */
-    private $ignoreTrailingSlash;
+    private int $id;
+    private string $matchType;
+    private string $targetType;
+    private string $fromUrl;
+    private string $fromScheme;
+    private string $toUrl;
+    private string $toScheme;
+    private string $cmsPage;
+    private string $staticPage;
+    private int $statusCode;
+    private array $requirements = [];
+    private ?Carbon $fromDate = null;
+    private ?Carbon $toDate = null;
+    private array $placeholderMatches = [];
+    private bool $ignoreQueryParameters;
+    private bool $ignoreCase;
+    private bool $ignoreTrailingSlash;
 
     public function __construct(array $attributes)
     {
-        $this->ignoreQueryParameters = false;
-        $this->ignoreCase = false;
-        $this->ignoreTrailingSlash = false;
+        $this->id = (int) ($attributes['id'] ?? null);
+        $this->matchType = (string) ($attributes['match_type'] ?? null);
+        $this->targetType = (string) ($attributes['target_type'] ?? null);
+        $this->fromUrl = (string) ($attributes['from_url'] ?? null);
+        $this->fromScheme = (string) ($attributes['from_scheme'] ?? null);
+        $this->toUrl = (string) ($attributes['to_url'] ?? null);
+        $this->toScheme = (string) ($attributes['to_scheme'] ?? null);
+        $this->cmsPage = (string) ($attributes['cms_page'] ?? null);
+        $this->staticPage = (string) ($attributes['static_page'] ?? null);
+        $this->statusCode = (int) ($attributes['status_code'] ?? null);
 
-        foreach ($attributes as $key => $value) {
-            $property = camel_case($key);
+        try {
+            $requirements = $attributes['requirements'] ?? null;
 
-            if (property_exists($this, $property)) {
-                $this->{$property} = $value;
+            if ($requirements === null || !is_string($requirements)) {
+                $requirements = '[]';
             }
-        }
 
-        try {
-            $this->fromDate = Carbon::createFromFormat(
-                'Y-m-d H:i:s',
-                substr($this->fromDate, 0, 10) . ' 00:00:00'
-            );
-        } catch (Throwable $e) {
-            $this->fromDate = null;
-        }
-
-        try {
-            $this->toDate = Carbon::createFromFormat(
-                'Y-m-d H:i:s',
-                substr($this->toDate, 0, 10) . ' 00:00:00'
-            );
-        } catch (Throwable $e) {
-            $this->toDate = null;
-        }
-
-        $this->requirements = json_decode((string) $this->requirements, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->requirements = json_decode($requirements, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
             $this->requirements = [];
         }
+
+        if (
+            isset($attributes['from_date'])
+            && is_string($attributes['from_date'])
+            && $attributes['from_date'] !== ''
+        ) {
+            $date = Carbon::createFromFormat(
+                'Y-m-d H:i:s',
+                substr($attributes['from_date'], 0, 10) . ' 00:00:00'
+            );
+
+            $this->fromDate = $date === false ? null : $date;
+        }
+
+        if (
+            isset($attributes['to_date'])
+            && is_string($attributes['to_date'])
+            && $attributes['to_date'] !== ''
+        ) {
+            $date = Carbon::createFromFormat(
+                'Y-m-d H:i:s',
+                substr($attributes['to_date'], 0, 10) . ' 00:00:00'
+            );
+
+            $this->toDate = $date === false ? null : $date;
+        }
+
+        $this->ignoreQueryParameters = (bool) ($attributes['ignore_query_parameters'] ?? false);
+        $this->ignoreCase = (bool) ($attributes['ignore_case'] ?? false);
+        $this->ignoreTrailingSlash = (bool) ($attributes['ignore_trailing_slash'] ?? false);
     }
 
     public static function createWithModel(Redirect $model): RedirectRule
     {
         $attributes = $model->getAttributes();
-        $attributes['requirements'] = json_encode($model->getAttribute('requirements'));
+
+        $requirements = $model->getAttribute('requirements');
+
+        if ($requirements === null || !is_string($requirements)) {
+            $attributes['requirements'] = '[]';
+        } else {
+            try {
+                $attributes['requirements'] = json_encode($requirements, JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                $attributes['requirements'] = '[]';
+            }
+        }
 
         return new self($attributes);
     }
 
     public function getId(): int
     {
-        return (int) $this->id;
+        return $this->id;
     }
 
     public function getMatchType(): string
     {
-        return (string) $this->matchType;
+        return $this->matchType;
     }
 
     public function getTargetType(): string
     {
-        return (string) $this->targetType;
+        return $this->targetType;
     }
 
     public function getFromUrl(): string
     {
-        return (string) $this->fromUrl;
+        return $this->fromUrl;
     }
 
     public function getFromScheme(): string
     {
-        return (string) $this->fromScheme;
+        return $this->fromScheme;
     }
 
     public function getToUrl(): string
     {
-        return (string) $this->toUrl;
+        return $this->toUrl;
     }
 
     public function getToScheme(): string
     {
-        return (string) $this->toScheme;
+        return $this->toScheme;
     }
 
     public function getCmsPage(): string
     {
-        return (string) $this->cmsPage;
+        return $this->cmsPage;
     }
 
     public function getStaticPage(): string
     {
-        return (string) $this->staticPage;
+        return $this->staticPage;
     }
 
     public function getStatusCode(): int
     {
-        return (int) $this->statusCode;
+        return $this->statusCode;
     }
 
     public function getRequirements(): array
     {
-        return (array) $this->requirements;
+        return $this->requirements;
     }
 
     public function getFromDate(): ?Carbon
@@ -224,27 +185,28 @@ final class RedirectRule
 
     public function getPlaceholderMatches(): array
     {
-        return (array) $this->placeholderMatches;
+        return $this->placeholderMatches;
     }
 
     public function setPlaceholderMatches(array $placeholderMatches = []): RedirectRule
     {
         $this->placeholderMatches = $placeholderMatches;
+
         return $this;
     }
 
     public function isIgnoreQueryParameters(): bool
     {
-        return (bool) $this->ignoreQueryParameters;
+        return $this->ignoreQueryParameters;
     }
 
     public function isIgnoreCase(): bool
     {
-        return (bool) $this->ignoreCase;
+        return $this->ignoreCase;
     }
 
     public function isIgnoreTrailingSlash(): bool
     {
-        return (bool) $this->ignoreTrailingSlash;
+        return $this->ignoreTrailingSlash;
     }
 }

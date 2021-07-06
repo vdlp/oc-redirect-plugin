@@ -30,45 +30,32 @@ final class RedirectManager implements RedirectManagerInterface
     /**
      * The redirect rules which this manager uses to perform matching.
      *
-     * @var RedirectRule[]
+     * @var RedirectRule[]|null
      */
-    private $rules;
+    private ?array $rules = null;
 
     /**
      * @var RedirectConditionInterface[]
      */
-    private $conditions = [];
+    private array $conditions = [];
 
     /**
      * The date for which the matching should be done.
-     *
-     * @var Carbon
      */
-    private $matchDate;
+    private Carbon $matchDate;
 
     /**
      * Site base path.
-     *
-     * @var string
      */
-    private $basePath;
+    private string $basePath;
 
-    /**
-     * @var RedirectManagerSettings
-     */
-    private $settings;
-
-    /**
-     * @var CacheManagerInterface
-     */
-    private $cacheManager;
+    private RedirectManagerSettings $settings;
+    private CacheManagerInterface $cacheManager;
 
     /**
      * HTTP 1.1 headers
-     *
-     * @var array
      */
-    private static $headers = [
+    private static array $headers = [
         301 => 'HTTP/1.1 301 Moved Permanently',
         302 => 'HTTP/1.1 302 Found',
         303 => 'HTTP/1.1 303 See Other',
@@ -76,10 +63,7 @@ final class RedirectManager implements RedirectManagerInterface
         410 => 'HTTP/1.1 410 Gone',
     ];
 
-    /**
-     * @var array
-     */
-    private static $schemes = [
+    private static array $schemes = [
         Models\Redirect::SCHEME_HTTP,
         Models\Redirect::SCHEME_HTTPS,
     ];
@@ -120,7 +104,7 @@ final class RedirectManager implements RedirectManagerInterface
 
         $this->loadRedirectRules();
 
-        foreach ($this->rules as $rule) {
+        foreach ((array) $this->rules as $rule) {
             try {
                 return $this->matchesRule($rule, $requestPath, $scheme);
             } catch (Exceptions\NoMatchForRule $e) {
@@ -131,7 +115,7 @@ final class RedirectManager implements RedirectManagerInterface
         throw Exceptions\NoMatchForRequest::withRequestPath($requestPath, $scheme);
     }
 
-    public function matchCached(string $requestPath, string $scheme)
+    public function matchCached(string $requestPath, string $scheme): ?RedirectRule
     {
         $cacheKey = $this->cacheManager->cacheKey($requestPath, $scheme);
 
@@ -179,10 +163,11 @@ final class RedirectManager implements RedirectManagerInterface
 
         $targetIsEqual = $this->settings->isRelativePathsEnabled()
             ? $requestUri === $toUrl
-            : (new Cms)->url($requestUri) === $toUrl;
+            : (new Cms())->url($requestUri) === $toUrl;
 
-        if (!$toUrl
-            || empty($toUrl)
+        if (
+            $toUrl === null
+            || $toUrl === ''
             || $targetIsEqual // Prevent redirect loop
         ) {
             return;
@@ -202,9 +187,9 @@ final class RedirectManager implements RedirectManagerInterface
     /**
      * @throws CmsException
      */
-    public function getLocation(RedirectRule $rule)
+    public function getLocation(RedirectRule $rule): ?string
     {
-        $toUrl = false;
+        $toUrl = null;
 
         // Determine the URL to redirect to
         switch ($rule->getTargetType()) {
@@ -213,35 +198,40 @@ final class RedirectManager implements RedirectManagerInterface
 
                 // Check if $toUrl is a relative path, if so, we need to add the base path to it.
                 // Refs: https://github.com/vdlp/redirect/issues/21
-                if (is_string($toUrl)
-                    && $toUrl[0] !== '/'
-                    && strpos($toUrl, 'http://') !== 0
-                    && strpos($toUrl, 'https://') !== 0
+                if (
+                    $toUrl[0] !== '/'
+                    && strncmp($toUrl, 'http://', 7) !== 0
+                    && strncmp($toUrl, 'https://', 8) !== 0
                 ) {
                     $toUrl = $this->basePath . '/' . $toUrl;
                 }
 
-                if (strpos($toUrl, '/') === 0) {
+                if (strncmp($toUrl, '/', 1) === 0) {
                     $toUrl = $this->settings->isRelativePathsEnabled()
                         ? $toUrl
                         : (new Cms())->url($toUrl);
                 }
 
                 break;
+
             case Models\Redirect::TARGET_TYPE_CMS_PAGE:
                 $toUrl = $this->redirectToCmsPage($rule);
+
                 break;
+
             case Models\Redirect::TARGET_TYPE_STATIC_PAGE:
                 try {
                     $toUrl = $this->redirectToStaticPage($rule);
                 } catch (Throwable $e) {
-                    $toUrl = false;
+                    $toUrl = null;
                 }
+
                 break;
         }
 
-        if ($rule->getToScheme() !== Models\Redirect::SCHEME_AUTO
-            && (strpos($toUrl, 'http://') === 0 || strpos($toUrl, 'https://') === 0)
+        if (
+            $rule->getToScheme() !== Models\Redirect::SCHEME_AUTO
+            && (strncmp($toUrl, 'http://', 7) === 0 || strncmp($toUrl, 'https://', 8) === 0)
         ) {
             $toUrl = str_replace(['https://', 'http://'], $rule->getToScheme() . '://', $toUrl);
         }
@@ -258,18 +248,21 @@ final class RedirectManager implements RedirectManagerInterface
     {
         $this->conditions[$conditionClass] = $priority;
         arsort($this->conditions);
+
         return $this;
     }
 
     public function setSettings(RedirectManagerSettings $settings): RedirectManagerInterface
     {
         $this->settings = $settings;
+
         return $this;
     }
 
     public function setBasePath(string $basePath): RedirectManager
     {
         $this->basePath = rtrim($basePath, '/');
+
         return $this;
     }
 
@@ -281,6 +274,7 @@ final class RedirectManager implements RedirectManagerInterface
     public function setMatchDate(Carbon $matchDate): RedirectManager
     {
         $this->matchDate = $matchDate;
+
         return $this;
     }
 
@@ -431,7 +425,7 @@ final class RedirectManager implements RedirectManagerInterface
         }
 
         $routeCollection = new Routing\RouteCollection();
-        $routeCollection->add($rule->getId(), $route);
+        $routeCollection->add((string) $rule->getId(), $route);
 
         try {
             $matcher = new Routing\Matcher\UrlMatcher(
@@ -478,32 +472,21 @@ final class RedirectManager implements RedirectManagerInterface
 
     private function matchesPeriod(RedirectRule $rule): bool
     {
-        if ($rule->getFromDate() instanceof Carbon
-            && $rule->getToDate() instanceof Carbon
-        ) {
+        if ($rule->getFromDate() instanceof Carbon && $rule->getToDate() instanceof Carbon) {
             return $this->matchDate->between($rule->getFromDate(), $rule->getToDate());
         }
 
-        if ($rule->getFromDate() instanceof Carbon
-            && $rule->getToDate() === null
-        ) {
+        if ($rule->getFromDate() instanceof Carbon && $rule->getToDate() === null) {
             return $this->matchDate->gte($rule->getFromDate());
         }
 
-        if ($rule->getToDate() instanceof Carbon
-            && $rule->getFromDate() === null
-        ) {
+        if ($rule->getToDate() instanceof Carbon && $rule->getFromDate() === null) {
             return $this->matchDate->lte($rule->getToDate());
         }
 
         return true;
     }
 
-    /**
-     * @param RedirectRule $rule
-     * @param string $scheme
-     * @return bool
-     */
     private function matchesScheme(RedirectRule $rule, string $scheme): bool
     {
         if ($rule->getFromScheme() === Models\Redirect::SCHEME_AUTO) {
@@ -624,7 +607,7 @@ final class RedirectManager implements RedirectManagerInterface
                 'to_url' => $toUrl,
                 'status_code' => $rule->getStatusCode(),
                 'hits' => DB::raw('hits + 1'),
-                'updated_at' => date('Y-m-d H:i:s')
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
         } catch (Throwable $e) {
             // Don't report this issue.

@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
+use Backend\Facades\BackendAuth;
 use Backend\Models\BrandSetting;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
 use Vdlp\Redirect\Classes\Sparkline;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
@@ -13,37 +17,35 @@ Route::group(['middleware' => ['web']], static function () {
             return response('Forbidden', 403);
         }
 
-        /** @var \Illuminate\Http\Request $request */
-        $request = resolve(\Illuminate\Http\Request::class);
+        /** @var Request $request */
+        $request = resolve(Request::class);
 
         $crawler = $request->has('crawler');
 
         $preset = $request->get('preset', '30d-small');
 
-        switch ($preset) {
-            case '3m-large':
-                $properties = [
-                    'format' => '520x120',
-                    'lineThickness' => 2,
-                    'days' => 90,
-                ];
-                break;
-            default:
-                $properties = [
-                    'format' => '200x60',
-                    'lineThickness' => 3,
-                    'days' => 30,
-                ];
+        $properties = [
+            'format' => '200x60',
+            'lineThickness' => 3,
+            'days' => 30,
+        ];
+
+        if ($preset === '3m-large') {
+            $properties = [
+                'format' => '520x120',
+                'lineThickness' => 2,
+                'days' => 90,
+            ];
         }
 
         $cacheKey = sprintf('vdlp_redirect_%s_%d_%d', $preset, (int) $redirectId, (int) $crawler);
 
-        $data = Cache::remember($cacheKey, 5, static function () use ($redirectId, $crawler, $properties) {
+        $data = Cache::remember($cacheKey, 5 * 60, static function () use ($redirectId, $crawler, $properties) {
             return (new StatisticsHelper())->getRedirectHitsSparkline((int) $redirectId, $crawler, $properties['days']);
         });
 
         // TODO: Generate fallback image data if generating image fails.
-        $imageData = Cache::remember($cacheKey . '_image', 5, static function () use ($crawler, $data, $properties) {
+        $imageData = Cache::remember($cacheKey . '_image', 5 * 60, static function () use ($crawler, $data, $properties) {
             $primaryColor = BrandSetting::get(
                 $crawler ? 'primary_color' : 'secondary_color',
                 $crawler ? BrandSetting::PRIMARY_COLOR : BrandSetting::SECONDARY_COLOR
@@ -68,6 +70,6 @@ Route::group(['middleware' => ['web']], static function () {
 
         echo base64_decode($imageData);
 
-        exit();
+        exit(0);
     });
 });

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\ReportWidgets;
 
-use Backend;
 use Backend\Classes\Controller;
 use Backend\Classes\ReportWidgetBase;
+use Backend\Helpers\Backend;
 use Backend\Widgets\Form;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
-use SystemException;
 use Vdlp\Redirect\Models\Redirect;
 
 /**
@@ -33,14 +32,13 @@ final class CreateRedirect extends ReportWidgetBase
     }
 
     /**
-     * @throws SystemException
      * @noinspection PhpMissingParentCallCommonInspection
      */
     public function render()
     {
         $widgetConfig = $this->makeConfig('~/plugins/vdlp/redirect/reportwidgets/createredirect/fields.yaml');
         $widgetConfig->model = new Redirect;
-        $widgetConfig->alias = $this->alias.'Redirect';
+        $widgetConfig->alias = $this->alias . 'Redirect';
 
         $this->vars['formWidget'] = $this->makeWidget(Form::class, $widgetConfig);
 

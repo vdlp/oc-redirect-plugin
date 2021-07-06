@@ -9,20 +9,13 @@ use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 
 final class RedirectConditionManager
 {
-    /**
-     * @var RedirectManagerInterface
-     */
-    private $redirectManager;
+    private RedirectManagerInterface $redirectManager;
 
     public function __construct(RedirectManagerInterface $redirectManager)
     {
         $this->redirectManager = $redirectManager;
     }
 
-    /**
-     * @param RedirectRule $rule
-     * @return array
-     */
     public function getEnabledConditions(RedirectRule $rule): array
     {
         $enabledConditions = [];

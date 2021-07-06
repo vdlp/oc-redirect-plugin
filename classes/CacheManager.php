@@ -17,15 +17,8 @@ final class CacheManager implements CacheManagerInterface
     private const CACHE_TAG_RULES = 'vdlp_redirect_rules';
     private const CACHE_TAG_MATCHES = 'vdlp_redirect_matches';
 
-    /**
-     * @var Repository
-     */
-    private $cache;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
+    private Repository $cache;
+    private LoggerInterface $log;
 
     public function __construct(Repository $cache, LoggerInterface $log)
     {

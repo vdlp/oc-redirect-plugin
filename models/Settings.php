@@ -16,21 +16,14 @@ final class Settings extends Model
 {
     /**
      * The settings code which to save the settings under.
-     *
-     * @var string
      */
-    public $settingsCode = 'vdlp_redirect_settings';
+    public string $settingsCode = 'vdlp_redirect_settings';
 
     /**
      * Form fields definition file.
-     *
-     * @var string
      */
-    public $settingsFields = 'fields.yaml';
+    public string $settingsFields = 'fields.yaml';
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct(array $attributes = [])
     {
         $this->implement = [SettingsModel::class];

@@ -6,7 +6,6 @@ namespace Vdlp\Redirect\ReportWidgets;
 
 use Backend\Classes\Controller;
 use Backend\Classes\ReportWidgetBase;
-use SystemException;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
 /**
@@ -22,7 +21,6 @@ final class TopTenRedirects extends ReportWidgetBase
     }
 
     /**
-     * @throws SystemException
      * @noinspection PhpMissingParentCallCommonInspection
      */
     public function render()
@@ -30,7 +28,7 @@ final class TopTenRedirects extends ReportWidgetBase
         $helper = new StatisticsHelper();
 
         return $this->makePartial('widget', [
-            'topTenRedirectsThisMonth' => $helper->getTopRedirectsThisMonth()
+            'topTenRedirectsThisMonth' => $helper->getTopRedirectsThisMonth(),
         ]);
     }
 }

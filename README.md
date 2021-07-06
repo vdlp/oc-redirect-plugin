@@ -66,7 +66,7 @@ This plugin adds a 'Redirects' section to the main menu of October CMS. This plu
 
 ## Requirements
 
-* October CMS 2.0
+* October CMS 1.1+
 * PHP version 7.4 or higher.
 * PHP extensions: `ext-curl` and `ext-json`.
 

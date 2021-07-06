@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Carbon\Carbon;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use October\Rain\Database\Collection;
 use Vdlp\Redirect\Classes\Observers\RedirectObserver;
@@ -24,7 +24,7 @@ final class StatisticsHelper
             ->orderBy('timestamp', 'desc')
             ->limit(1);
 
-        if ($redirectId) {
+        if ($redirectId !== null) {
             $builder->where('redirect_id', '=', $redirectId);
         }
 
@@ -38,7 +38,7 @@ final class StatisticsHelper
             ->where('month', '=', date('m'))
             ->where('year', '=', date('Y'));
 
-        if ($redirectId) {
+        if ($redirectId !== null) {
             $builder->where('redirect_id', '=', $redirectId);
         }
 
@@ -54,7 +54,7 @@ final class StatisticsHelper
             ->where('month', '=', $lastMonth->month)
             ->where('year', '=', $lastMonth->year);
 
-        if ($redirectId) {
+        if ($redirectId !== null) {
             $builder->where('redirect_id', '=', $redirectId);
         }
 
@@ -68,7 +68,7 @@ final class StatisticsHelper
         /** @var Collection $redirects */
         $redirects = Models\Redirect::enabled()
             ->get()
-            ->filter(static function (Models\Redirect $redirect) {
+            ->filter(static function (Models\Redirect $redirect): bool {
                 return $redirect->isActiveOnDate(Carbon::today());
             });
 
@@ -84,7 +84,7 @@ final class StatisticsHelper
     {
         return Models\Redirect::enabled()
             ->get()
-            ->filter(static function (Models\Redirect $redirect) {
+            ->filter(static function (Models\Redirect $redirect): bool {
                 return $redirect->isActiveOnDate(Carbon::today());
             })
             ->count();
@@ -192,7 +192,7 @@ final class StatisticsHelper
 
     public function increaseHitsForRedirect(int $redirectId): void
     {
-        /** @var Models\Redirect $redirect */
+        /** @var ?Models\Redirect $redirect */
         $redirect = Models\Redirect::query()->find($redirectId);
 
         if ($redirect === null) {
@@ -204,11 +204,7 @@ final class StatisticsHelper
         RedirectObserver::stopHandleChanges();
 
         /** @noinspection PhpUndefinedClassInspection */
-        $redirect->forceFill([
-            'hits' => DB::raw('hits + 1'),
-            'last_used_at' => $now,
-        ]);
-
+        $redirect->forceFill(['hits' => DB::raw('hits + 1'), 'last_used_at' => $now]);
         $redirect->forceSave();
 
         RedirectObserver::startHandleChanges();

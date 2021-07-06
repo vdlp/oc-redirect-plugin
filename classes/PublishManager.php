@@ -14,15 +14,8 @@ use Vdlp\Redirect\Models\Redirect;
 
 final class PublishManager implements PublishManagerInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
-
-    /**
-     * @var CacheManagerInterface
-     */
-    private $cacheManager;
+    private LoggerInterface $log;
+    private CacheManagerInterface $cacheManager;
 
     public function __construct(LoggerInterface $log, CacheManagerInterface $cacheManager)
     {
@@ -30,9 +23,6 @@ final class PublishManager implements PublishManagerInterface
         $this->cacheManager = $cacheManager;
     }
 
-    /**
-     * @return int Number of published redirects
-     */
     public function publish(): int
     {
         $columns = [
@@ -107,9 +97,8 @@ final class PublishManager implements PublishManagerInterface
     {
         foreach ($redirects as &$redirect) {
             if (isset($redirect['requirements'])) {
-                $redirect['requirements'] = json_encode($redirect['requirements']);
+                $redirect['requirements'] = json_encode($redirect['requirements'], JSON_THROW_ON_ERROR);
             }
-
         }
 
         unset($redirect);

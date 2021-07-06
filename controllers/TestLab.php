@@ -1,20 +1,17 @@
 <?php
 
-/** @noinspection PhpUnused */
-
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
 
 use Backend\Classes\Controller;
-use BackendMenu;
+use Backend\Facades\BackendMenu;
 use Carbon\Carbon;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use October\Rain\Database\Collection;
 use October\Rain\Flash\FlashBag;
-use SystemException;
 use Throwable;
 use Vdlp\Redirect\Classes\Testers;
 use Vdlp\Redirect\Models\Redirect;
@@ -29,25 +26,10 @@ final class TestLab extends Controller
      */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
-    /**
-     * @var array
-     */
-    private $redirects;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @var FlashBag
-     */
-    private $flash;
+    private array $redirects = [];
+    private Request $request;
+    private Translator $translator;
+    private FlashBag $flash;
 
     public function __construct(Request $request, Translator $translator)
     {
@@ -83,7 +65,7 @@ final class TestLab extends Controller
             ->testLabEnabled()
             ->orderBy('sort_order')
             ->get()
-            ->filter(static function (Redirect $redirect) {
+            ->filter(static function (Redirect $redirect): bool {
                 return $redirect->isActiveOnDate(Carbon::today());
             })
             ->all());
@@ -94,12 +76,7 @@ final class TestLab extends Controller
         return $this->redirects[$offset] ?? null;
     }
 
-    // @codingStandardsIgnoreStart
-
-    /**
-     * @throws SystemException
-     */
-    public function index_onTest(): string
+    public function onTest(): string
     {
         $offset = (int) $this->request->get('offset');
 
@@ -110,21 +87,16 @@ final class TestLab extends Controller
         }
 
         try {
-            $partial = (string) $this->makePartial(
-                'tester_result', [
-                    'redirect' => $redirect,
-                    'testPath' => $this->getTestPath($redirect),
-                    'testResults' => $this->getTestResults($redirect),
-                ]
-            );
+            $partial = (string) $this->makePartial('tester_result', [
+                'redirect' => $redirect,
+                'testPath' => $this->getTestPath($redirect),
+                'testResults' => $this->getTestResults($redirect),
+            ]);
         } catch (Throwable $e) {
-            $partial = (string) $this->makePartial(
-                'tester_failed',
-                [
-                    'redirect' => $redirect,
-                    'message' => $e->getMessage()
-                ]
-            );
+            $partial = (string) $this->makePartial('tester_failed', [
+                'redirect' => $redirect,
+                'message' => $e->getMessage(),
+            ]);
         }
 
         return $partial;
@@ -132,46 +104,39 @@ final class TestLab extends Controller
 
     /**
      * @throws ModelNotFoundException
-     * @throws SystemException
      */
-    public function index_onReRun(): array
+    public function onReRun(): array
     {
         /** @var Redirect $redirect */
         $redirect = Redirect::query()->findOrFail($this->request->get('id'));
 
-        $this->flash->success($this->translator->trans('vdlp.redirect::lang.test_lab.flash_test_executed'));
+        $this->flash->success(trans('vdlp.redirect::lang.test_lab.flash_test_executed'));
 
         return [
             '#testerResult' . $redirect->getKey() => $this->makePartial(
                 'tester_result_items',
                 $this->getTestResults($redirect)
-            )
+            ),
         ];
     }
 
     /**
      * @throws ModelNotFoundException
-     * @throws SystemException
      */
-    public function index_onExclude(): array
+    public function onExclude(): array
     {
         /** @var Redirect $redirect */
         $redirect = Redirect::query()->findOrFail($this->request->get('id'));
         $redirect->update(['test_lab' => false]);
 
-        $this->flash->success($this->translator->trans('vdlp.redirect::lang.test_lab.flash_redirect_excluded'));
+        $this->flash->success(trans('vdlp.redirect::lang.test_lab.flash_redirect_excluded'));
 
         return [
-            '#testButtonWrapper' => $this->makePartial(
-                'test_button',
-                [
-                    'redirectCount' => $this->getRedirectCount()
-                ]
-            )
+            '#testButtonWrapper' => $this->makePartial('test_button', [
+                'redirectCount' => $this->getRedirectCount(),
+            ]),
         ];
     }
-
-    // @codingStandardsIgnoreEnd
 
     public function getTestPath(Redirect $redirect): string
     {

@@ -19,39 +19,13 @@ use Vdlp\Redirect\Models\Settings;
 
 final class RedirectMiddleware
 {
-    /**
-     * @var array
-     */
-    private static $supportedMethods = [
-        'GET',
-        'POST',
-        'HEAD'
-    ];
+    private static array $supportedMethods = ['GET', 'POST', 'HEAD'];
 
-    /**
-     * @var RedirectManagerInterface
-     */
-    private $redirectManager;
-
-    /**
-     * @var RedirectConditionManager
-     */
-    private $redirectConditionManager;
-
-    /**
-     * @var CacheManagerInterface
-     */
-    private $cacheManager;
-
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
+    private RedirectManagerInterface $redirectManager;
+    private RedirectConditionManager $redirectConditionManager;
+    private CacheManagerInterface $cacheManager;
+    private Dispatcher $dispatcher;
+    private LoggerInterface $log;
 
     public function __construct(
         RedirectManagerInterface $redirectManager,
@@ -70,14 +44,13 @@ final class RedirectMiddleware
     /**
      * Run the request filter.
      *
-     * @param Request $request
-     * @param Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
         // Only handle specific request methods.
-        if ($request->isXmlHttpRequest()
+        if (
+            $request->isXmlHttpRequest()
             || !in_array($request->method(), self::$supportedMethods, true)
             || Str::startsWith($request->getRequestUri(), '/vdlp/redirect/sparkline/')
         ) {
@@ -97,7 +70,10 @@ final class RedirectMiddleware
         $requestUri = str_replace($request->getBasePath(), '', $request->getRequestUri());
 
         try {
-            if ($this->cacheManager->cachingEnabledAndSupported()) {
+            if (
+                $this->cacheManager->cachingEnabledAndSupported()
+                && method_exists($this->redirectManager, 'matchCached')
+            ) {
                 $rule = $this->redirectManager->matchCached($requestUri, $request->getScheme());
             } else {
                 $rule = $this->redirectManager->match($requestUri, $request->getScheme());

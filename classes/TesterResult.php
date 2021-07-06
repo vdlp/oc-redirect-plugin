@@ -6,20 +6,9 @@ namespace Vdlp\Redirect\Classes;
 
 final class TesterResult
 {
-    /**
-     * @var bool
-     */
-    private $passed;
-
-    /**
-     * @var string
-     */
-    private $message;
-
-    /**
-     * @var int
-     */
-    private $duration;
+    private bool $passed;
+    private string $message;
+    private int $duration;
 
     public function __construct(bool $passed, string $message)
     {

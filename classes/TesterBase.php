@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use Cms;
 use InvalidArgumentException;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
@@ -15,32 +14,21 @@ abstract class TesterBase implements TesterInterface
 {
     /**
      * Maximum redirects to follow.
-     *
-     * @var int
      */
     public const MAX_REDIRECTS = 10;
 
     /**
      * Connection timeout in seconds.
-     *
-     * @var int
      */
     public const CONNECTION_TIMEOUT = 10;
 
-    /**
-     * @var string
-     */
-    protected $testUrl;
-
-    /**
-     * @var string
-     */
-    protected $testPath;
+    protected string $testUrl;
+    protected string $testPath;
 
     public function __construct(string $testPath)
     {
         $this->testPath = $testPath;
-        $this->testUrl = Cms::url($testPath);
+        $this->testUrl = url($testPath);
     }
 
     final public function execute(): TesterResult
@@ -98,13 +86,10 @@ abstract class TesterBase implements TesterInterface
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curlHandle, CURLOPT_VERBOSE, false);
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, [
-            'X-Vdlp-Redirect: Tester'
+            'X-Vdlp-Redirect: Tester',
         ]);
     }
 
-    /**
-     * @return RedirectManagerInterface
-     */
     protected function getRedirectManager(): RedirectManagerInterface
     {
         /** @var RedirectManagerInterface $manager */
