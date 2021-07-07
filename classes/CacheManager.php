@@ -9,6 +9,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Psr\Log\LoggerInterface;
 use Throwable;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
+use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 use Vdlp\Redirect\Models\Settings;
 
 final class CacheManager implements CacheManagerInterface
@@ -69,6 +70,11 @@ final class CacheManager implements CacheManagerInterface
 
     public function getRedirectRules(): array
     {
+        if (! $this->cache->tags(self::CACHE_TAG_RULES)->has('rules')) {
+            $publishManager = app(PublishManagerInterface::class);
+            $publishManager->publish();
+        }
+
         $data = $this->cache->tags(self::CACHE_TAG_RULES)
             ->get('rules', []);
 
