@@ -64,39 +64,6 @@ final class Plugin extends PluginBase
             $this->app['Illuminate\Contracts\Http\Kernel']
                 ->prependMiddleware(RedirectMiddleware::class);
         }
-
-        /*
-         * Extensibility:
-         *
-         * Allows third-party plugin develop to notify when a URL has changed.
-         * E.g. An editor changes the slug of a blog item.
-         *
-         * `Event::fire('vdlp.redirect.toUrlChanged', [$oldSlug, $newSlug])`
-         *
-         * Only 'exact' redirects will be supported.
-         */
-        Event::listen('vdlp.redirect.toUrlChanged', static function (string $oldUrl, string $newUrl): void {
-            Models\Redirect::query()
-                ->where('match_type', '=', Models\Redirect::TYPE_EXACT)
-                ->where('target_type', '=', Models\Redirect::TARGET_TYPE_PATH_URL)
-                ->where('to_url', '=', $oldUrl)
-                ->where('is_enabled', '=', true)
-                ->update([
-                    'to_url' => $newUrl,
-                    'system' => true,
-                ]);
-        });
-
-        /*
-         * Extensibility:
-         *
-         * When one or more redirects have been changed.
-         */
-        Event::listen('vdlp.redirect.changed', static function (array $redirectIds): void {
-            /** @var PublishManagerInterface $publishManager */
-            $publishManager = resolve(PublishManagerInterface::class);
-            $publishManager->publish();
-        });
     }
 
     public function register(): void
@@ -108,6 +75,7 @@ final class Plugin extends PluginBase
         }
 
         $this->registerConsoleCommands();
+        $this->registerEventListeners();
     }
 
     public function registerPermissions(): array
@@ -402,6 +370,53 @@ final class Plugin extends PluginBase
     {
         Models\Redirect::observe(Observers\RedirectObserver::class);
         Models\Settings::observe(Observers\SettingsObserver::class);
+    }
+
+    private function registerEventListeners(): void
+    {
+        /*
+         * Extensibility:
+         *
+         * Allows third-party plugin develop to notify when a URL has changed.
+         * E.g. An editor changes the slug of a blog item.
+         *
+         * `Event::fire('vdlp.redirect.toUrlChanged', [$oldSlug, $newSlug])`
+         *
+         * Only 'exact' redirects will be supported.
+         */
+        Event::listen('vdlp.redirect.toUrlChanged', static function (string $oldUrl, string $newUrl): void {
+            Models\Redirect::query()
+                ->where('match_type', '=', Models\Redirect::TYPE_EXACT)
+                ->where('target_type', '=', Models\Redirect::TARGET_TYPE_PATH_URL)
+                ->where('to_url', '=', $oldUrl)
+                ->where('is_enabled', '=', true)
+                ->update([
+                    'to_url' => $newUrl,
+                    'system' => true,
+                ]);
+        });
+
+        /*
+         * Extensibility:
+         *
+         * When one or more redirects have been changed.
+         */
+        Event::listen('vdlp.redirect.changed', static function (array $redirectIds): void {
+            /** @var PublishManagerInterface $publishManager */
+            $publishManager = resolve(PublishManagerInterface::class);
+            $publishManager->publish();
+        });
+
+        /*
+         * Cache Management:
+         *
+         * Re-publish all redirect if cache has been cleared.
+         */
+        Event::listen('cache:cleared', static function (): void {
+            /** @var PublishManagerInterface $publishManager */
+            $publishManager = resolve(PublishManagerInterface::class);
+            $publishManager->publish();
+        });
     }
 
     public static function cmsSupported(): bool
