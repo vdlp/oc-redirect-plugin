@@ -85,6 +85,8 @@
     - "Prevent connection exception when accessing settings in CLI mode -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.6"
 2.5.7:
     - "Improve redirect caching management -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.7"
+2.5.8:
+    - "Improve redirect caching management (revised) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.8"
 3.0.0:
     - "!!! New major version. See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/3.0.0"
     - 20200918_0011_refactor_redirects_logs_table.php
