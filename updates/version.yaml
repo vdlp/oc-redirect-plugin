@@ -83,3 +83,5 @@
     - "Suppress logging when redirect rules file is empty -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.5"
 2.5.6:
     - "Prevent connection exception when accessing settings in CLI mode -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.6"
+2.5.7:
+    - "Improve redirect caching management -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.7"
