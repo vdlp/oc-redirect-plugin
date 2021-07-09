@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect;
 
-use Backend;
+use Backend\Facades\Backend;
+use Event;
 use Exception;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Support\Str;
-use October\Rain\Support\Facades\Event;
 use System\Classes\PluginBase;
 use Throwable;
 use Validator;
