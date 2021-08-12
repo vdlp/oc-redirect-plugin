@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect;
 
-use Backend\Facades\Backend;
+use Backend;
 use Event;
 use Exception;
 use Illuminate\Contracts\Translation\Translator;
@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use System\Classes\PluginBase;
 use Throwable;
 use Validator;
+use Backend\Classes\Controller;
 use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 use Vdlp\Redirect\Classes\Observers;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
@@ -43,7 +44,7 @@ final class Plugin extends PluginBase
             return;
         }
 
-        Backend\Classes\Controller::extend(static function (Backend\Classes\Controller $controller): void {
+        Controller::extend(static function (Controller $controller): void {
             if (Str::startsWith(get_class($controller), 'Vdlp\Redirect\Controllers')) {
                 abort_if(
                     !self::cmsSupported(),
