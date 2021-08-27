@@ -1,13 +1,30 @@
 # 3.0.0
 
 * Drop support for October CMS 1.0
-* Minimum required PHP version is now 7.4
+* Minimum required PHP version is now 7.2.9
 * Redirect to relative paths is now enabled by default.
 * Add database relation to system request logs.
 * When updating to `3.0.0` the table `vdlp_redirect_redirect_logs` will be removed due to schema changes.
 * Improvements to redirect request logs.
 * Improvements to redirect conditions logic.
 * Relative paths setting is now enabled by default.
+
+# 2.5.10
+
+* Add PHP 8.0 version constraint.
+* Add composer/installers package.
+
+# 2.5.9
+
+* Fix import in Plugin file
+
+# 2.5.8
+
+* Improve redirect caching management (revised)
+
+# 2.5.7
+
+* Improve redirect caching management
 
 # 2.5.6
 

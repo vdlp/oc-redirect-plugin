@@ -89,6 +89,8 @@
     - "Improve redirect caching management (revised) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.8"
 2.5.9:
     - "Fix import in Plugin file"
+2.5.10:
+    - "Add PHP 8.0 version constraint and composer/installers package"
 3.0.0:
     - "!!! New major version. See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/3.0.0"
     - 20200918_0011_refactor_redirects_logs_table.php
