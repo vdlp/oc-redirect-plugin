@@ -1,3 +1,20 @@
+# 2.5.10
+
+* Add PHP 8.0 version constraint.
+* Add composer/installers package.
+
+# 2.5.9
+
+* Fix import in Plugin file.
+
+# 2.5.8
+
+* Improve redirect caching management (revised).
+
+# 2.5.7
+
+* Improve redirect caching management.
+
 # 2.5.6
 
 * Prevent connection exception when accessing settings in CLI mode
