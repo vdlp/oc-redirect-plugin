@@ -8,7 +8,6 @@ use Backend\Facades\Backend;
 use Event;
 use Exception;
 use Illuminate\Contracts\Translation\Translator;
-use Illuminate\Support\Str;
 use System\Classes\PluginBase;
 use Throwable;
 use Validator;
@@ -43,20 +42,6 @@ final class Plugin extends PluginBase
             return;
         }
 
-        Backend\Classes\Controller::extend(static function (Backend\Classes\Controller $controller): void {
-            if (Str::startsWith(get_class($controller), 'Vdlp\Redirect\Controllers')) {
-                abort_if(
-                    !self::cmsSupported(),
-                    500,
-                    'The Vdlp.Redirect plugin is not compatible with your October CMS version.'
-                );
-            }
-        });
-
-        if (!self::cmsSupported()) {
-            return;
-        }
-
         $this->registerCustomValidators();
         $this->registerObservers();
 
@@ -70,20 +55,12 @@ final class Plugin extends PluginBase
     {
         $this->app->register(ServiceProvider::class);
 
-        if (!self::cmsSupported()) {
-            return;
-        }
-
         $this->registerConsoleCommands();
         $this->registerEventListeners();
     }
 
     public function registerPermissions(): array
     {
-        if (!self::cmsSupported()) {
-            return [];
-        }
-
         return [
             'vdlp.redirect.access_redirects' => [
                 'label' => 'vdlp.redirect::lang.permission.access_redirects.label',
@@ -94,10 +71,6 @@ final class Plugin extends PluginBase
 
     public function registerNavigation(): array
     {
-        if (!self::cmsSupported()) {
-            return [];
-        }
-
         $defaultBackendUrl = Backend::url(
             'vdlp/redirect/' . (Models\Settings::isStatisticsEnabled() ? 'statistics' : 'redirects')
         );
@@ -213,10 +186,6 @@ final class Plugin extends PluginBase
 
     public function registerSettings(): array
     {
-        if (!self::cmsSupported()) {
-            return [];
-        }
-
         return [
             'config' => [
                 'label' => 'vdlp.redirect::lang.settings.menu_label',
@@ -233,10 +202,6 @@ final class Plugin extends PluginBase
 
     public function registerReportWidgets(): array
     {
-        if (!self::cmsSupported()) {
-            return [];
-        }
-
         /** @var Translator $translator */
         $translator = resolve(Translator::class);
 
@@ -262,10 +227,6 @@ final class Plugin extends PluginBase
 
     public function registerListColumnTypes(): array
     {
-        if (!self::cmsSupported()) {
-            return [];
-        }
-
         return [
             'redirect_switch_color' => static function ($value): string {
                 $format = '<div class="oc-icon-circle" style="color: %s">%s</div>';
@@ -340,10 +301,6 @@ final class Plugin extends PluginBase
 
     public function registerSchedule($schedule): void
     {
-        if (!self::cmsSupported()) {
-            return;
-        }
-
         $schedule->command('vdlp:redirect:publish-redirects')
             ->dailyAt(config('vdlp.redirect::cron.publish_redirects', '00:00'));
     }
