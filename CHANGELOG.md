@@ -2,7 +2,6 @@
 
 ## 2.5.11
 
-* Remove CMS support check.
 * Fix bad use of import.
 
 ## 2.5.10
