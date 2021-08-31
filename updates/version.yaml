@@ -91,6 +91,8 @@
     - "Fix import in Plugin file"
 2.5.10:
     - "Add PHP 8.0 version constraint and composer/installers package"
+2.5.11:
+    - "Minor fixes -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.11"
 3.0.0:
     - "!!! New major version. See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/3.0.0"
     - 20200918_0011_refactor_redirects_logs_table.php

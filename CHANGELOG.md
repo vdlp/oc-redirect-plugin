@@ -9,6 +9,11 @@
 * Improvements to redirect conditions logic.
 * Relative paths setting is now enabled by default.
 
+# 2.5.11
+
+* Remove CMS support check.
+* Fix bad use of import.
+
 # 2.5.10
 
 * Add PHP 8.0 version constraint.
