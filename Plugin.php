@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect;
 
-use Backend\Facades\Backend;
+use Backend;
 use Event;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
