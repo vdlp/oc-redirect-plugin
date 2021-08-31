@@ -1,99 +1,67 @@
-1.0.0:
+v1.0.0:
     - "Transfer vendor ownership. Adrenth.Redirect -> Vdlp.Redirect"
     - 20180718_0001_create_tables.php
     - 20180831_0002_upgrade_from_adrenth_redirect.php
-1.1.0: "Redirect rules are now being cached (if caching enabled) -- See: https://github.com/vdlp/oc-redirect-plugin/issues/1"
-1.2.0: "Add extra filters to the Redirects overview -- See: https://github.com/vdlp/oc-redirect-plugin/pull/5"
-1.3.0:
+v1.1.0: "Redirect rules are now being cached (if caching enabled) -- See: https://github.com/vdlp/oc-redirect-plugin/issues/1"
+v1.2.0: "Add extra filters to the Redirects overview -- See: https://github.com/vdlp/oc-redirect-plugin/pull/5"
+v1.3.0:
     - "Add support for ignoring query parameters -- See: https://github.com/vdlp/oc-redirect-plugin/issues/6"
     - 20181019_0003_add_ignore_query_parameters_to_redirects_table.php
-1.4.0: "Code dusting and improvements to the redirect list view"
-1.4.1:
+v1.4.0: "Code dusting and improvements to the redirect list view"
+v1.4.1:
     - "Add extra statistics database index to improve performance"
     - 20181117_0004_add_redirect_timestamp_crawler_index_on_clients_table.php
-1.4.2:
+v1.4.2:
     - "Add extra statistics database index to improve performance (Statistics dashboard)"
     - 20181117_0005_add_month_year_crawler_index_on_clients_table.php
-1.4.3:
-    - "Fix thrown BindingResolutionException on redirecting"
-1.4.4:
-    - "Fixes a redirect loop bug which might occur after renaming content pages"
-1.4.5:
-    - "Fixes critical issue with ignoring query parameters"
-1.5.0:
-    - "Bugfixes and added more extensibility support -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.5.0"
-1.6.0:
+v1.4.3: "Fix thrown BindingResolutionException on redirecting"
+v1.4.4: "Fixes a redirect loop bug which might occur after renaming content pages"
+v1.4.5: "Fixes critical issue with ignoring query parameters"
+v1.5.0: "Bugfixes and added more extensibility support -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.5.0"
+v1.6.0:
     - "Minor UI additions and added new Match Type: Regular Expressions! -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.6.0"
     - 20190404_0006_add_description_to_redirects_table.php
-1.7.0:
-    - "Bugfixes and code improvements -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.7.0"
-1.8.0:
-    - "Add CLI command for publishing redirects -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.8.0"
-1.8.1: "Fix critical issue regarding regular expression redirects"
-1.9.0: "Add setting for enabling/disabling automatic creation of redirects -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.9.0"
-1.10.0:
+v1.7.0: "Bugfixes and code improvements -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.7.0"
+v1.8.0: "Add CLI command for publishing redirects -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.8.0"
+v1.8.1: "Fix critical issue regarding regular expression redirects"
+v1.9.0: "Add setting for enabling/disabling automatic creation of redirects -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.9.0"
+v1.10.0:
     - "Improve statistics performance -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.0"
     - 20190704_0007_add_timestamp_crawler_index_on_clients_table.php
-1.10.1:
-    - "This fixes an issue where redirects will fail to work when the redirects.csv file does not have the write permission -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.1"
-1.10.2:
-    - "Fixes a fatal error when running TestLab -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.2"
-1.10.3:
-    - "Fix support for Postgres -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.3"
-1.10.4:
-    - "Fixes reported issues #41 and #43 -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.4"
-1.10.5:
-    - "Fixes reported issues #46 and #49 -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.5"
-2.0.0:
-    - "Supports PHP 7.1.3 and higher. Read CHANGELOG.md -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.0.0"
-2.0.1:
-    - "Fix Middleware not being invoked in newer PHP versions -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.0.1"
-2.0.2:
+v1.10.1: "This fixes an issue where redirects will fail to work when the redirects.csv file does not have the write permission -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.1"
+v1.10.2: "Fixes a fatal error when running TestLab -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.2"
+v1.10.3: "Fix support for Postgres -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.3"
+v1.10.4: "Fixes reported issues #41 and #43 -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.4"
+v1.10.5: "Fixes reported issues #46 and #49 -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/1.10.5"
+v2.0.0: "Supports PHP 7.1.3 and higher. Read CHANGELOG.md -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.0.0"
+v2.0.1: "Fix Middleware not being invoked in newer PHP versions -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.0.1"
+v2.0.2:
     - "Minor database and configuration fixes -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.0.2"
     - 20200408_0008_change_column_types_from_char_to_varchar.php
-2.1.0:
-    - "Added support for October CMS L6 build, improved caching and more -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.1.0"
-2.1.1:
-    - "Update CHANGELOG"
-2.2.0:
-    - "Add cache control header and UI improvements -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.2.0"
-2.3.0:
+v2.1.0: "Added support for October CMS L6 build, improved caching and more -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.1.0"
+v2.1.1: "Update CHANGELOG"
+v2.2.0: "Add cache control header and UI improvements -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.2.0"
+v2.3.0:
     - "Add new redirect options (ignore case and ignore trailing slash) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.3.0"
     - 20200414_0009_add_ignore_case_to_redirects_table.php
     - 20200414_0010_add_ignore_trailing_slash_to_redirects_table.php
-2.3.1:
-    - "Fix SQLSTATE[42S22] error when installing plugin -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.3.1"
-2.3.2:
-    - "Improve error handling in plugin migration process -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.3.2"
-2.4.0:
-    - "Skip requests with header 'X-Requested-With: XMLHttpRequest' -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.4.0"
-2.4.1:
-    - "Add Redirect Extensions promo page -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.4.1"
-2.5.0:
-    - "Add support for using relative paths -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.0"
-2.5.1:
-    - "Fixes issues with redirect rules file not being present -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.1"
-2.5.2:
-    - "Fix bug that causes re-writing the redirect rules file when hits are updated -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.2"
-2.5.3:
-    - "Improve / fixes redirect rule caching -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.3"
-2.5.4:
-    - "Add support for symfony/stopwatch:^5.0 (version 4.0 is still supported) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.4"
-2.5.5:
-    - "Suppress logging when redirect rules file is empty -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.5"
-2.5.6:
-    - "Prevent connection exception when accessing settings in CLI mode -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.6"
-2.5.7:
-    - "Improve redirect caching management -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.7"
-2.5.8:
-    - "Improve redirect caching management (revised) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.8"
-2.5.9:
-    - "Fix import in Plugin file"
-2.5.10:
-    - "Add PHP 8.0 version constraint and composer/installers package"
-2.5.11:
-    - "Minor fixes -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.11"
-3.0.0:
-    - "!!! New major version. See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/3.0.0"
+v2.3.1: "Fix SQLSTATE[42S22] error when installing plugin -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.3.1"
+v2.3.2: "Improve error handling in plugin migration process -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.3.2"
+v2.4.0: "Skip requests with header 'X-Requested-With: XMLHttpRequest' -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.4.0"
+v2.4.1: "Add Redirect Extensions promo page -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.4.1"
+v2.5.0: "Add support for using relative paths -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.0"
+v2.5.1: "Fixes issues with redirect rules file not being present -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.1"
+v2.5.2: "Fix bug that causes re-writing the redirect rules file when hits are updated -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.2"
+v2.5.3: "Improve / fixes redirect rule caching -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.3"
+v2.5.4: "Add support for symfony/stopwatch:^5.0 (version 4.0 is still supported) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.4"
+v2.5.5: "Suppress logging when redirect rules file is empty -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.5"
+v2.5.6: "Prevent connection exception when accessing settings in CLI mode -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.6"
+v2.5.7: "Improve redirect caching management -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.7"
+v2.5.8: "Improve redirect caching management (revised) -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.8"
+v2.5.9: "Fix import in Plugin file"
+v2.5.10: "Add PHP 8.0 version constraint and composer/installers package"
+v2.5.11: "Minor fixes -- See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/2.5.11"
+v3.0.0:
+    - "Drop support for October CMS 1.1 and lower. See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/3.0.0"
     - 20200918_0011_refactor_redirects_logs_table.php
     - 20200918_0012_add_redirect_id_to_system_request_logs_table.php
