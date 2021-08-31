@@ -1,6 +1,6 @@
 # 3.0.0
 
-* Drop support for October CMS 1.0
+* Drop support for October CMS 1.1 and lower
 * Minimum required PHP version is now 7.2.9
 * Redirect to relative paths is now enabled by default.
 * Add database relation to system request logs.
