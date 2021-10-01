@@ -34,35 +34,35 @@ final class Settings extends Model
     public static function isLoggingEnabled(): bool
     {
         try {
-            return (bool) (new self)->get('logging_enabled', true);
-        } catch (Throwable $e) {
-            return true;
+            return (bool) (new self())->get('logging_enabled', false);
+        } catch (Throwable $exception) {
+            return false;
         }
     }
 
     public static function isStatisticsEnabled(): bool
     {
         try {
-            return (bool) (new self)->get('statistics_enabled', true);
-        } catch (Throwable $e) {
-            return true;
+            return (bool) (new self())->get('statistics_enabled', false);
+        } catch (Throwable $exception) {
+            return false;
         }
     }
 
     public static function isTestLabEnabled(): bool
     {
         try {
-            return (bool) (new self)->get('test_lab_enabled', true);
-        } catch (Throwable $e) {
-            return true;
+            return (bool) (new self())->get('test_lab_enabled', false);
+        } catch (Throwable $exception) {
+            return false;
         }
     }
 
     public static function isCachingEnabled(): bool
     {
         try {
-            return (bool) (new self)->get('caching_enabled', false);
-        } catch (Throwable $e) {
+            return (bool) (new self())->get('caching_enabled', false);
+        } catch (Throwable $exception) {
             return false;
         }
     }
@@ -70,8 +70,8 @@ final class Settings extends Model
     public static function isRelativePathsEnabled(): bool
     {
         try {
-            return (bool) (new self)->get('relative_paths_enabled', true);
-        } catch (Throwable $e) {
+            return (bool) (new self())->get('relative_paths_enabled', true);
+        } catch (Throwable $exception) {
             return true;
         }
     }
