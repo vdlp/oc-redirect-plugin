@@ -239,7 +239,8 @@ final class RedirectManager implements RedirectManagerInterface
                 break;
         }
 
-        if ($rule->getToScheme() !== Models\Redirect::SCHEME_AUTO
+        if (is_string($toUrl)
+            && $rule->getToScheme() !== Models\Redirect::SCHEME_AUTO
             && (strpos($toUrl, 'http://') === 0 || strpos($toUrl, 'https://') === 0)
         ) {
             $toUrl = str_replace(['https://', 'http://'], $rule->getToScheme() . '://', $toUrl);

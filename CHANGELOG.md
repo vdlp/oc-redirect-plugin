@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.5.12
+
+* Fix strpos() type error.
+
 ## 2.5.11
 
 * Fix bad use of import.
