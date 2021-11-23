@@ -359,9 +359,13 @@ final class Plugin extends PluginBase
          * When one or more redirects have been changed.
          */
         Event::listen('vdlp.redirect.changed', static function (array $redirectIds): void {
-            /** @var PublishManagerInterface $publishManager */
-            $publishManager = resolve(PublishManagerInterface::class);
-            $publishManager->publish();
+            try {
+                /** @var PublishManagerInterface $publishManager */
+                $publishManager = resolve(PublishManagerInterface::class);
+                $publishManager->publish();
+            } catch (Throwable $throwable) {
+                // @ignoreException
+            }
         });
 
         /*
@@ -370,9 +374,13 @@ final class Plugin extends PluginBase
          * Re-publish all redirect if cache has been cleared.
          */
         Event::listen('cache:cleared', static function (): void {
-            /** @var PublishManagerInterface $publishManager */
-            $publishManager = resolve(PublishManagerInterface::class);
-            $publishManager->publish();
+            try {
+                /** @var PublishManagerInterface $publishManager */
+                $publishManager = resolve(PublishManagerInterface::class);
+                $publishManager->publish();
+            } catch (Throwable $throwable) {
+                // @ignoreException
+            }
         });
     }
 
