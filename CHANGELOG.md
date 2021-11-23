@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.5.13
+
+* Fix database error when cache is being cleared before installation of plugin.
+
 ## 2.5.12
 
 * Fix strpos() type error.
