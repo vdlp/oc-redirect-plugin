@@ -1,8 +1,8 @@
 {
     "name": "vdlp/oc-redirect-plugin",
     "description": "Advanced redirect plugin for October CMS.",
-    "type": "october-plugin",
     "license": "GPL-2.0-only",
+    "type": "october-plugin",
     "authors": [
         {
             "name": "Van der Let & Partners",
@@ -15,19 +15,27 @@
     ],
     "require": {
         "php": "^7.2.9 || ^8.0",
-        "ext-json": "*",
         "ext-curl": "*",
+        "ext-json": "*",
         "composer/installers": "^1.0",
-        "jaybizzle/crawler-detect": "^1.2",
-        "symfony/stopwatch": "^4.0|^5.0",
         "davaxi/sparkline": "~1.2.0",
-        "october/system": "^2.0"
+        "jaybizzle/crawler-detect": "^1.2",
+        "october/system": "^2.1",
+        "symfony/stopwatch": "^4.0 || ^5.0"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://gateway.octobercms.com"
+        }
+    ],
     "archive": {
         "exclude": [
-            ".gitignore",
+            ".gitattributes",
             ".github",
-            ".idea/"
+            ".gitignore",
+            "tests",
+            "phpunit.xml"
         ]
     }
 }
