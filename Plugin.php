@@ -20,8 +20,6 @@ use Vdlp\Redirect\ReportWidgets;
 
 final class Plugin extends PluginBase
 {
-    public $elevated = true;
-
     public function pluginDetails(): array
     {
         return [
@@ -382,10 +380,5 @@ final class Plugin extends PluginBase
                 // @ignoreException
             }
         });
-    }
-
-    public static function cmsSupported(): bool
-    {
-        return true;
     }
 }
