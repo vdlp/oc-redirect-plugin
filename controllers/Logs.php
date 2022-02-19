@@ -21,42 +21,16 @@ use Vdlp\Redirect\Models\RedirectLog;
  */
 final class Logs extends Controller
 {
-    /**
-     * @var array
-     */
     public $implement = [
         ListController::class
     ];
 
-    /**
-     * @var string
-     */
-    public $listConfig = 'config_list.yaml';
-
-    /**
-     * @var array
-     */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @var FlashBag
-     */
-    private $flash;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
+    public string $listConfig = 'config_list.yaml';
+    private Request $request;
+    private Translator $translator;
+    private FlashBag $flash;
+    private LoggerInterface $log;
 
     public function __construct(Request $request, Translator $translator, LoggerInterface $log)
     {
@@ -65,7 +39,6 @@ final class Logs extends Controller
         BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'logs');
 
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
-        $this->addJs('/plugins/vdlp/redirect/assets/javascript/redirect.js');
 
         $this->request = $request;
         $this->translator = $translator;

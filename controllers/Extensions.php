@@ -11,7 +11,7 @@ use System\Classes\PluginManager;
 final class Extensions extends Controller
 {
     /** @var string[] */
-    private static $extensions = [
+    private static array $extensions = [
         'Vdlp.RedirectConditions',
         'Vdlp.RedirectConditionsDomain',
         'Vdlp.RedirectConditionsExample',
@@ -26,7 +26,6 @@ final class Extensions extends Controller
         BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'extensions');
 
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
-        $this->addJs('/plugins/vdlp/redirect/assets/javascript/redirect.js');
 
         $this->pageTitle = 'Redirect Extensions (new)';
     }

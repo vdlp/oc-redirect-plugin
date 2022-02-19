@@ -43,9 +43,6 @@ use Vdlp\Redirect\Models;
  */
 final class Redirects extends Controller
 {
-    /**
-     * {@inheritDoc}
-     */
     public $implement = [
         Behaviors\FormController::class,
         Behaviors\ListController::class,
@@ -54,63 +51,24 @@ final class Redirects extends Controller
         Behaviors\RelationController::class,
     ];
 
-    /**
-     * @var string
-     */
-    public $formConfig = 'config_form.yaml';
+    public string $formConfig = 'config_form.yaml';
 
-    /**
-     * @var string
-     */
-    public $listConfig = [
+    public array $listConfig = [
         'list' => 'config_list.yaml',
         'requestLog' => 'request-log/config_list.yaml',
     ];
 
-    /**
-     * @var string
-     */
-    public $reorderConfig = 'config_reorder.yaml';
+    public string $reorderConfig = 'config_reorder.yaml';
+    public string $importExportConfig = 'config_import_export.yaml';
+    public string $relationConfig = 'config_relation.yaml';
 
-    /**
-     * @var string
-     */
-    public $importExportConfig = 'config_import_export.yaml';
-
-    /**
-     * @var string
-     */
-    public $relationConfig = 'config_relation.yaml';
-
-    /**
-     * {@inheritDoc}
-     */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-
-    /**
-     * @var CacheManagerInterface
-     */
-    private $cacheManager;
-
-    /**
-     * @var FlashBag
-     */
-    private $flash;
+    private Request $request;
+    private Translator $translator;
+    private Dispatcher $dispatcher;
+    private CacheManagerInterface $cacheManager;
+    private FlashBag $flash;
 
     public function __construct(
         Request $request,
@@ -127,7 +85,6 @@ final class Redirects extends Controller
         BackendMenu::setContext('Vdlp.Redirect', 'redirect', $sideMenuItemCode);
 
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
-        $this->addJs('/plugins/vdlp/redirect/assets/javascript/redirect.js');
 
         $this->vars['match'] = null;
         $this->vars['statisticsHelper'] = new StatisticsHelper();

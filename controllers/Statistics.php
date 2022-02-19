@@ -19,15 +19,8 @@ use Vdlp\Redirect\Classes\StatisticsHelper;
  */
 final class Statistics extends Controller
 {
-    /**
-     * @var StatisticsHelper
-     */
-    private $helper;
-
-    /**
-     * @var array
-     */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
+    private StatisticsHelper $helper;
 
     public function __construct()
     {
@@ -38,7 +31,6 @@ final class Statistics extends Controller
         $this->pageTitle = 'vdlp.redirect::lang.title.statistics';
 
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
-        $this->addJs('/plugins/vdlp/redirect/assets/javascript/redirect.js');
         $this->addCss('/plugins/vdlp/redirect/assets/css/statistics.css');
 
         $this->helper = new StatisticsHelper();

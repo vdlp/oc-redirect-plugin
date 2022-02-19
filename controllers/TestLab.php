@@ -21,9 +21,6 @@ use Vdlp\Redirect\Models\Redirect;
  */
 final class TestLab extends Controller
 {
-    /**
-     * @var array
-     */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     private array $redirects = [];
@@ -51,7 +48,6 @@ final class TestLab extends Controller
         $this->pageTitle = 'vdlp.redirect::lang.title.test_lab';
 
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
-        $this->addJs('/plugins/vdlp/redirect/assets/javascript/redirect.js');
         $this->addCss('/plugins/vdlp/redirect/assets/css/test-lab.css');
         $this->addJs('/plugins/vdlp/redirect/assets/javascript/test-lab.js');
 
