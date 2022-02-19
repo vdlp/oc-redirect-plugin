@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Redirect logging is now **disabled** by default.
   * Redirect statistics is now **disabled** by default.
 
+## [2.6.0]
+
+* Update plugin dependencies.
+
+## [2.5.13]
+
+* Fix database error when cache is being cleared before installation of plugin.
+
+## [2.5.12]
+
+* Fix strpos() type error.
+
 ## [2.5.11]
 
 * Remove CMS support check.

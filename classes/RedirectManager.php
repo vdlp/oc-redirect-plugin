@@ -191,13 +191,12 @@ final class RedirectManager implements RedirectManagerInterface
     {
         $toUrl = null;
 
-        // Determine the URL to redirect to
+        // Determine the URL to redirect to.
         switch ($rule->getTargetType()) {
             case Models\Redirect::TARGET_TYPE_PATH_URL:
                 $toUrl = $this->redirectToPathOrUrl($rule);
 
                 // Check if $toUrl is a relative path, if so, we need to add the base path to it.
-                // Refs: https://github.com/vdlp/redirect/issues/21
                 if (
                     $toUrl[0] !== '/'
                     && strncmp($toUrl, 'http://', 7) !== 0
@@ -222,15 +221,16 @@ final class RedirectManager implements RedirectManagerInterface
             case Models\Redirect::TARGET_TYPE_STATIC_PAGE:
                 try {
                     $toUrl = $this->redirectToStaticPage($rule);
-                } catch (Throwable $e) {
-                    $toUrl = null;
+                } catch (Throwable $throwable) {
+                    // @ignoreException
                 }
 
                 break;
         }
 
         if (
-            $rule->getToScheme() !== Models\Redirect::SCHEME_AUTO
+            is_string($toUrl)
+            && $rule->getToScheme() !== Models\Redirect::SCHEME_AUTO
             && (strncmp($toUrl, 'http://', 7) === 0 || strncmp($toUrl, 'https://', 8) === 0)
         ) {
             $toUrl = str_replace(['https://', 'http://'], $rule->getToScheme() . '://', $toUrl);
