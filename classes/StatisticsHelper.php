@@ -90,13 +90,35 @@ final class StatisticsHelper
             ->count();
     }
 
-    public function getRedirectHitsPerDay(bool $crawler = false): array
+    public function getMonthYearOptions(): array
+    {
+        $result = Models\Client::query()
+            ->addSelect('month', 'year')
+            ->groupBy('month', 'year')
+            ->orderByRaw('year DESC, month DESC');
+
+        $data = $result->get()
+            ->toArray();
+
+        $options = [];
+
+        foreach ($data as $monthYear) {
+            $options[$monthYear['month'] . '_' . $monthYear['year']]
+                = Carbon::createFromDate($monthYear['year'], $monthYear['month'])->isoFormat('MMMM Y');
+        }
+
+        return $options;
+    }
+
+    public function getRedirectHitsPerDay(int $month, int $year, bool $crawler = false): array
     {
         $result = Models\Client::query()
             ->selectRaw('COUNT(id) AS hits')
+            ->where('month', $month)
+            ->where('year', $year)
             ->addSelect('day', 'month', 'year')
             ->groupBy('day', 'month', 'year')
-            ->orderByRaw('year ASC, month ASC, day ASC');
+            ->orderByRaw('year DESC, month DESC, day DESC');
 
         if ($crawler) {
             $result->whereNotNull('crawler');
@@ -104,8 +126,8 @@ final class StatisticsHelper
             $result->whereNull('crawler');
         }
 
-        return $result->limit(365)
-            ->get()
+        return $result->get()
+            ->keyBy('day')
             ->toArray();
     }
 

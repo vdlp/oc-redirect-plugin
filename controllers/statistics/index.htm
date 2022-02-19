@@ -1,9 +1,19 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"
+        integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+
 <div class="row">
     <div class="col-md-12">
-        <div class="report-widget redirect-hits-per-day">
-            <h3><?= e(trans('vdlp.redirect::lang.statistics.hits_per_day')); ?></h3>
-            <div id="visualization"></div>
-            <p class="help-block"><em><?= e(trans('vdlp.redirect::lang.statistics.click_on_chart')); ?></em></p>
+        <div class="report-widget redirect-hits-per-day" id="hitsPerDay">
+            <?= $this->makePartial('loading-indicator'); ?>
+            <script>
+                let data = null;
+                let config = null;
+                let hitsPerDayChart = null;
+
+                $.request('onLoadHitsPerDay')
+            </script>
         </div>
     </div>
 </div>

@@ -7,7 +7,10 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Controllers;
 
 use Backend\Classes\Controller;
+use Backend\Models\BrandSetting;
 use BackendMenu;
+use Carbon\Carbon;
+use JsonException;
 use SystemException;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
@@ -34,9 +37,6 @@ final class Statistics extends Controller
 
         $this->pageTitle = 'vdlp.redirect::lang.title.statistics';
 
-        $this->addJs('https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js');
-        $this->addCss('https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css');
-        $this->addJs('/plugins/vdlp/redirect/assets/javascript/statistics.js');
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
         $this->addJs('/plugins/vdlp/redirect/assets/javascript/redirect.js');
         $this->addCss('/plugins/vdlp/redirect/assets/css/statistics.css');
@@ -48,32 +48,36 @@ final class Statistics extends Controller
     {
     }
 
-    public function onRedirectHitsPerDay(): string
+    /**
+     * @throws SystemException|JsonException
+     */
+    public function onLoadHitsPerDay(): array
     {
-        $crawlerHits = $this->helper->getRedirectHitsPerDay(true);
+        $today = Carbon::today();
 
-        $data = [];
+        $postValue = post('period-month-year', $today->month . '_' . $today->year);
 
-        foreach ($crawlerHits as $hit) {
-            $data[] = [
-                'x' => date('Y-m-d', mktime(0, 0, 0, (int) $hit['month'], (int) $hit['day'], (int) $hit['year'])),
-                'y' => (int) $hit['hits'],
-                'group' => 0
-            ];
-        }
+        [$month, $year] = explode('_', $postValue);
 
-        $notCrawlerHits = $this->helper->getRedirectHitsPerDay();
+        return [
+            '#hitsPerDay' => $this->makePartial('hits-per-day', [
+                'dataSets' => json_encode([
+                    $this->getHitsPerDayAsDataSet((int) $month, (int) $year, true),
+                    $this->getHitsPerDayAsDataSet((int) $month, (int) $year, false),
+                ], JSON_THROW_ON_ERROR),
+                'labels' => json_encode($this->getLabels(), JSON_THROW_ON_ERROR),
+                'monthYearOptions' => $this->helper->getMonthYearOptions(),
+                'monthYearSelected' => $month . '_' . $year,
+            ]),
+        ];
+    }
 
-        foreach ($notCrawlerHits as $hit) {
-            $data[] = [
-                'x' => date('Y-m-d', mktime(0, 0, 0, (int) $hit['month'], (int) $hit['day'], (int) $hit['year'])),
-                'y' => (int) $hit['hits'],
-                'group' => 1
-            ];
-        }
-
-
-        return json_encode($data);
+    /**
+     * @throws SystemException|JsonException
+     */
+    public function onSelectPeriodMonthYear(): array
+    {
+        return $this->onLoadHitsPerDay();
     }
 
     /**
@@ -127,6 +131,43 @@ final class Statistics extends Controller
                 'totalLastMonth' => $this->helper->getTotalLastMonth(),
                 'latestClient' => $this->helper->getLatestClient(),
             ]),
+        ];
+    }
+
+    private function getLabels(): array
+    {
+        $labels = [];
+
+        foreach (Carbon::today()->firstOfMonth()->daysUntil(Carbon::today()->endOfMonth()) as $date) {
+            $labels[] = $date->isoFormat('LL');
+        }
+
+        return $labels;
+    }
+
+    private function getHitsPerDayAsDataSet(int $month, int $year, bool $crawler): array
+    {
+        $today = Carbon::createFromDate($year, $month, 1);
+
+        $data = $this->helper->getRedirectHitsPerDay($month, $year, $crawler);
+
+        for ($i = $today->firstOfMonth()->day; $i <= $today->lastOfMonth()->day; $i++) {
+            if (!array_key_exists($i, $data)) {
+                $data[$i] = ['hits' => 0];
+            }
+        }
+
+        ksort($data);
+
+        $brandSettings = new BrandSetting();
+
+        $color = $crawler ? $brandSettings->get('primary_color') : $brandSettings->get('secondary_color');
+
+        return [
+            'label' => $crawler ? 'Crawler hits' : 'Visitor hits',
+            'backgroundColor' => $color,
+            'borderColor' => $color,
+            'data' => data_get($data, '*.hits'),
         ];
     }
 }
