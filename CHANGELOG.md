@@ -6,13 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.0.0]
 
-* Drop support for October CMS 1.1 and lower
-* Minimum required PHP version is now 7.2.9
+* Drop support for October CMS 1.1 and lower.
+* Minimum required PHP version is now 7.4
 * Redirect to relative paths is now enabled by default.
 * Add database relation to system request logs.
 * When updating to `3.0.0` the table `vdlp_redirect_redirect_logs` will be removed due to schema changes.
 * Improvements to redirect request logs.
 * Improvements to redirect conditions logic.
+* Improvements to the statistics page.
 * Redirect Settings:
   * Relative paths setting is now **enabled** by default.
   * Testlab (Beta) is now **disabled** by default.

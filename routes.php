@@ -11,7 +11,6 @@ use Vdlp\Redirect\Classes\Sparkline;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
 Route::group(['middleware' => ['web']], static function () {
-
     Route::get('vdlp/redirect/sparkline/{redirectId}', static function ($redirectId) {
         if (!BackendAuth::check()) {
             return response('Forbidden', 403);

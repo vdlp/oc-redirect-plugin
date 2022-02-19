@@ -313,7 +313,7 @@ final class Plugin extends PluginBase
         Validator::extend('is_regex', static function ($attribute, $value): bool {
             try {
                 preg_match($value, '');
-            } catch (Throwable $e) {
+            } catch (Throwable $throwable) {
                 return false;
             }
 
