@@ -14,7 +14,7 @@ use Validator;
 use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 use Vdlp\Redirect\Classes\Observers;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
-use Vdlp\Redirect\Console\PublishRedirects;
+use Vdlp\Redirect\Console\PublishRedirectsCommand;
 use Vdlp\Redirect\Models;
 use Vdlp\Redirect\ReportWidgets;
 
@@ -305,7 +305,7 @@ final class Plugin extends PluginBase
 
     private function registerConsoleCommands(): void
     {
-        $this->registerConsoleCommand('vdlp.redirect.publish-redirects', PublishRedirects::class);
+        $this->registerConsoleCommand('vdlp.redirect.publish-redirects', PublishRedirectsCommand::class);
     }
 
     private function registerCustomValidators(): void
