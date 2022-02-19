@@ -10,4 +10,4 @@ logs:
         showSearch: true
         showSorting: true
         recordsPerPage: 10
-        defaultSort: date_time
+        defaultSort: updated_at

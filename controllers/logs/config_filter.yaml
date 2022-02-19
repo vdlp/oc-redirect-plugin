@@ -3,10 +3,10 @@
 # ===================================
 
 scopes:
-    date_time:
+    updated_at:
         label: vdlp.redirect::lang.redirect.date
         type: date
-        conditions: date_time >= ':filtered'
+        conditions: updated_at >= ':filtered'
     status_code:
         label: vdlp.redirect::lang.redirect.status_code
         type: group

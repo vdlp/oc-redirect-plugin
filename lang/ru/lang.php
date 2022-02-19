@@ -30,25 +30,25 @@ return [
         'caching_enabled_comment' => 'Улучшает механизм перенаправления при большом количестве перенаправлений. '
             . 'ВНИМАНИЕ: Драйвер кэша `file` и `database` НЕ поддерживаются. '
             . 'Рекомендуемым драйвером является `memcached` или аналогичный драйвер "in-memory" для кеширования в памяти.',
-        'relative_paths_enabled_label' => 'Use relative paths', // TODO
-        'relative_paths_enabled_command' => 'The redirect engine will generate relative paths instead of absolute paths.', // TODO
+        'relative_paths_enabled_label' => 'Использовать относительные пути',
+        'relative_paths_enabled_command' => 'Движок редиректов сгенерирует относительные пути вместо абсолютных.',
     ],
     'redirect' => [
         'redirect' => 'Редиректы',
         'from_url' => 'Исходный путь',
         'from_url_placeholder' => '/source/path',
         'from_url_comment' => 'Исходный путь относительно корня сайта.',
-        'from_scheme' => 'Source scheme', // TODO
-        'from_scheme_comment' => 'Force match on scheme. If HTTP is selected <u>http://domain.com/path</u> will ' // TODO
-            . 'match and <u>https://domain.com/path</u> does not match.', // TODO
+        'from_scheme' => 'Исходный протокол',
+        'from_scheme_comment' => 'Принудительное совпадение протоколов. Если выбранное HTTP путь: <u>http://domain.com/path</u> '
+            . 'не совпадет с <u>https://domain.com/path</u>.',
         'to_url' => 'Путь редиректа или URL',
         'to_url_placeholder' => '/absolute/path, relative/path или http://target.url',
         'to_url_comment' => 'Абсолютный путь, относительный путь или URL для перенаправления.',
         'to_url_required_if' => 'Исходный путь или URL обязателен для заполнения',
-        'to_scheme' => 'Target scheme', // TODO
-        'to_scheme_comment' => 'Target scheme will be forced to HTTP or HTTPS ' // TODO
-            . 'or choose AUTOMATIC to use the default scheme of the website.', // TODO
-        'scheme_auto' => 'Automatic', // TODO
+        'to_scheme' => 'Целевой протокол',
+        'to_scheme_comment' => 'Целевой протокол принудительно установит HTTP или HTTPS'
+            . ' Используйте "Авто" для использования стандартного протокола веб-сайта.',
+        'scheme_auto' => 'Авто',
         'cms_page_required_if' => 'Пожалуйста, выберите страницу CMS для перенаправления',
         'static_page_required_if' => 'Пожалуйста, пропишите статическую страницу для перенаправления',
         'match_type' => 'Тип соответствия',
@@ -78,7 +78,7 @@ return [
         'not_found' => '404 - не найдено',
         'gone' => '410 - удалено',
         'enabled' => 'Включено',
-        'none' => 'none', // TODO
+        'none' => 'Пусто',
         'enabled_comment' => 'Установите флажок для включения этого редиректа.',
         'priority' => 'Приоритет',
         'hits' => 'Переходы',
@@ -108,10 +108,10 @@ return [
         'minimum_hits' => 'Минимум # хитов',
         'ignore_query_parameters' => 'Игнорировать параметры запроса (рекомендуется).',
         'ignore_query_parameters_comment' => 'Движок будет игнорировать все параметры запроса из исходного пути.',
-        'ignore_case' => 'Ignore case', // TODO
-        'ignore_case_comment' => 'The redirect engine will do case-insensitive matching.', // TODO
-        'ignore_trailing_slash' => 'Ignore trailing slash', // TODO
-        'ignore_trailing_slash_comment' => 'The redirect engine will ignore trailing slashes.', // TODO
+        'ignore_case' => 'Игнорирование регистра',
+        'ignore_case_comment' => 'Дивжок редиректов будет работать без учета регистра.',
+        'ignore_trailing_slash' => 'Игнорировать завершающий слэш',
+        'ignore_trailing_slash_comment' => 'Дивжок редиректов будет игнорировать завершающий слэш.',
         'last_used_at' => 'Последний хит',
         'updated_at' => 'Обновлено',
         'invalid_regex' => 'Неправильное регулярное выражение.',
@@ -134,7 +134,7 @@ return [
         'input_path' => 'Введите путь',
         'input_path_comment' => 'Путь для тестирования. Например, /old-blog/category/123',
         'input_path_placeholder' => '/input/path',
-        'input_scheme' => 'Input scheme', // TODO
+        'input_scheme' => 'Введите протокол',
         'test_date' => 'Выберите дату',
         'test_date_comment' => 'Если вы запланировали редирект по расписанию, вы можете проверить его работу для конкретной даты.',
         'testing' => 'Проверка...',
@@ -147,41 +147,41 @@ return [
         'section_test_lab_comment' => 'TestLab позволяет вам массово протестировать ваши перенаправления.',
         'test_lab_label' => 'Включить в TestLab',
         'test_lab_enable' => 'Включите этот переключатель, чтобы разрешить тестирование этого редиректа в TestLab.',
-        'test_lab_path_label' => 'Test Path', // TODO
-        'test_lab_path_comment' => 'This path will be used when performing tests. '
-            . 'Replace placeholders with real values.', // TODO
+        'test_lab_path_label' => 'Протестировать путь',
+        'test_lab_path_comment' => 'Этот путь будет использован для тестов. '
+            . 'Замените плейсхолдеры с реальными значениями.',
         'start_tests' => 'Запустить тесты',
         'start_tests_description' => 'Нажмите кнопку \'Запустить тесты\' чтобы начать.',
         'edit' => 'Редактировать',
         'exclude' => 'Исключить',
         'exclude_confirm' => 'Вы действительно хотите исключить этот редирект из TestLab?',
-        'exclude_indicator' => 'Excluding redirect from TestLab', // TODO
-        're_run' => 'Re-run', // TODO
+        'exclude_indicator' => 'Исключаем редирект из TestLab',
+        're_run' => 'Перезапустить',
         're_run_indicator' => 'Запуск тестов, подождите...',
-        'loop' => 'Loop', // TODO
-        'match' => 'Match', // TODO
-        'response_http_code' => 'Response HTTP code', // TODO
-        'response_http_code_should_be' => 'Response HTTP code should be one of:', // TODO
-        'redirect_count' => 'Redirect count', // TODO
-        'final_destination' => 'Final Destination', // TODO
+        'loop' => 'Цикл',
+        'match' => 'Совпадине',
+        'response_http_code' => 'Код ответа HTTP',
+        'response_http_code_should_be' => 'Код ответа HTTP должен быть один из:',
+        'redirect_count' => 'Количество редиректов',
+        'final_destination' => 'Конечный путь',
         'no_redirects' => 'Нет отмеченных редиректов с включенным TestLab. '
             . 'Пожалуйста, включите опцию \'Включить в TestLab\' в редактировании редиректа.',
         'test_error' => 'Произошла ошибка при тестировании этого редиректа.',
         'flash_test_executed' => 'Тест был выполнен.',
         'flash_redirect_excluded' => 'Перенаправление было исключено из TestLab и не будет отображаться при следующем запуске теста.',
         'result_request_failed' => 'Не удалось выполнить запрос.',
-        'redirects_followed' => 'Number of redirects followed: :count (limited to :limit)', // TODO
-        'not_determinate_destination_url' => 'Could not determine final destination URL.', // TODO
-        'no_destination_url' => 'No final destination URL.', // TODO
-        'final_destination_is' => 'Final destination is: :destination', // TODO
-        'possible_loop' => 'Possible redirect loop!', // TODO
-        'no_loop' => 'No redirect loop detected.', // TODO
+        'redirects_followed' => 'Количество редиректов: :count (лимит :limit)',
+        'not_determinate_destination_url' => 'Невозможно определить конечный путь URL.',
+        'no_destination_url' => 'Нет конечного пути URL.',
+        'final_destination_is' => 'Конечный путь: :destination',
+        'possible_loop' => 'Найдена рекурсия редиректов!',
+        'no_loop' => 'Рекурсии редиректов не найдено.',
         'not_match_redirect' => 'Не соответствует ни одному редиректу.',
-        'matched' => 'Matched', // TODO
-        'redirect' => 'redirect', // TODO
-        'matched_not_http_code' => 'Matched redirect, but response HTTP code did not match! '
-            . 'Expected :expected but received :received.', // TODO
-        'matched_http_code' => 'Matched redirect, response HTTP code :code.', // TODO
+        'matched' => 'Совпало',
+        'redirect' => 'редирект',
+        'matched_not_http_code' => 'Совпавший редирект, но код ответа HTTP не совпал! '
+            . 'Ожидалось :expected но получено :received.',
+        'matched_http_code' => 'Совпавший редирект, код ответа HTTP :code.',
         'executing_tests' => 'Выполнение тестов...',
     ],
     'statistics' => [
@@ -197,7 +197,7 @@ return [
         'no_data' => 'Нет данных',
         'top_crawlers_this_month' => 'Топ :top crawlers в этом месяце',
         'top_redirects_this_month' => 'Топ :top редиректов в этом месяце',
-        'activity_last_three_months' => 'Activity last 3 months', // TODO
+        'activity_last_three_months' => 'Активность последние 3 месяца',
     ],
     'title' => [
         'import' => 'Импорт',
@@ -227,7 +227,7 @@ return [
         'import' => 'Импорт',
         'settings' => 'Настройки',
         'categories' => 'Категории',
-        'extensions' => 'Extensions', // TODO
+        'extensions' => 'Расширения',
         'new_category' => 'Новая категория',
         'reset_statistics' => 'Сбросить статистику',
         'logs' => 'Лог редиректов',
@@ -245,7 +245,7 @@ return [
         'tab_scheduling' => 'Расписание',
         'tab_test_lab' => 'TestLab',
         'tab_advanced' => 'Продвинутый',
-        'tab_logs' => 'Event log', // TODO
+        'tab_logs' => 'Журнал событий',
     ],
     'flash' => [
         'success_created_redirects' => 'Успешно создано :count редирект(ов)',
@@ -277,11 +277,11 @@ return [
         'sort_order' => 'Приоритет [sort_order]',
         'is_enabled' => 'Включен [is_enabled] (1 = редирект включен, 0 = редирект отключен [default])',
         'ignore_query_parameters' => 'Ignore Query Parameters [ignore_query_parameters] (1 = ignore query parameters, 0 = include query parameters [default])',
-        'ignore_case' => 'Ignore Case [ignore_case] (1 = yes, 0 = no [default])', // TODO
-        'ignore_trailing_slash' => 'Ignore Trailing Slashes [ignore_trailing_slash] (1 = yes, 0 = no [default])', // TODO
+        'ignore_case' => 'Игнорировать регистр [ignore_case] (1 = да, 0 = нет [по-умолчанию])',
+        'ignore_trailing_slash' => 'Игнорировать завершающие слэши[ignore_trailing_slash] (1 = да, 0 = нет [по-умолчанию])',
         'test_lab' => 'TestLab [test_lab] (1 = TestLab включен, 0 = TestLab выключен [default])',
         'test_lab_path' => 'TestLab path [test_lab_path] (требуется, если match_type = placeholders)',
-        'system' => 'System [system] (1 = система сгенерировала редирект, 0 = пользователь создал редирект [default])',
+        'system' => 'System [system] (1 = система сгенерировала редирект, 0 = пользователь создал редирект [по-умолчанию])',
         'description' => 'Описание [description]',
         'last_used_at' => 'Последнее применение [last_used_at] (YYYY-MM-DD HH:MM:SS или пустой)',
         'created_at' => 'Создан [created_at] (YYYY-MM-DD HH:MM:SS или пустой)',

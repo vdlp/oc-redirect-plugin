@@ -8,33 +8,34 @@ fields:
         comment: vdlp.redirect::lang.settings.menu_description
         type: section
         span: left
+    relative_paths_enabled:
+        label: vdlp.redirect::lang.settings.relative_paths_enabled_label
+        comment: vdlp.redirect::lang.settings.relative_paths_enabled_command
+        span: left
+        type: switch
+        default: true
     logging_enabled:
         label: vdlp.redirect::lang.settings.logging_enabled_label
         comment: vdlp.redirect::lang.settings.logging_enabled_comment
         span: left
         type: switch
-        default: true
+        default: false
     statistics_enabled:
         label: vdlp.redirect::lang.settings.statistics_enabled_label
         comment: vdlp.redirect::lang.settings.statistics_enabled_comment
         span: left
         type: switch
-        default: true
+        default: false
     test_lab_enabled:
         label: vdlp.redirect::lang.settings.test_lab_enabled_label
         comment: vdlp.redirect::lang.settings.test_lab_enabled_comment
         span: left
         type: switch
-        default: true
+        default: false
     caching_enabled:
         label: vdlp.redirect::lang.settings.caching_enabled_label
         comment: vdlp.redirect::lang.settings.caching_enabled_comment
         span: left
         type: switch
         default: false
-    relative_paths_enabled:
-        label: vdlp.redirect::lang.settings.relative_paths_enabled_label
-        comment: vdlp.redirect::lang.settings.relative_paths_enabled_command
-        span: left
-        type: switch
-        default: false
+

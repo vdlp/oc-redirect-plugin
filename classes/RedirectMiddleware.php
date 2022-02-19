@@ -11,7 +11,6 @@ use October\Rain\Events\Dispatcher;
 use Psr\Log\LoggerInterface;
 use Throwable;
 use Vdlp\Redirect\Classes\Contracts\CacheManagerInterface;
-use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
@@ -20,42 +19,23 @@ use Vdlp\Redirect\Models\Settings;
 
 final class RedirectMiddleware
 {
-    /**
-     * @var array
-     */
-    private static $supportedMethods = [
-        'GET',
-        'POST',
-        'HEAD'
-    ];
+    private static array $supportedMethods = ['GET', 'POST', 'HEAD'];
 
-    /**
-     * @var RedirectManagerInterface
-     */
-    private $redirectManager;
-
-    /**
-     * @var CacheManagerInterface
-     */
-    private $cacheManager;
-
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
+    private RedirectManagerInterface $redirectManager;
+    private RedirectConditionManager $redirectConditionManager;
+    private CacheManagerInterface $cacheManager;
+    private Dispatcher $dispatcher;
+    private LoggerInterface $log;
 
     public function __construct(
         RedirectManagerInterface $redirectManager,
+        RedirectConditionManager $redirectConditionManager,
         CacheManagerInterface $cacheManager,
         Dispatcher $dispatcher,
         LoggerInterface $log
     ) {
         $this->redirectManager = $redirectManager;
+        $this->redirectConditionManager = $redirectConditionManager;
         $this->cacheManager = $cacheManager;
         $this->dispatcher = $dispatcher;
         $this->log = $log;
@@ -64,14 +44,13 @@ final class RedirectMiddleware
     /**
      * Run the request filter.
      *
-     * @param Request $request
-     * @param Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
         // Only handle specific request methods.
-        if ($request->isXmlHttpRequest()
+        if (
+            $request->isXmlHttpRequest()
             || !in_array($request->method(), self::$supportedMethods, true)
             || Str::startsWith($request->getRequestUri(), '/vdlp/redirect/sparkline/')
         ) {
@@ -91,7 +70,10 @@ final class RedirectMiddleware
         $requestUri = str_replace($request->getBasePath(), '', $request->getRequestUri());
 
         try {
-            if ($this->cacheManager->cachingEnabledAndSupported()) {
+            if (
+                $this->cacheManager->cachingEnabledAndSupported()
+                && method_exists($this->redirectManager, 'matchCached')
+            ) {
                 $rule = $this->redirectManager->matchCached($requestUri, $request->getScheme());
             } else {
                 $rule = $this->redirectManager->match($requestUri, $request->getScheme());
@@ -123,10 +105,7 @@ final class RedirectMiddleware
          *
          * Developers can add their own conditions. If a condition does not pass the redirect will be ignored.
          */
-        foreach ($this->redirectManager->getConditions() as $condition) {
-            /** @var RedirectConditionInterface $condition */
-            $condition = resolve($condition);
-
+        foreach ($this->redirectConditionManager->getEnabledConditions($rule) as $condition) {
             if (!$condition->passes($rule, $requestUri)) {
                 return $next($request);
             }

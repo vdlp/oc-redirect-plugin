@@ -16,10 +16,6 @@
 	<img src="https://plugins.vdlp.nl/octobercms/badge/installations.php?plugin=vdlp-redirect">
 </p>
 
-> **IMPORTANT**: As of version 2.0 PHP 7.0 support is dropped.
-
-> This plugin was formerly known as `Adrenth.Redirect`. The plugin has been renamed to `Vdlp.Redirect`. Please install this plugin which automatically migrates data and settings from `Adrenth.Redirect`. The current version of `Adrenth.Redirect` will stay available for users which have it installed, but will be hidden from the October CMS marketplace. Upgrade to `Vdlp.Redirect` as soon as possible.
-
 ## The #1 Redirect plugin for October CMS
 
 This is the best Redirect-plugin for October CMS. With this plugin installed you can manage redirects directly from October CMS' beautiful interface. Many webmasters and SEO specialists use redirects to optimise their website for search engines. This plugin allows you to manage such redirects with a nice and user-friendly interface.
@@ -66,9 +62,10 @@ This plugin adds a 'Redirects' section to the main menu of October CMS. This plu
 * Postgres
 * SQLite
 
-## PHP requirements
+## Requirements
 
-* PHP version 7.1.3 or higher.
+* October CMS 2.1 or higher.
+* PHP version 7.4 or higher.
 * PHP extensions: `ext-curl` and `ext-json`.
 
 ## Supported HTTP status codes

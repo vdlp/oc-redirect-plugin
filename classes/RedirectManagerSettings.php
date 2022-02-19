@@ -8,29 +8,10 @@ use Vdlp\Redirect\Models\Settings;
 
 final class RedirectManagerSettings
 {
-    /**
-     * Whether the manager should log redirects.
-     *
-     * @var bool
-     */
-    private $loggingEnabled;
+    private bool $loggingEnabled;
+    private bool $statisticsEnabled;
+    private bool $relativePathsEnabled;
 
-    /**
-     * Whether the manager should gather statistics.
-     *
-     * @var bool
-     */
-    private $statisticsEnabled;
-
-    /**
-     * @var bool
-     */
-    private $relativePathsEnabled;
-
-    /**
-     * @param bool $loggingEnabled
-     * @param bool $statisticsEnabled
-     */
     public function __construct(bool $loggingEnabled, bool $statisticsEnabled, bool $relativePathsEnabled)
     {
         $this->loggingEnabled = $loggingEnabled;
@@ -38,9 +19,6 @@ final class RedirectManagerSettings
         $this->relativePathsEnabled = $relativePathsEnabled;
     }
 
-    /**
-     * @return RedirectManagerSettings
-     */
     public static function createDefault(): RedirectManagerSettings
     {
         return new self(
@@ -50,25 +28,16 @@ final class RedirectManagerSettings
         );
     }
 
-    /**
-     * @return bool
-     */
     public function isLoggingEnabled(): bool
     {
         return $this->loggingEnabled;
     }
 
-    /**
-     * @return bool
-     */
     public function isStatisticsEnabled(): bool
     {
         return $this->statisticsEnabled;
     }
 
-    /**
-     * @return bool
-     */
     public function isRelativePathsEnabled(): bool
     {
         return $this->relativePathsEnabled;

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use October\Rain\Database\Builder;
 use October\Rain\Database\Model;
 use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\SystemException;
@@ -42,9 +43,6 @@ use Vdlp\Redirect\Models;
  */
 final class Redirects extends Controller
 {
-    /**
-     * {@inheritDoc}
-     */
     public $implement = [
         Behaviors\FormController::class,
         Behaviors\ListController::class,
@@ -53,63 +51,24 @@ final class Redirects extends Controller
         Behaviors\RelationController::class,
     ];
 
-    /**
-     * @var string
-     */
-    public $formConfig = 'config_form.yaml';
+    public string $formConfig = 'config_form.yaml';
 
-    /**
-     * @var string
-     */
-    public $listConfig = [
+    public array $listConfig = [
         'list' => 'config_list.yaml',
         'requestLog' => 'request-log/config_list.yaml',
     ];
 
-    /**
-     * @var string
-     */
-    public $reorderConfig = 'config_reorder.yaml';
+    public string $reorderConfig = 'config_reorder.yaml';
+    public string $importExportConfig = 'config_import_export.yaml';
+    public string $relationConfig = 'config_relation.yaml';
 
-    /**
-     * @var string
-     */
-    public $importExportConfig = 'config_import_export.yaml';
-
-    /**
-     * @var string
-     */
-    public $relationConfig = 'config_relation.yaml';
-
-    /**
-     * {@inheritDoc}
-     */
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-
-    /**
-     * @var CacheManagerInterface
-     */
-    private $cacheManager;
-
-    /**
-     * @var FlashBag
-     */
-    private $flash;
+    private Request $request;
+    private Translator $translator;
+    private Dispatcher $dispatcher;
+    private CacheManagerInterface $cacheManager;
+    private FlashBag $flash;
 
     public function __construct(
         Request $request,
@@ -126,7 +85,6 @@ final class Redirects extends Controller
         BackendMenu::setContext('Vdlp.Redirect', 'redirect', $sideMenuItemCode);
 
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
-        $this->addJs('/plugins/vdlp/redirect/assets/javascript/redirect.js');
 
         $this->vars['match'] = null;
         $this->vars['statisticsHelper'] = new StatisticsHelper();
@@ -349,6 +307,13 @@ final class Redirects extends Controller
         return (string) $this->makePartial('status_code_info', [], false);
     }
 
+    public function listExtendQuery(Builder $query, $definition = null): void
+    {
+        if ($definition === 'requestLog') {
+            $query->whereNull('vdlp_redirect_redirect_id');
+        }
+    }
+
     public function formExtendFields(Form $host, array $fields = []): void
     {
         $disableFields = [
@@ -465,7 +430,8 @@ final class Redirects extends Controller
 
         foreach ($checkedIds as $checkedId) {
             /** @var RequestLog $requestLog */
-            $requestLog = RequestLog::query()->findOrFail($checkedId);
+            $requestLog = RequestLog::query()
+                ->findOrFail($checkedId);
 
             $url = $this->parseRequestLogItemUrl((string) $requestLog->getAttribute('url'));
 
@@ -473,7 +439,7 @@ final class Redirects extends Controller
                 continue;
             }
 
-            Models\Redirect::create([
+            $redirect = Models\Redirect::create([
                 'match_type' => Models\Redirect::TYPE_EXACT,
                 'target_type' => Models\Redirect::TARGET_TYPE_PATH_URL,
                 'from_url' => $url,
@@ -482,11 +448,11 @@ final class Redirects extends Controller
                 'is_enabled' => false,
             ]);
 
-            $redirectsCreated++;
-        }
+            $requestLog->update([
+                'vdlp_redirect_redirect_id' => $redirect->getKey()
+            ]);
 
-        if ((bool) $this->request->get('andDelete', false)) {
-            RequestLog::destroy($checkedIds);
+            $redirectsCreated++;
         }
 
         if ($redirectsCreated > 0) {

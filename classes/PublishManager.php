@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Illuminate\Database\Eloquent\Collection;
+use JsonException;
 use League\Csv\Writer;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -14,15 +15,8 @@ use Vdlp\Redirect\Models\Redirect;
 
 final class PublishManager implements PublishManagerInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
-
-    /**
-     * @var CacheManagerInterface
-     */
-    private $cacheManager;
+    private LoggerInterface $log;
+    private CacheManagerInterface $cacheManager;
 
     public function __construct(LoggerInterface $log, CacheManagerInterface $cacheManager)
     {
@@ -30,9 +24,6 @@ final class PublishManager implements PublishManagerInterface
         $this->cacheManager = $cacheManager;
     }
 
-    /**
-     * @return int Number of published redirects
-     */
     public function publish(): int
     {
         $columns = [
@@ -92,14 +83,15 @@ final class PublishManager implements PublishManagerInterface
 
             foreach ($redirects as $row) {
                 if (isset($row['requirements'])) {
-                    $row['requirements'] = json_encode($row['requirements']);
+                    $row['requirements'] = json_encode($row['requirements'], JSON_THROW_ON_ERROR);
                 }
 
                 $writer->insertOne($row);
             }
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             touch($redirectsFile);
-            $this->log->error($e);
+
+            $this->log->error($throwable);
         }
     }
 
@@ -107,9 +99,12 @@ final class PublishManager implements PublishManagerInterface
     {
         foreach ($redirects as &$redirect) {
             if (isset($redirect['requirements'])) {
-                $redirect['requirements'] = json_encode($redirect['requirements']);
+                try {
+                    $redirect['requirements'] = json_encode($redirect['requirements'], JSON_THROW_ON_ERROR);
+                } catch (JsonException $exception) {
+                    // @ignoreException
+                }
             }
-
         }
 
         unset($redirect);

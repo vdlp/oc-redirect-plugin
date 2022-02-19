@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect;
 
-use Backend;
+use Backend\Facades\Backend;
 use Event;
 use Exception;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Translation\Translator;
 use System\Classes\PluginBase;
 use Throwable;
@@ -15,17 +14,12 @@ use Validator;
 use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 use Vdlp\Redirect\Classes\Observers;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
-use Vdlp\Redirect\Console\PublishRedirects;
+use Vdlp\Redirect\Console\PublishRedirectsCommand;
 use Vdlp\Redirect\Models;
 use Vdlp\Redirect\ReportWidgets;
 
-class Plugin extends PluginBase
+final class Plugin extends PluginBase
 {
-    /**
-     * @var bool
-     */
-    public $elevated = true;
-
     public function pluginDetails(): array
     {
         return [
@@ -143,7 +137,7 @@ class Plugin extends PluginBase
                         'permissions' => [
                             'vdlp.redirect.access_redirects',
                         ],
-                    ]
+                    ],
                 ],
             ],
         ];
@@ -200,7 +194,7 @@ class Plugin extends PluginBase
                 'permissions' => [
                     'vdlp.redirect.access_redirects',
                 ],
-            ]
+            ],
         ];
     }
 
@@ -211,7 +205,7 @@ class Plugin extends PluginBase
 
         $reportWidgets[ReportWidgets\CreateRedirect::class] = [
             'label' => 'vdlp.redirect::lang.buttons.create_redirect',
-            'context' => 'dashboard'
+            'context' => 'dashboard',
         ];
 
         if (Models\Settings::isStatisticsEnabled()) {
@@ -219,7 +213,7 @@ class Plugin extends PluginBase
                 'label' => e($translator->trans(
                     'vdlp.redirect::lang.statistics.top_redirects_this_month',
                     [
-                        'top' => 10
+                        'top' => 10,
                     ]
                 )),
                 'context' => 'dashboard',
@@ -231,70 +225,69 @@ class Plugin extends PluginBase
 
     public function registerListColumnTypes(): array
     {
-        /** @var Translator $translator */
-        $translator = resolve(Translator::class);
-
         return [
-            'redirect_switch_color' => static function ($value) use ($translator) {
+            'redirect_switch_color' => static function ($value): string {
                 $format = '<div class="oc-icon-circle" style="color: %s">%s</div>';
 
                 if ((int) $value === 1) {
-                    return sprintf($format, '#95b753', e($translator->trans('backend::lang.list.column_switch_true')));
+                    return sprintf($format, '#95b753', e(trans('backend::lang.list.column_switch_true')));
                 }
 
-                return sprintf($format, '#cc3300', e($translator->trans('backend::lang.list.column_switch_false')));
+                return sprintf($format, '#cc3300', e(trans('backend::lang.list.column_switch_false')));
             },
-            'redirect_match_type' => static function ($value) use ($translator) {
+            'redirect_match_type' => static function ($value): string {
                 switch ($value) {
                     case Models\Redirect::TYPE_EXACT:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.exact'));
+                        return e(trans('vdlp.redirect::lang.redirect.exact'));
                     case Models\Redirect::TYPE_PLACEHOLDERS:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.placeholders'));
+                        return e(trans('vdlp.redirect::lang.redirect.placeholders'));
                     case Models\Redirect::TYPE_REGEX:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.regex'));
+                        return e(trans('vdlp.redirect::lang.redirect.regex'));
                     default:
                         return e($value);
                 }
             },
-            'redirect_status_code' => static function ($value) use ($translator) {
+            'redirect_status_code' => static function ($value): string {
                 switch ($value) {
                     case 301:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.permanent'));
+                        return e(trans('vdlp.redirect::lang.redirect.permanent'));
                     case 302:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.temporary'));
+                        return e(trans('vdlp.redirect::lang.redirect.temporary'));
                     case 303:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.see_other'));
+                        return e(trans('vdlp.redirect::lang.redirect.see_other'));
                     case 404:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.not_found'));
+                        return e(trans('vdlp.redirect::lang.redirect.not_found'));
                     case 410:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.gone'));
+                        return e(trans('vdlp.redirect::lang.redirect.gone'));
                     default:
                         return e($value);
                 }
             },
-            'redirect_target_type' => static function ($value) use ($translator) {
+            'redirect_target_type' => static function ($value): string {
                 switch ($value) {
                     case Models\Redirect::TARGET_TYPE_PATH_URL:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.target_type_path_or_url'));
+                        return e(trans('vdlp.redirect::lang.redirect.target_type_path_or_url'));
                     case Models\Redirect::TARGET_TYPE_CMS_PAGE:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.target_type_cms_page'));
+                        return e(trans('vdlp.redirect::lang.redirect.target_type_cms_page'));
                     case Models\Redirect::TARGET_TYPE_STATIC_PAGE:
-                        return e($translator->trans('vdlp.redirect::lang.redirect.target_type_static_page'));
+                        return e(trans('vdlp.redirect::lang.redirect.target_type_static_page'));
                     default:
                         return e($value);
                 }
             },
-            'redirect_from_url' => static function ($value) {
+            'redirect_from_url' => static function ($value): string {
                 $maxChars = 40;
                 $textLength = strlen($value);
+
                 if ($textLength > $maxChars) {
                     return '<span title="' . e($value) . '">'
                         . e(substr_replace($value, '...', $maxChars / 2, $textLength - $maxChars))
                         . '</span>';
                 }
+
                 return e($value);
             },
-            'redirect_system' => static function ($value) use ($translator) {
+            'redirect_system' => static function ($value): string {
                 return sprintf(
                     '<span class="%s" title="%s"></span>',
                     $value ? 'oc-icon-magic' : 'oc-icon-user',
@@ -306,22 +299,21 @@ class Plugin extends PluginBase
 
     public function registerSchedule($schedule): void
     {
-        /** @var Schedule $schedule */
         $schedule->command('vdlp:redirect:publish-redirects')
             ->dailyAt(config('vdlp.redirect::cron.publish_redirects', '00:00'));
     }
 
     private function registerConsoleCommands(): void
     {
-        $this->registerConsoleCommand('vdlp.redirect.publish-redirects', PublishRedirects::class);
+        $this->registerConsoleCommand('vdlp.redirect.publish-redirects', PublishRedirectsCommand::class);
     }
 
     private function registerCustomValidators(): void
     {
-        Validator::extend('is_regex', static function ($attribute, $value) {
+        Validator::extend('is_regex', static function ($attribute, $value): bool {
             try {
                 preg_match($value, '');
-            } catch (Throwable $e) {
+            } catch (Throwable $throwable) {
                 return false;
             }
 
