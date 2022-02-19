@@ -153,10 +153,14 @@ final class Statistics extends Controller
 
         $brandSettings = new BrandSetting();
 
-        $color = $crawler ? $brandSettings->get('primary_color') : $brandSettings->get('secondary_color');
+        $color = $crawler
+            ? $brandSettings->get('primary_color')
+            : $brandSettings->get('secondary_color');
 
         return [
-            'label' => $crawler ? 'Crawler hits' : 'Visitor hits',
+            'label' => $crawler
+                ? trans('vdlp.redirect::lang.statistics.crawler_hits')
+                : trans('vdlp.redirect::lang.statistics.visitor_hits'),
             'backgroundColor' => $color,
             'borderColor' => $color,
             'data' => data_get($data, '*.hits'),
