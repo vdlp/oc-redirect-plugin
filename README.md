@@ -16,8 +16,6 @@
 	<img src="https://plugins.vdlp.nl/octobercms/badge/installations.php?plugin=vdlp-redirect">
 </p>
 
-> **IMPORTANT**: As of version 3.0 October CMS 1.0 support is dropped.
-
 ## The #1 Redirect plugin for October CMS
 
 This is the best Redirect-plugin for October CMS. With this plugin installed you can manage redirects directly from October CMS' beautiful interface. Many webmasters and SEO specialists use redirects to optimise their website for search engines. This plugin allows you to manage such redirects with a nice and user-friendly interface.
@@ -66,7 +64,7 @@ This plugin adds a 'Redirects' section to the main menu of October CMS. This plu
 
 ## Requirements
 
-* October CMS 1.1+
+* October CMS 2.1 or higher.
 * PHP version 7.4 or higher.
 * PHP extensions: `ext-curl` and `ext-json`.
 

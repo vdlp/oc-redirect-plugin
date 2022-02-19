@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
+use ApplicationException;
 use Carbon\Carbon;
 use Cms\Classes\CmsException;
 use Cms\Classes\Controller;
@@ -107,7 +108,7 @@ final class RedirectManager implements RedirectManagerInterface
         foreach ((array) $this->rules as $rule) {
             try {
                 return $this->matchesRule($rule, $requestPath, $scheme);
-            } catch (Exceptions\NoMatchForRule $e) {
+            } catch (Exceptions\NoMatchForRule $exception) {
                 continue;
             }
         }
@@ -135,7 +136,7 @@ final class RedirectManager implements RedirectManagerInterface
 
         try {
             $matchedRule = $this->match($requestPath, $scheme);
-        } catch (Exceptions\NoMatchForRequest | Exceptions\InvalidScheme | Exceptions\UnableToLoadRules $e) {
+        } catch (Exceptions\NoMatchForRequest | Exceptions\InvalidScheme | Exceptions\UnableToLoadRules $exception) {
             $matchedRule = null;
         }
 
@@ -294,7 +295,7 @@ final class RedirectManager implements RedirectManagerInterface
     }
 
     /**
-     * @throws CmsException
+     * @throws CmsException|ApplicationException
      */
     private function redirectToCmsPage(RedirectRule $rule): string
     {
@@ -319,9 +320,7 @@ final class RedirectManager implements RedirectManagerInterface
     }
 
     /**
-     * @throws RuntimeException
-     * @noinspection ClassConstantCanBeUsedInspection
-     * @noinspection PhpFullyQualifiedNameUsageInspection
+     * @throws RuntimeException|ApplicationException
      */
     private function redirectToStaticPage(RedirectRule $rule): string
     {
@@ -419,7 +418,7 @@ final class RedirectManager implements RedirectManagerInterface
                     str_replace(['{', '}'], '', $requirement['placeholder']),
                     $requirement['requirement']
                 );
-            } catch (Throwable $e) {
+            } catch (Throwable $throwable) {
                 // Catch empty requirement / placeholder
             }
         }
@@ -445,7 +444,7 @@ final class RedirectManager implements RedirectManagerInterface
             }
 
             $rule->setPlaceholderMatches($items);
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             throw Exceptions\NoMatchForRule::withRedirectRule($rule, $url);
         }
 
@@ -463,8 +462,8 @@ final class RedirectManager implements RedirectManagerInterface
             if (preg_match($pattern, $url) === 1) {
                 return $rule;
             }
-        } catch (Throwable $e) {
-            // ..
+        } catch (Throwable $throwable) {
+            // @ignoreException
         }
 
         throw Exceptions\NoMatchForRule::withRedirectRule($rule, $url);
@@ -542,20 +541,11 @@ final class RedirectManager implements RedirectManagerInterface
 
         try {
             $reader = Reader::createFromPath($rulesPath, 'r');
+            $reader->setHeaderOffset(0);
 
-            if (method_exists($reader, 'fetchAssoc')) {
-                // Supports league/csv:8.0+
-                $results = $reader->fetchAssoc(0);
-            } else {
-                // Supports league/csv:9.0+
-                /** @noinspection PhpUndefinedMethodInspection */
-                $reader->setHeaderOffset(0);
-
-                /** @noinspection PhpUndefinedMethodInspection */
-                $results = $reader->getRecords();
-            }
-        } catch (Throwable $e) {
-            throw Exceptions\UnableToLoadRules::withMessage($e->getMessage(), $e);
+            $results = $reader->getRecords();
+        } catch (Throwable $throwable) {
+            throw Exceptions\UnableToLoadRules::withMessage($throwable->getMessage(), $throwable);
         }
 
         $rules = [];
@@ -609,8 +599,8 @@ final class RedirectManager implements RedirectManagerInterface
                 'hits' => DB::raw('hits + 1'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
-        } catch (Throwable $e) {
-            // Don't report this issue.
+        } catch (Throwable $throwable) {
+            // @ignoreException
         }
     }
 }
