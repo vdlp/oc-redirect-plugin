@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.6.0
+
+* Update plugin dependencies.
+
 ## 2.5.13
 
 * Fix database error when cache is being cleared before installation of plugin.
