@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpUnused */
-
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Controllers;
@@ -10,6 +8,7 @@ use Backend\Classes\Controller;
 use Backend\Models\BrandSetting;
 use BackendMenu;
 use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use JsonException;
 use SystemException;
 use Vdlp\Redirect\Classes\StatisticsHelper;
@@ -41,7 +40,7 @@ final class Statistics extends Controller
     }
 
     /**
-     * @throws SystemException|JsonException
+     * @throws SystemException|JsonException|InvalidFormatException
      */
     public function onLoadHitsPerDay(): array
     {
@@ -137,6 +136,9 @@ final class Statistics extends Controller
         return $labels;
     }
 
+    /**
+     * @throws InvalidFormatException
+     */
     private function getHitsPerDayAsDataSet(int $month, int $year, bool $crawler): array
     {
         $today = Carbon::createFromDate($year, $month, 1);
@@ -157,12 +159,15 @@ final class Statistics extends Controller
             ? $brandSettings->get('primary_color')
             : $brandSettings->get('secondary_color');
 
+        [$r, $g, $b] = sscanf($color, "#%02x%02x%02x");
+
         return [
             'label' => $crawler
-                ? trans('vdlp.redirect::lang.statistics.crawler_hits')
-                : trans('vdlp.redirect::lang.statistics.visitor_hits'),
-            'backgroundColor' => $color,
-            'borderColor' => $color,
+                ? e(trans('vdlp.redirect::lang.statistics.crawler_hits'))
+                : e(trans('vdlp.redirect::lang.statistics.visitor_hits')),
+            'backgroundColor' => sprintf('rgb(%d, %d, %d, 0.5)', $r, $g, $b),
+            'borderColor' => sprintf('rgb(%d, %d, %d, 1)', $r, $g, $b),
+            'borderWidth' => 1,
             'data' => data_get($data, '*.hits'),
         ];
     }
