@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.6.0
+
+* Update plugin dependencies.
+
+## 2.5.13
+
+* Fix database error when cache is being cleared before installation of plugin.
+
+## 2.5.12
+
+* Fix strpos() type error.
+
 ## 2.5.11
 
 * Fix bad use of import.
