@@ -17,7 +17,7 @@
         "php": "^7.4 || ^8.0",
         "ext-curl": "*",
         "ext-json": "*",
-        "composer/installers": "^1.0",
+        "composer/installers": "^1.0 || ^2.0",
         "davaxi/sparkline": "~1.2.0",
         "jaybizzle/crawler-detect": "^1.2",
         "league/csv": "^9.0",
