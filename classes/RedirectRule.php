@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use JsonException;
 use Vdlp\Redirect\Models\Redirect;
 
@@ -24,6 +25,7 @@ final class RedirectRule
     private ?Carbon $fromDate = null;
     private ?Carbon $toDate = null;
     private array $placeholderMatches = [];
+    private array $pregMatchMatches = [];
     private bool $ignoreQueryParameters;
     private bool $ignoreCase;
     private bool $ignoreTrailingSlash;
@@ -44,12 +46,12 @@ final class RedirectRule
         try {
             $requirements = $attributes['requirements'] ?? null;
 
-            if ($requirements === null || !is_string($requirements)) {
+            if (!is_string($requirements)) {
                 $requirements = '[]';
             }
 
             $this->requirements = json_decode($requirements, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (JsonException $exception) {
             $this->requirements = [];
         }
 
@@ -58,12 +60,17 @@ final class RedirectRule
             && is_string($attributes['from_date'])
             && $attributes['from_date'] !== ''
         ) {
-            $date = Carbon::createFromFormat(
-                'Y-m-d H:i:s',
-                substr($attributes['from_date'], 0, 10) . ' 00:00:00'
-            );
+            try {
+                $date = Carbon::createFromFormat(
+                    'Y-m-d H:i:s',
+                    substr($attributes['from_date'], 0, 10) . ' 00:00:00'
+                );
 
-            $this->fromDate = $date === false ? null : $date;
+                $this->fromDate = $date === false ? null : $date;
+            } catch (InvalidFormatException $exception) {
+                // @ignoreException
+                $this->fromDate = null;
+            }
         }
 
         if (
@@ -71,12 +78,17 @@ final class RedirectRule
             && is_string($attributes['to_date'])
             && $attributes['to_date'] !== ''
         ) {
-            $date = Carbon::createFromFormat(
-                'Y-m-d H:i:s',
-                substr($attributes['to_date'], 0, 10) . ' 00:00:00'
-            );
+            try {
+                $date = Carbon::createFromFormat(
+                    'Y-m-d H:i:s',
+                    substr($attributes['to_date'], 0, 10) . ' 00:00:00'
+                );
 
-            $this->toDate = $date === false ? null : $date;
+                $this->toDate = $date === false ? null : $date;
+            } catch (InvalidFormatException $exception) {
+                // @ignoreException
+                $this->toDate = null;
+            }
         }
 
         $this->ignoreQueryParameters = (bool) ($attributes['ignore_query_parameters'] ?? false);
@@ -87,17 +99,17 @@ final class RedirectRule
     public static function createWithModel(Redirect $model): RedirectRule
     {
         $attributes = $model->getAttributes();
-
         $requirements = $model->getAttribute('requirements');
 
-        if ($requirements === null || !is_string($requirements)) {
+        if ($requirements === '' || $requirements === null) {
+            $requirements = [];
+        }
+
+        try {
+            $attributes['requirements'] = json_encode($requirements, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            // @ignoreException
             $attributes['requirements'] = '[]';
-        } else {
-            try {
-                $attributes['requirements'] = json_encode($requirements, JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {
-                $attributes['requirements'] = '[]';
-            }
         }
 
         return new self($attributes);
@@ -188,9 +200,21 @@ final class RedirectRule
         return $this->placeholderMatches;
     }
 
-    public function setPlaceholderMatches(array $placeholderMatches = []): RedirectRule
+    public function setPlaceholderMatches(array $placeholderMatches = []): self
     {
         $this->placeholderMatches = $placeholderMatches;
+
+        return $this;
+    }
+
+    public function getPregMatchMatches(): array
+    {
+        return $this->pregMatchMatches;
+    }
+
+    public function setPregMatchMatches(array $pregMatchMatches): self
+    {
+        $this->pregMatchMatches = $pregMatchMatches;
 
         return $this;
     }
