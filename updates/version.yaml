@@ -68,3 +68,4 @@ v3.0.0:
     - "Drop support for October CMS 1.1 and lower. See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/3.0.0"
     - 20200918_0011_refactor_redirects_logs_table.php
     - 20200918_0012_add_redirect_id_to_system_request_logs_table.php
+v3.0.1: "Add support for regular expression matches in target path."
