@@ -53,7 +53,7 @@ Every placeholder can be attached to a requirement. A requirement consists of a 
 
 Example:
 
-````
+```
 Input path:
 /blog.php?category=cat&id=145
 
@@ -65,7 +65,7 @@ Target path:
 
 Result path:
 /blog/cat/145
-````
+```
 
 * The requirement for `{category}` would be: `[a-zA-Z]` or could be more specific like `(dog|cat|mouse)`.
 * The requirement for `{id}` would be: `[0-9]+`.
@@ -78,7 +78,7 @@ Example:
 
 The requirement for `{category}` is `(dog|cat|mouse)`, with replacement value `animals`.
 
-````
+```
 Input path:
 /blog.php?category=mouse&id=1337
 
@@ -90,7 +90,7 @@ Target path:
 
 Result:
 /blog/animals/1337
-````
+```
 
 ![](https://i.imgur.com/928z7pI.png)
 
@@ -98,6 +98,20 @@ Result in TestLab:
 
 ![](https://i.imgur.com/BswnUAo.png)
 
+## Regular expression (advanced)
+
+For advanced users there's the Regular Expression matching logic. Please refer to the PHP.net `preg_match` manual.
+
+The actual `$matches` result from the `preg_match($sourcePath, $url, $matches)` function can be used in the target path and will be replaced with the matched value.
+
+Example (with matches replacement):
+
+```
+Input path: /foo/my-match
+Source Path: @/foo/(.*)?@
+Target Path: /bar/{1}
+Result: /bar/my-match
+```
 
 ## Redirect Target
 

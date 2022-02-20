@@ -285,7 +285,34 @@ final class RedirectManager implements RedirectManagerInterface
             return $rule->getToUrl();
         }
 
+        /*
+         * Handle preg_match matches.
+         *
+         * Example:
+         *
+         * Source Path: @/foo/(.*)?@
+         * Target Path: /bar/{1}
+         * Result: /foo/my-match -> /bar/my-match
+         */
+        $pregMatchMatches = $rule->getPregMatchMatches();
+
+        if ($rule->isRegexMatchType() && count($pregMatchMatches) > 0) {
+            $search = array_map(
+                static fn($key): string => '{' . $key . '}',
+                array_keys($pregMatchMatches)
+            );
+
+            return str_replace($search, $pregMatchMatches, $rule->getToUrl());
+        }
+
+        /*
+         * Handle placeholder matches.
+         */
         $placeholderMatches = $rule->getPlaceholderMatches();
+
+        if (count($placeholderMatches) === 0) {
+            return $rule->getToUrl();
+        }
 
         return str_replace(
             array_keys($placeholderMatches),
@@ -459,8 +486,8 @@ final class RedirectManager implements RedirectManagerInterface
         $pattern = $rule->getFromUrl();
 
         try {
-            if (preg_match($pattern, $url) === 1) {
-                return $rule;
+            if (preg_match($pattern, $url, $matches) === 1) {
+                return $rule->setPregMatchMatches($matches);
             }
         } catch (Throwable $throwable) {
             // @ignoreException

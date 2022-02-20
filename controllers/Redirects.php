@@ -396,10 +396,10 @@ final class Redirects extends Controller
             $testDate = Carbon::createFromFormat('Y-m-d', $this->request->get('test_date', date('Y-m-d')));
             $manager->setMatchDate($testDate);
             $match = $manager->match($inputPath, $this->request->get('test_scheme', $this->request->getScheme()));
-        } catch (NoMatchForRequest | InvalidScheme | UnableToLoadRules $e) {
+        } catch (NoMatchForRequest | InvalidScheme | UnableToLoadRules $exception) {
             $match = false;
-        } catch (Throwable $e) {
-            throw new ApplicationException($e->getMessage());
+        } catch (Throwable $throwable) {
+            throw new ApplicationException($throwable->getMessage());
         }
 
         return [
