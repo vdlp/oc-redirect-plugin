@@ -70,3 +70,4 @@ v3.0.0:
     - 20200918_0012_add_redirect_id_to_system_request_logs_table.php
 v3.0.1: "Add support for regular expression matches in target path."
 v3.0.2: "Change version constraint for composer/installers."
+v3.0.3: "Update plugin dependencies"
