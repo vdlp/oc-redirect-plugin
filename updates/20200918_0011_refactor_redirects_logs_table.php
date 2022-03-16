@@ -14,13 +14,15 @@ class RefactorRedirectsLogTable extends Migration
             Schema::disableForeignKeyConstraints();
             Schema::dropIfExists('vdlp_redirect_redirect_logs');
             Schema::enableForeignKeyConstraints();
-        } catch (Throwable $e) {
-            echo "Database table `vdlp_redirect_redirect_logs` could not be removed.", PHP_EOL;
-            echo "Please remove it manually and try running the database migrations again.", PHP_EOL;
+        } catch (Throwable $throwable) {
+            echo 'Migration error: ' . $throwable->getMessage(), PHP_EOL;
+            echo 'Database table `vdlp_redirect_redirect_logs` could not be removed.', PHP_EOL;
+            echo 'Please remove it manually and try running the database migrations again.', PHP_EOL;
+
             return;
         }
 
-        Schema::create('vdlp_redirect_redirect_logs', static function (Blueprint $table) {
+        Schema::create('vdlp_redirect_redirect_logs', static function (Blueprint $table): void {
             // Table MySQL configuration
             $table->engine = 'InnoDB';
 
@@ -56,13 +58,15 @@ class RefactorRedirectsLogTable extends Migration
             Schema::disableForeignKeyConstraints();
             Schema::dropIfExists('vdlp_redirect_redirect_logs');
             Schema::enableForeignKeyConstraints();
-        } catch (Throwable $e) {
-            echo "Database table `vdlp_redirect_redirect_logs` could not be removed.", PHP_EOL;
-            echo "Please remove it manually and try running the database migrations again.", PHP_EOL;
+        } catch (Throwable $throwable) {
+            echo 'Migration error: ' . $throwable->getMessage(), PHP_EOL;
+            echo 'Database table `vdlp_redirect_redirect_logs` could not be removed.', PHP_EOL;
+            echo 'Please remove it manually and try running the database migrations again.', PHP_EOL;
+
             return;
         }
 
-        Schema::create('vdlp_redirect_redirect_logs', static function (Blueprint $table) {
+        Schema::create('vdlp_redirect_redirect_logs', static function (Blueprint $table): void {
             // Table MySQL configuration
             $table->engine = 'InnoDB';
 

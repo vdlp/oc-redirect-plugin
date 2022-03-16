@@ -14,7 +14,7 @@ class AddRedirectIdToSystemRequestLogsTable extends Migration
             return;
         }
 
-        Schema::table('system_request_logs', static function (Blueprint $table) {
+        Schema::table('system_request_logs', static function (Blueprint $table): void {
             $table->unsignedInteger('vdlp_redirect_redirect_id')
                 ->nullable()
                 ->after('id');
@@ -29,7 +29,7 @@ class AddRedirectIdToSystemRequestLogsTable extends Migration
     public function down(): void
     {
         if (Schema::hasColumn('system_request_logs', 'vdlp_redirect_redirect_id')) {
-            Schema::table('system_request_logs', static function (Blueprint $table) {
+            Schema::table('system_request_logs', static function (Blueprint $table): void {
                 $table->dropForeign('vdlp_redirect_request_log');
                 $table->dropColumn('vdlp_redirect_redirect_id');
             });
