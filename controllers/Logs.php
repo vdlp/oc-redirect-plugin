@@ -26,7 +26,7 @@ final class Logs extends Controller
     ];
 
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
-    public string $listConfig = 'config_list.yaml';
+    public $listConfig = 'config_list.yaml';
     private Request $request;
     private Translator $translator;
     private FlashBag $flash;

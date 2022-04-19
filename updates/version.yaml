@@ -71,3 +71,4 @@ v3.0.0:
 v3.0.1: "Add support for regular expression matches in target path."
 v3.0.2: "Change version constraint for composer/installers."
 v3.0.3: "Update plugin dependencies"
+v3.0.4: "Improved compatibility/extensibility with other Plugins."
