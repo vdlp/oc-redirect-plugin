@@ -58,10 +58,9 @@ final class Redirects extends Controller
         'requestLog' => 'request-log/config_list.yaml',
     ];
 
-    public string $reorderConfig = 'config_reorder.yaml';
-    public string $importExportConfig = 'config_import_export.yaml';
-    public string $relationConfig = 'config_relation.yaml';
-
+    public $reorderConfig = 'config_reorder.yaml';
+    public $importExportConfig = 'config_import_export.yaml';
+    public $relationConfig = 'config_relation.yaml';
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     private Request $request;
