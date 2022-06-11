@@ -121,7 +121,7 @@ tabs:
         section_requirements:
             tab: vdlp.redirect::lang.tab.tab_requirements
             type: section
-            commentAbove: vdlp.redirect::lang.redirect.requirements_comment
+            comment: vdlp.redirect::lang.redirect.requirements_comment
             trigger:
                 action: show
                 field: match_type
@@ -160,11 +160,7 @@ tabs:
         section_test:
             tab: vdlp.redirect::lang.tab.tab_test
             type: section
-            commentAbove: vdlp.redirect::lang.test.test_comment
-        test_url:
-            tab: vdlp.redirect::lang.tab.tab_test
-            type: text
-            hidden: true
+            comment: vdlp.redirect::lang.test.test_comment
         test:
             tab: vdlp.redirect::lang.tab.tab_test
             type: partial
@@ -175,7 +171,7 @@ tabs:
         section_scheduling:
             tab: vdlp.redirect::lang.tab.tab_scheduling
             type: section
-            commentAbove: vdlp.redirect::lang.scheduling.scheduling_comment
+            comment: vdlp.redirect::lang.scheduling.scheduling_comment
         from_date:
             tab: vdlp.redirect::lang.tab.tab_scheduling
             label: vdlp.redirect::lang.scheduling.from_date
@@ -198,7 +194,7 @@ tabs:
         section_test_lab:
             tab: vdlp.redirect::lang.tab.tab_test_lab
             type: section
-            commentAbove: vdlp.redirect::lang.test_lab.section_test_lab_comment
+            comment: vdlp.redirect::lang.test_lab.section_test_lab_comment
         test_lab:
             tab: vdlp.redirect::lang.tab.tab_test_lab
             label: vdlp.redirect::lang.test_lab.test_lab_label
@@ -214,7 +210,7 @@ tabs:
             trigger:
                 action: show
                 field: match_type
-                condition: value[placeholders]
+                condition: value[placeholders][regex]
         #
         # Logs
         #

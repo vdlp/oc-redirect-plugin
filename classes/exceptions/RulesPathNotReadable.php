@@ -8,6 +8,6 @@ final class RulesPathNotReadable extends UnableToLoadRules
 {
     public static function withPath(string $path): self
     {
-        return new static("Rules path $path is not readable.");
+        return new self("Rules path $path is not readable.");
     }
 }

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2022-06-11
+
+* Add support for October CMS 3.x.
+* Drop support for October CMS 2.x.
+* Minimum required PHP version is now 8.0.2
+
 ## [3.0.5] - 2022-06-11
 
 * Lock to October CMS version 2.x. Support for October CMS 3 will be added in v3.1.0.

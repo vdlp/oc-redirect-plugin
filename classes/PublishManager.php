@@ -15,13 +15,10 @@ use Vdlp\Redirect\Models\Redirect;
 
 final class PublishManager implements PublishManagerInterface
 {
-    private LoggerInterface $log;
-    private CacheManagerInterface $cacheManager;
-
-    public function __construct(LoggerInterface $log, CacheManagerInterface $cacheManager)
-    {
-        $this->log = $log;
-        $this->cacheManager = $cacheManager;
+    public function __construct(
+        private LoggerInterface $log,
+        private CacheManagerInterface $cacheManager
+    ) {
     }
 
     public function publish(): int
@@ -101,7 +98,7 @@ final class PublishManager implements PublishManagerInterface
             if (isset($redirect['requirements'])) {
                 try {
                     $redirect['requirements'] = json_encode($redirect['requirements'], JSON_THROW_ON_ERROR);
-                } catch (JsonException $exception) {
+                } catch (JsonException) {
                     // @ignoreException
                 }
             }

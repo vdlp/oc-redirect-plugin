@@ -67,7 +67,7 @@ Route::group(['middleware' => ['web']], static function () {
         header('Content-Disposition: inline; filename="' . $cacheKey . '.png"');
         header('Accept-Ranges: none');
 
-        echo base64_decode($imageData);
+        echo base64_decode($imageData, true);
 
         exit(0);
     });

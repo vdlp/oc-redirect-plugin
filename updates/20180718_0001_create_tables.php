@@ -1,17 +1,14 @@
 <?php
 
-/** @noinspection PhpUnused */
-/** @noinspection AutoloadingIssuesInspection */
-
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Updates;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use October\Rain\Database\Updates\Migration;
 use Psr\Log\LoggerInterface;
-use Schema;
 use Throwable;
 use Vdlp\Redirect\Models\Category;
 use Vdlp\Redirect\Models\Redirect;
@@ -27,7 +24,8 @@ class CreateTables extends Migration
         $schema = $database->getSchemaBuilder();
 
         // Drop any existing index keys on SQLite databases #24.
-        if ($schema->hasTable('adrenth_redirect_redirects')
+        if (
+            $schema->hasTable('adrenth_redirect_redirects')
             && $database->getDriverName() === 'sqlite'
         ) {
             $statements = [
@@ -42,8 +40,9 @@ class CreateTables extends Migration
                 try {
                     $database->statement($statement);
                 } catch (Throwable $e) {
-                    resolve(LoggerInterface::class)
-                        ->error(sprintf('Vdlp.Redirect: Unable to drop index: %s'. $e->getMessage()));
+                    /** @var LoggerInterface $logger */
+                    $logger = resolve(LoggerInterface::class);
+                    $logger->error(sprintf('Vdlp.Redirect: Unable to drop index: %s'. $e->getMessage()));
 
                     continue;
                 }
@@ -51,7 +50,7 @@ class CreateTables extends Migration
         }
 
         if (!Schema::hasTable('vdlp_redirect_categories')) {
-            Schema::create('vdlp_redirect_categories', static function (Blueprint $table) {
+            Schema::create('vdlp_redirect_categories', static function (Blueprint $table): void {
                 // Table configuration
                 $table->engine = 'InnoDB';
 
@@ -65,7 +64,7 @@ class CreateTables extends Migration
         }
 
         if (!Schema::hasTable('vdlp_redirect_redirects')) {
-            Schema::create('vdlp_redirect_redirects', static function (Blueprint $table) {
+            Schema::create('vdlp_redirect_redirects', static function (Blueprint $table): void {
                     // Table MySQL configuration
                     $table->engine = 'InnoDB';
                     // Columns
@@ -111,7 +110,7 @@ class CreateTables extends Migration
         }
 
         if (!Schema::hasTable('vdlp_redirect_clients')) {
-            Schema::create('vdlp_redirect_clients', static function (Blueprint $table) {
+            Schema::create('vdlp_redirect_clients', static function (Blueprint $table): void {
                 // Table MySQL configuration
                 $table->engine = 'InnoDB';
 
@@ -137,7 +136,7 @@ class CreateTables extends Migration
         }
 
         if (!Schema::hasTable('vdlp_redirect_redirect_logs')) {
-            Schema::create('vdlp_redirect_redirect_logs', static function (Blueprint $table) {
+            Schema::create('vdlp_redirect_redirect_logs', static function (Blueprint $table): void {
                 // Table MySQL configuration
                 $table->engine = 'InnoDB';
                 // Columns
@@ -151,6 +150,7 @@ class CreateTables extends Migration
                 $table->unsignedTinyInteger('month');
                 $table->unsignedSmallInteger('year');
                 $table->dateTime('date_time');
+                $table->timestamps();
                 // Indexes
                 $table->index(['redirect_id', 'day', 'month', 'year'], 'redirect_log_dmy');
                 $table->index(['redirect_id', 'month', 'year'], 'redirect_log_my');
@@ -170,7 +170,9 @@ class CreateTables extends Migration
             $settings->test_lab_enabled = '1';
             $settings->save();
         } catch (Throwable $e) {
-            resolve(LoggerInterface::class)->error(sprintf(
+            /** @var LoggerInterface $logger */
+            $logger = resolve(LoggerInterface::class);
+            $logger->error(sprintf(
                 'Vdlp.Redirect: Unable to save default settings: %s',
                 $e->getMessage()
             ));
@@ -187,7 +189,9 @@ class CreateTables extends Migration
             Schema::dropIfExists('vdlp_redirect_categories');
             Schema::enableForeignKeyConstraints();
         } catch (Throwable $e) {
-            resolve(LoggerInterface::class)->error(sprintf(
+            /** @var LoggerInterface $logger */
+            $logger = resolve(LoggerInterface::class);
+            $logger->error(sprintf(
                 'Vdlp.Redirect: Unable to drop all tables: %s',
                 $e->getMessage()
             ));
