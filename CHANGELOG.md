@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.1.0] - 2022-06-11
 
-* Drop support for October CMS 2.x and lower.
+* Add support for October CMS 3.x.
+* Drop support for October CMS 2.x.
 * Minimum required PHP version is now 8.0.2
 
 ## [3.0.5] - 2022-06-11
