@@ -12,7 +12,6 @@
     top: 0;
     overflow: scroll;
     height: 85%;
-    text-shadow: 0 -1px 0 #eee;
     outline: none;
 }
 
@@ -25,7 +24,7 @@
  **********************************************************************************************************************/
 
 .progress {
-    height: 34px;
+    height: 35.7891px;
     margin-bottom: 4px;
 }
 
@@ -65,8 +64,8 @@
 }
 
 #testerResults .tester-result {
-    background: #eee;
-    border: 1px solid #bbb;
+    background-color: rgb(233, 237, 243);
+    border: 1px solid #fafbfd;
     border-radius: 4px;
     padding: 8px;
     margin-bottom: 20px;
@@ -81,7 +80,7 @@
 }
 
 #testerResults .loading-indicator-container {
-    min-height: 20px;
+    min-height: 34px;
 }
 
 #testerResults .loading-indicator > span {
