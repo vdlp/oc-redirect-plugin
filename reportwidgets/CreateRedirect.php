@@ -17,10 +17,7 @@ use Vdlp\Redirect\Models\Redirect;
  */
 final class CreateRedirect extends ReportWidgetBase
 {
-    /**
-     * @var Redirector
-     */
-    private $redirect;
+    private Redirector $redirect;
 
     public function __construct(Controller $controller, array $properties = [])
     {

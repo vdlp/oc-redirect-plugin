@@ -21,32 +21,16 @@ final class RedirectMiddleware
 {
     private static array $supportedMethods = ['GET', 'POST', 'HEAD'];
 
-    private RedirectManagerInterface $redirectManager;
-    private RedirectConditionManager $redirectConditionManager;
-    private CacheManagerInterface $cacheManager;
-    private Dispatcher $dispatcher;
-    private LoggerInterface $log;
-
     public function __construct(
-        RedirectManagerInterface $redirectManager,
-        RedirectConditionManager $redirectConditionManager,
-        CacheManagerInterface $cacheManager,
-        Dispatcher $dispatcher,
-        LoggerInterface $log
+        private RedirectManagerInterface $redirectManager,
+        private RedirectConditionManager $redirectConditionManager,
+        private CacheManagerInterface $cacheManager,
+        private Dispatcher $dispatcher,
+        private LoggerInterface $log
     ) {
-        $this->redirectManager = $redirectManager;
-        $this->redirectConditionManager = $redirectConditionManager;
-        $this->cacheManager = $cacheManager;
-        $this->dispatcher = $dispatcher;
-        $this->log = $log;
     }
 
-    /**
-     * Run the request filter.
-     *
-     * @return mixed
-     */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         // Only handle specific request methods.
         if (
@@ -78,14 +62,15 @@ final class RedirectMiddleware
             } else {
                 $rule = $this->redirectManager->match($requestUri, $request->getScheme());
             }
-        } catch (NoMatchForRequest | UnableToLoadRules | InvalidScheme $e) {
+        } catch (NoMatchForRequest | UnableToLoadRules | InvalidScheme) {
+            // @ignoreException
             $rule = false;
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             $this->log->error(sprintf(
                 'Vdlp.Redirect: Could not perform redirect for %s (scheme: %s): %s',
                 $requestUri,
                 $request->getScheme(),
-                $e->getMessage()
+                $throwable->getMessage()
             ));
         }
 

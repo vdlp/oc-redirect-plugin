@@ -8,7 +8,7 @@ final class Str
 {
     public static function removeTrailingSlash(string $url): string
     {
-        if (strpos($url, '?') !== false) {
+        if (str_contains($url, '?')) {
             [$part1, $part2] = explode('?', $url, 2);
 
             return implode('?', [rtrim($part1, '/'), $part2]);

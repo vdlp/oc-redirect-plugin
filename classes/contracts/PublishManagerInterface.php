@@ -9,7 +9,7 @@ interface PublishManagerInterface
     /**
      * Publish applicable redirects.
      *
-     * @return int Number of published redirects
+     * Returns the number of published redirects.
      */
     public function publish(): int;
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes\Testers;
 
 use Backend;
-use Request;
+use Illuminate\Support\Facades\Request;
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
 use Vdlp\Redirect\Classes\TesterBase;
@@ -20,7 +20,7 @@ final class RedirectMatch extends TesterBase
         // TODO: Add scheme.
         try {
             $match = $manager->match($this->testPath, Request::getScheme());
-        } catch (NoMatchForRequest | InvalidScheme $e) {
+        } catch (NoMatchForRequest | InvalidScheme) {
             $match = false;
         }
 

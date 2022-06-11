@@ -18,16 +18,13 @@ final class CacheManager implements CacheManagerInterface
     private const CACHE_TAG_RULES = 'vdlp_redirect_rules';
     private const CACHE_TAG_MATCHES = 'vdlp_redirect_matches';
 
-    private Repository $cache;
-    private LoggerInterface $log;
-
-    public function __construct(Repository $cache, LoggerInterface $log)
-    {
-        $this->cache = $cache;
-        $this->log = $log;
+    public function __construct(
+        private Repository $cache,
+        private LoggerInterface $log
+    ) {
     }
 
-    public function get(string $key)
+    public function get(string $key): mixed
     {
         return $this->cache->tags(self::CACHE_TAG_MATCHES)
             ->get($key);
@@ -117,7 +114,7 @@ final class CacheManager implements CacheManagerInterface
 
         try {
             $this->cache->tags(self::CACHE_TAG);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return false;
         }
 
@@ -132,7 +129,7 @@ final class CacheManager implements CacheManagerInterface
 
         try {
             $this->cache->tags(self::CACHE_TAG);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return true;
         }
 

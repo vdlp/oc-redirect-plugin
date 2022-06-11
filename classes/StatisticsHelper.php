@@ -9,18 +9,19 @@ use Illuminate\Support\Facades\DB;
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use October\Rain\Database\Collection;
 use Vdlp\Redirect\Classes\Observers\RedirectObserver;
-use Vdlp\Redirect\Models;
+use Vdlp\Redirect\Models\Client;
+use Vdlp\Redirect\Models\Redirect;
 
 final class StatisticsHelper
 {
     public function getTotalRedirectsServed(): int
     {
-        return Models\Client::query()->count();
+        return Client::query()->count();
     }
 
-    public function getLatestClient(?int $redirectId = null): ?Models\Client
+    public function getLatestClient(?int $redirectId = null): ?Client
     {
-        $builder = Models\Client::query()
+        $builder = Client::query()
             ->orderBy('timestamp', 'desc')
             ->limit(1);
 
@@ -28,13 +29,15 @@ final class StatisticsHelper
             $builder->where('redirect_id', '=', $redirectId);
         }
 
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $builder->first();
+        /** @var Client $client */
+        $client = $builder->first();
+
+        return $client;
     }
 
     public function getTotalThisMonth(?int $redirectId = null): int
     {
-        $builder = Models\Client::query()
+        $builder = Client::query()
             ->where('month', '=', date('m'))
             ->where('year', '=', date('Y'));
 
@@ -50,7 +53,7 @@ final class StatisticsHelper
         $lastMonth = Carbon::today();
         $lastMonth->subMonthNoOverflow();
 
-        $builder = Models\Client::query()
+        $builder = Client::query()
             ->where('month', '=', $lastMonth->month)
             ->where('year', '=', $lastMonth->year);
 
@@ -66,13 +69,13 @@ final class StatisticsHelper
         $groupedRedirects = [];
 
         /** @var Collection $redirects */
-        $redirects = Models\Redirect::enabled()
+        $redirects = Redirect::enabled()
             ->get()
-            ->filter(static function (Models\Redirect $redirect): bool {
+            ->filter(static function (Redirect $redirect): bool {
                 return $redirect->isActiveOnDate(Carbon::today());
             });
 
-        /** @var Models\Redirect $redirect */
+        /** @var Redirect $redirect */
         foreach ($redirects as $redirect) {
             $groupedRedirects[$redirect->getAttribute('status_code')][] = $redirect;
         }
@@ -82,9 +85,9 @@ final class StatisticsHelper
 
     public function getTotalActiveRedirects(): int
     {
-        return Models\Redirect::enabled()
+        return Redirect::enabled()
             ->get()
-            ->filter(static function (Models\Redirect $redirect): bool {
+            ->filter(static function (Redirect $redirect): bool {
                 return $redirect->isActiveOnDate(Carbon::today());
             })
             ->count();
@@ -92,7 +95,7 @@ final class StatisticsHelper
 
     public function getMonthYearOptions(): array
     {
-        $result = Models\Client::query()
+        $result = Client::query()
             ->addSelect('month', 'year')
             ->groupBy('month', 'year')
             ->orderByRaw('year DESC, month DESC');
@@ -112,7 +115,7 @@ final class StatisticsHelper
 
     public function getRedirectHitsPerDay(int $month, int $year, bool $crawler = false): array
     {
-        $result = Models\Client::query()
+        $result = Client::query()
             ->selectRaw('COUNT(id) AS hits')
             ->where('month', $month)
             ->where('year', $year)
@@ -136,7 +139,7 @@ final class StatisticsHelper
         $startDate = Carbon::now()->subDays($days);
 
         // DB index: redirect_timestamp_crawler
-        $builder = Models\Client::query()
+        $builder = Client::query()
             ->selectRaw('COUNT(id) AS hits, DATE(timestamp) AS date')
             ->where('redirect_id', '=', $redirectId)
             ->groupBy('day', 'month', 'year', 'timestamp')
@@ -171,7 +174,7 @@ final class StatisticsHelper
 
     public function getRedirectHitsPerMonth(): array
     {
-        return Models\Client::query()
+        return Client::query()
             ->selectRaw('COUNT(id) AS hits')
             ->addSelect('month', 'year')
             ->groupBy('month', 'year')
@@ -184,7 +187,7 @@ final class StatisticsHelper
     public function getTopTenCrawlersThisMonth(): array
     {
         // DB index: month_year_crawler
-        return Models\Client::query()
+        return Client::query()
             ->selectRaw('COUNT(id) AS hits')
             ->addSelect('crawler')
             ->where('month', '=', (int) date('n'))
@@ -199,7 +202,7 @@ final class StatisticsHelper
 
     public function getTopRedirectsThisMonth(int $limit = 10): array
     {
-        return Models\Client::query()
+        return Client::query()
             ->selectRaw('COUNT(redirect_id) AS hits')
             ->addSelect('redirect_id', 'r.from_url')
             ->join('vdlp_redirect_redirects AS r', 'r.id', '=', 'redirect_id')
@@ -214,8 +217,8 @@ final class StatisticsHelper
 
     public function increaseHitsForRedirect(int $redirectId): void
     {
-        /** @var ?Models\Redirect $redirect */
-        $redirect = Models\Redirect::query()->find($redirectId);
+        /** @var ?Redirect $redirect */
+        $redirect = Redirect::query()->find($redirectId);
 
         if ($redirect === null) {
             return;
@@ -225,7 +228,6 @@ final class StatisticsHelper
 
         RedirectObserver::stopHandleChanges();
 
-        /** @noinspection PhpUndefinedClassInspection */
         $redirect->forceFill(['hits' => DB::raw('hits + 1'), 'last_used_at' => $now]);
         $redirect->forceSave();
 
@@ -233,7 +235,7 @@ final class StatisticsHelper
 
         $crawlerDetect = new CrawlerDetect();
 
-        Models\Client::create([
+        Client::create([
             'redirect_id' => $redirectId,
             'timestamp' => $now,
             'day' => $now->day,

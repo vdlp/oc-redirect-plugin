@@ -51,7 +51,8 @@ final class RedirectRule
             }
 
             $this->requirements = json_decode($requirements, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
+        } catch (JsonException) {
+            // @ignoreException
             $this->requirements = [];
         }
 
@@ -67,7 +68,7 @@ final class RedirectRule
                 );
 
                 $this->fromDate = $date === false ? null : $date;
-            } catch (InvalidFormatException $exception) {
+            } catch (InvalidFormatException) {
                 // @ignoreException
                 $this->fromDate = null;
             }
@@ -85,7 +86,7 @@ final class RedirectRule
                 );
 
                 $this->toDate = $date === false ? null : $date;
-            } catch (InvalidFormatException $exception) {
+            } catch (InvalidFormatException) {
                 // @ignoreException
                 $this->toDate = null;
             }
@@ -107,7 +108,7 @@ final class RedirectRule
 
         try {
             $attributes['requirements'] = json_encode($requirements, JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
+        } catch (JsonException) {
             // @ignoreException
             $attributes['requirements'] = '[]';
         }

@@ -8,15 +8,11 @@ use Vdlp\Redirect\Models\Settings;
 
 final class RedirectManagerSettings
 {
-    private bool $loggingEnabled;
-    private bool $statisticsEnabled;
-    private bool $relativePathsEnabled;
-
-    public function __construct(bool $loggingEnabled, bool $statisticsEnabled, bool $relativePathsEnabled)
-    {
-        $this->loggingEnabled = $loggingEnabled;
-        $this->statisticsEnabled = $statisticsEnabled;
-        $this->relativePathsEnabled = $relativePathsEnabled;
+    public function __construct(
+        private bool $loggingEnabled,
+        private bool $statisticsEnabled,
+        private bool $relativePathsEnabled
+    ) {
     }
 
     public static function createDefault(): RedirectManagerSettings

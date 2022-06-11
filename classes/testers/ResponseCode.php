@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Request;
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
+use Vdlp\Redirect\Classes\Exceptions\UnableToLoadRules;
 use Vdlp\Redirect\Classes\TesterBase;
 use Vdlp\Redirect\Classes\TesterResult;
 use Vdlp\Redirect\Models\Redirect;
@@ -23,7 +24,7 @@ use Vdlp\Redirect\Models\Redirect;
 final class ResponseCode extends TesterBase
 {
     /**
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException|UnableToLoadRules
      */
     protected function test(): TesterResult
     {

@@ -23,8 +23,10 @@ final class RedirectLoop extends TesterBase
 
         $error = null;
 
-        if (curl_exec($curlHandle) === false
-            && curl_errno($curlHandle) === CURLE_TOO_MANY_REDIRECTS) {
+        if (
+            curl_exec($curlHandle) === false
+            && curl_errno($curlHandle) === CURLE_TOO_MANY_REDIRECTS
+        ) {
             $error = e(trans('vdlp.redirect::lang.test_lab.possible_loop'));
         }
 

@@ -10,6 +10,6 @@ final class InvalidScheme extends RuntimeException
 {
     public static function withScheme(string $scheme): InvalidScheme
     {
-        return new static("Scheme '$scheme' is not a valid scheme. Use 'http' or 'https'.");
+        return new self("Scheme '$scheme' is not a valid scheme. Use 'http' or 'https'.");
     }
 }

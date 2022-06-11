@@ -15,8 +15,8 @@ use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 use Vdlp\Redirect\Classes\Observers;
 use Vdlp\Redirect\Classes\RedirectMiddleware;
 use Vdlp\Redirect\Console\PublishRedirectsCommand;
-use Vdlp\Redirect\Models;
-use Vdlp\Redirect\ReportWidgets;
+use Vdlp\Redirect\Models\Redirect;
+use Vdlp\Redirect\Models\Settings;
 
 final class Plugin extends PluginBase
 {
@@ -70,7 +70,7 @@ final class Plugin extends PluginBase
     public function registerNavigation(): array
     {
         $defaultBackendUrl = Backend::url(
-            'vdlp/redirect/' . (Models\Settings::isStatisticsEnabled() ? 'statistics' : 'redirects')
+            'vdlp/redirect/' . (Settings::isStatisticsEnabled() ? 'statistics' : 'redirects')
         );
 
         $navigation = [
@@ -142,7 +142,7 @@ final class Plugin extends PluginBase
             ],
         ];
 
-        if (Models\Settings::isStatisticsEnabled()) {
+        if (Settings::isStatisticsEnabled()) {
             $navigation['redirect']['sideMenu']['statistics'] = [
                 'icon' => 'icon-bar-chart',
                 'label' => 'vdlp.redirect::lang.title.statistics',
@@ -154,7 +154,7 @@ final class Plugin extends PluginBase
             ];
         }
 
-        if (Models\Settings::isTestLabEnabled()) {
+        if (Settings::isTestLabEnabled()) {
             $navigation['redirect']['sideMenu']['test_lab'] = [
                 'icon' => 'icon-flask',
                 'label' => 'vdlp.redirect::lang.title.test_lab',
@@ -166,7 +166,7 @@ final class Plugin extends PluginBase
             ];
         }
 
-        if (Models\Settings::isLoggingEnabled()) {
+        if (Settings::isLoggingEnabled()) {
             $navigation['redirect']['sideMenu']['logs'] = [
                 'label' => 'vdlp.redirect::lang.buttons.logs',
                 'url' => Backend::url('vdlp/redirect/logs'),
@@ -189,7 +189,7 @@ final class Plugin extends PluginBase
                 'label' => 'vdlp.redirect::lang.settings.menu_label',
                 'description' => 'vdlp.redirect::lang.settings.menu_description',
                 'icon' => 'icon-link',
-                'class' => Models\Settings::class,
+                'class' => Settings::class,
                 'order' => 600,
                 'permissions' => [
                     'vdlp.redirect.access_redirects',
@@ -208,7 +208,7 @@ final class Plugin extends PluginBase
             'context' => 'dashboard',
         ];
 
-        if (Models\Settings::isStatisticsEnabled()) {
+        if (Settings::isStatisticsEnabled()) {
             $reportWidgets[ReportWidgets\TopTenRedirects::class] = [
                 'label' => e($translator->trans(
                     'vdlp.redirect::lang.statistics.top_redirects_this_month',
@@ -237,11 +237,11 @@ final class Plugin extends PluginBase
             },
             'redirect_match_type' => static function ($value): string {
                 switch ($value) {
-                    case Models\Redirect::TYPE_EXACT:
+                    case Redirect::TYPE_EXACT:
                         return e(trans('vdlp.redirect::lang.redirect.exact'));
-                    case Models\Redirect::TYPE_PLACEHOLDERS:
+                    case Redirect::TYPE_PLACEHOLDERS:
                         return e(trans('vdlp.redirect::lang.redirect.placeholders'));
-                    case Models\Redirect::TYPE_REGEX:
+                    case Redirect::TYPE_REGEX:
                         return e(trans('vdlp.redirect::lang.redirect.regex'));
                     default:
                         return e($value);
@@ -265,11 +265,11 @@ final class Plugin extends PluginBase
             },
             'redirect_target_type' => static function ($value): string {
                 switch ($value) {
-                    case Models\Redirect::TARGET_TYPE_PATH_URL:
+                    case Redirect::TARGET_TYPE_PATH_URL:
                         return e(trans('vdlp.redirect::lang.redirect.target_type_path_or_url'));
-                    case Models\Redirect::TARGET_TYPE_CMS_PAGE:
+                    case Redirect::TARGET_TYPE_CMS_PAGE:
                         return e(trans('vdlp.redirect::lang.redirect.target_type_cms_page'));
-                    case Models\Redirect::TARGET_TYPE_STATIC_PAGE:
+                    case Redirect::TARGET_TYPE_STATIC_PAGE:
                         return e(trans('vdlp.redirect::lang.redirect.target_type_static_page'));
                     default:
                         return e($value);
@@ -313,7 +313,7 @@ final class Plugin extends PluginBase
         Validator::extend('is_regex', static function ($attribute, $value): bool {
             try {
                 preg_match($value, '');
-            } catch (Throwable $throwable) {
+            } catch (Throwable) {
                 return false;
             }
 
@@ -323,8 +323,8 @@ final class Plugin extends PluginBase
 
     private function registerObservers(): void
     {
-        Models\Redirect::observe(Observers\RedirectObserver::class);
-        Models\Settings::observe(Observers\SettingsObserver::class);
+        Redirect::observe(Observers\RedirectObserver::class);
+        Settings::observe(Observers\SettingsObserver::class);
     }
 
     private function registerEventListeners(): void
@@ -340,9 +340,9 @@ final class Plugin extends PluginBase
          * Only 'exact' redirects will be supported.
          */
         Event::listen('vdlp.redirect.toUrlChanged', static function (string $oldUrl, string $newUrl): void {
-            Models\Redirect::query()
-                ->where('match_type', '=', Models\Redirect::TYPE_EXACT)
-                ->where('target_type', '=', Models\Redirect::TARGET_TYPE_PATH_URL)
+            Redirect::query()
+                ->where('match_type', '=', Redirect::TYPE_EXACT)
+                ->where('target_type', '=', Redirect::TARGET_TYPE_PATH_URL)
                 ->where('to_url', '=', $oldUrl)
                 ->where('is_enabled', '=', true)
                 ->update([
@@ -361,7 +361,7 @@ final class Plugin extends PluginBase
                 /** @var PublishManagerInterface $publishManager */
                 $publishManager = resolve(PublishManagerInterface::class);
                 $publishManager->publish();
-            } catch (Throwable $throwable) {
+            } catch (Throwable) {
                 // @ignoreException
             }
         });
@@ -376,7 +376,7 @@ final class Plugin extends PluginBase
                 /** @var PublishManagerInterface $publishManager */
                 $publishManager = resolve(PublishManagerInterface::class);
                 $publishManager->publish();
-            } catch (Throwable $throwable) {
+            } catch (Throwable) {
                 // @ignoreException
             }
         });
