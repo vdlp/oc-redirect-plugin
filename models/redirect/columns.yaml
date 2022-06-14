@@ -38,6 +38,9 @@ columns:
     is_enabled:
         label: vdlp.redirect::lang.redirect.enabled
         type: redirect_switch_color
+    description:
+        label: vdlp.redirect::lang.redirect.description
+        invisible: true
     system:
         label: vdlp.redirect::lang.redirect.type
         width: 16px
