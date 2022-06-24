@@ -21,6 +21,10 @@ columns:
         relation: category
         select: name
         default: '-'
+    description:
+        label: vdlp.redirect::lang.redirect.description
+        invisible: true
+        default: '-'
     hits:
         label: vdlp.redirect::lang.redirect.hits
         type: number
