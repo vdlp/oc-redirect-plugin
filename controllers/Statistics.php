@@ -56,7 +56,7 @@ final class Statistics extends Controller
                     $this->getHitsPerDayAsDataSet((int) $month, (int) $year, true),
                     $this->getHitsPerDayAsDataSet((int) $month, (int) $year, false),
                 ], JSON_THROW_ON_ERROR),
-                'labels' => json_encode($this->getLabels(), JSON_THROW_ON_ERROR),
+                'labels' => json_encode($this->getLabels((int) $month, (int) $year), JSON_THROW_ON_ERROR),
                 'monthYearOptions' => $this->helper->getMonthYearOptions(),
                 'monthYearSelected' => $month . '_' . $year,
             ]),
@@ -125,11 +125,11 @@ final class Statistics extends Controller
         ];
     }
 
-    private function getLabels(): array
+    private function getLabels(int $month, int $year): array
     {
         $labels = [];
 
-        foreach (Carbon::today()->firstOfMonth()->daysUntil(Carbon::today()->endOfMonth()) as $date) {
+        foreach (Carbon::create($year, $month)->firstOfMonth()->daysUntil(Carbon::create($year, $month)->endOfMonth()) as $date) {
             $labels[] = $date->isoFormat('LL');
         }
 
