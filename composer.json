@@ -21,7 +21,7 @@
         "davaxi/sparkline": "^2.0",
         "jaybizzle/crawler-detect": "^1.2",
         "league/csv": "^9.0",
-        "october/system": "^3.0",
+        "october/rain": "^3.0",
         "symfony/stopwatch": "^6.0"
     },
     "repositories": [
