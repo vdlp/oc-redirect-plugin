@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Controllers;
 
 use Backend\Classes\Controller;
-use Backend\Facades\BackendMenu;
+use Backend\Classes\NavigationManager;
 use Carbon\Carbon;
-use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use October\Rain\Database\Collection;
 use October\Rain\Flash\FlashBag;
+use SystemException;
 use Throwable;
 use Vdlp\Redirect\Classes\Testers;
 use Vdlp\Redirect\Models\Redirect;
@@ -24,23 +24,18 @@ final class TestLab extends Controller
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     private array $redirects = [];
-    private Request $request;
-    private Translator $translator;
-    private FlashBag $flash;
 
-    public function __construct(Request $request, Translator $translator)
-    {
+    public function __construct(
+        private Request $request,
+        private FlashBag $flash
+    ) {
         $this->bodyClass = 'layout-relative';
 
         parent::__construct();
 
-        BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'test_lab');
+        NavigationManager::instance()->setContext('Vdlp.Redirect', 'redirect', 'test_lab');
 
         $this->loadRedirects();
-
-        $this->request = $request;
-        $this->translator = $translator;
-        $this->flash = resolve('flash');
     }
 
     public function index(): void
@@ -118,6 +113,7 @@ final class TestLab extends Controller
 
     /**
      * @throws ModelNotFoundException
+     * @throws SystemException
      */
     public function onExclude(): array
     {

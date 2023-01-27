@@ -6,7 +6,7 @@ namespace Vdlp\Redirect\Controllers;
 
 use Backend\Behaviors;
 use Backend\Classes\Controller;
-use BackendMenu;
+use Backend\Classes\NavigationManager;
 
 /**
  * @mixin Behaviors\FormController
@@ -16,7 +16,7 @@ final class Categories extends Controller
 {
     public $implement = [
         Behaviors\FormController::class,
-        Behaviors\ListController::class
+        Behaviors\ListController::class,
     ];
 
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
@@ -29,6 +29,6 @@ final class Categories extends Controller
 
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
 
-        BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'categories');
+        NavigationManager::instance()->setContext('Vdlp.Redirect', 'redirect', 'categories');
     }
 }

@@ -70,8 +70,6 @@ final class Redirect extends Model
         410 => 'gone',
     ];
 
-    public $table = 'vdlp_redirect_redirects';
-
     /**
      * Validation rules.
      */
@@ -135,6 +133,8 @@ final class Redirect extends Model
             'otherKey' => 'vdlp_redirect_redirect_id',
         ],
     ];
+
+    protected $table = 'vdlp_redirect_redirects';
 
     protected $guarded = [];
 

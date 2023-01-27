@@ -7,8 +7,8 @@ namespace Vdlp\Redirect\Controllers;
 use Backend\Behaviors;
 use Backend\Classes\Controller;
 use Backend\Classes\FormField;
+use Backend\Classes\NavigationManager;
 use Backend\Facades\Backend;
-use Backend\Facades\BackendMenu;
 use Backend\Widgets\Form;
 use Carbon\Carbon;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -63,17 +63,12 @@ final class Redirects extends Controller
     public $relationConfig = 'config_relation.yaml';
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
-    private Request $request;
-    private Translator $translator;
-    private Dispatcher $dispatcher;
-    private CacheManagerInterface $cacheManager;
-    private FlashBag $flash;
-
     public function __construct(
-        Request $request,
-        Translator $translator,
-        Dispatcher $dispatcher,
-        CacheManagerInterface $cacheManager
+        private Request $request,
+        private Translator $translator,
+        private Dispatcher $dispatcher,
+        private CacheManagerInterface $cacheManager,
+        private FlashBag $flash
     ) {
         parent::__construct();
 
@@ -81,18 +76,12 @@ final class Redirects extends Controller
             ? $this->action
             : 'redirects';
 
-        BackendMenu::setContext('Vdlp.Redirect', 'redirect', $sideMenuItemCode);
+        NavigationManager::instance()->setContext('Vdlp.Redirect', 'redirect', $sideMenuItemCode);
 
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
 
         $this->vars['match'] = null;
         $this->vars['statisticsHelper'] = new StatisticsHelper();
-
-        $this->request = $request;
-        $this->translator = $translator;
-        $this->dispatcher = $dispatcher;
-        $this->cacheManager = $cacheManager;
-        $this->flash = resolve('flash');
     }
 
     public function index(): void
@@ -340,13 +329,15 @@ final class Redirects extends Controller
 
     public function formExtendRefreshFields(Form $host, array $fields): void
     {
-        if ($fields['status_code']->value
+        if (
+            $fields['status_code']->value
             && strpos((string) $fields['status_code']->value, '4') === 0
         ) {
             $host->getField('to_url')->hidden = true;
             $host->getField('static_page')->hidden = true;
             $host->getField('cms_page')->hidden = true;
             $host->getField('to_scheme')->hidden = true;
+
             return;
         }
 
@@ -355,23 +346,27 @@ final class Redirects extends Controller
                 $host->getField('to_url')->hidden = true;
                 $host->getField('static_page')->hidden = true;
                 $host->getField('cms_page')->hidden = false;
+
                 break;
             case Models\Redirect::TARGET_TYPE_STATIC_PAGE:
                 $host->getField('to_url')->hidden = true;
                 $host->getField('static_page')->hidden = false;
                 $host->getField('cms_page')->hidden = true;
+
                 break;
             default:
                 $host->getField('to_url')->hidden = false;
                 $host->getField('static_page')->hidden = true;
                 $host->getField('cms_page')->hidden = true;
+
                 break;
         }
     }
 
     public function listInjectRowClass(Model $record): string
     {
-        if ($record instanceof Models\Redirect
+        if (
+            $record instanceof Models\Redirect
             && !$record->isActiveOnDate(Carbon::now())
         ) {
             return 'special';
@@ -448,7 +443,7 @@ final class Redirects extends Controller
             ]);
 
             $requestLog->update([
-                'vdlp_redirect_redirect_id' => $redirect->getKey()
+                'vdlp_redirect_redirect_id' => $redirect->getKey(),
             ]);
 
             $redirectsCreated++;
@@ -468,7 +463,8 @@ final class Redirects extends Controller
 
     private function getCheckedIds(): array
     {
-        if (($checkedIds = $this->request->get('checked'))
+        if (
+            ($checkedIds = $this->request->get('checked'))
             && is_array($checkedIds)
             && count($checkedIds)
         ) {

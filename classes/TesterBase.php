@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes;
 
 use CurlHandle;
-use InvalidArgumentException;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\TesterInterface;
