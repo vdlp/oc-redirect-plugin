@@ -44,7 +44,7 @@ final class PublishManager implements PublishManagerInterface
 
         /** @var Collection $redirects */
         $redirects = Redirect::query()
-            ->where('is_enabled', '=', 1)
+            ->where('is_enabled', 1)
             ->orderBy('sort_order')
             ->get($columns);
 
@@ -95,12 +95,14 @@ final class PublishManager implements PublishManagerInterface
     private function publishToCache(array $redirects): void
     {
         foreach ($redirects as &$redirect) {
-            if (isset($redirect['requirements'])) {
-                try {
-                    $redirect['requirements'] = json_encode($redirect['requirements'], JSON_THROW_ON_ERROR);
-                } catch (JsonException) {
-                    // @ignoreException
-                }
+            if (!isset($redirect['requirements'])) {
+                continue;
+            }
+
+            try {
+                $redirect['requirements'] = json_encode($redirect['requirements'], JSON_THROW_ON_ERROR);
+            } catch (JsonException) {
+                // @ignoreException
             }
         }
 

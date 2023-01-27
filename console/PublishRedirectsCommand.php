@@ -11,7 +11,7 @@ final class PublishRedirectsCommand extends Command
 {
     public function __construct()
     {
-        $this->name = 'vdlp:redirect:publish-redirects';
+        $this->signature = 'vdlp:redirect:publish-redirects';
         $this->description = 'Publish all redirects.';
 
         parent::__construct();

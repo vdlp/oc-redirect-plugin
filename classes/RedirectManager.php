@@ -23,6 +23,7 @@ use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRule;
+use Vdlp\Redirect\Classes\Exceptions\RulesPathNotReadable;
 use Vdlp\Redirect\Classes\Exceptions\RulesPathNotWritable;
 use Vdlp\Redirect\Classes\Exceptions\UnableToLoadRules;
 use Vdlp\Redirect\Classes\Util\Str;
