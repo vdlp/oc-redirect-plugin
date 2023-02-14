@@ -313,26 +313,29 @@ final class Redirects extends Controller
         ];
 
         foreach ($disableFields as $disableField) {
+            /** @var Models\Redirect $model */
+            $model = $host->model;
+
             /** @var FormField $field */
             $field = $host->getField($disableField);
-            $field->disabled = $host->model->getAttribute('system');
+            $field->disabled($model->getAttribute('system'));
         }
 
         if (!Models\Settings::isTestLabEnabled()) {
             $host->removeTab('vdlp.redirect::lang.tab.tab_test_lab');
         }
 
-        if ($this->request->isMethod(Request::METHOD_GET)) {
+        if ($this->request->isMethod('GET')) {
             $this->formExtendRefreshFields($host, $fields);
         }
     }
 
     public function formExtendRefreshFields(Form $host, array $fields): void
     {
-        if (
-            $fields['status_code']->value
-            && strpos((string) $fields['status_code']->value, '4') === 0
-        ) {
+        /** @var Models\Redirect $model */
+        $model = $host->model;
+
+        if (str_starts_with((string) $model->getAttribute('status_code'), '4')) {
             $host->getField('to_url')->hidden = true;
             $host->getField('static_page')->hidden = true;
             $host->getField('cms_page')->hidden = true;
@@ -341,25 +344,20 @@ final class Redirects extends Controller
             return;
         }
 
-        switch ($fields['target_type']->value) {
-            case Models\Redirect::TARGET_TYPE_CMS_PAGE:
-                $host->getField('to_url')->hidden = true;
-                $host->getField('static_page')->hidden = true;
-                $host->getField('cms_page')->hidden = false;
+        $targetType = $model->getAttribute('target_type');
 
-                break;
-            case Models\Redirect::TARGET_TYPE_STATIC_PAGE:
-                $host->getField('to_url')->hidden = true;
-                $host->getField('static_page')->hidden = false;
-                $host->getField('cms_page')->hidden = true;
-
-                break;
-            default:
-                $host->getField('to_url')->hidden = false;
-                $host->getField('static_page')->hidden = true;
-                $host->getField('cms_page')->hidden = true;
-
-                break;
+        if ($targetType === Models\Redirect::TARGET_TYPE_CMS_PAGE) {
+            $host->getField('to_url')->hidden = true;
+            $host->getField('static_page')->hidden = true;
+            $host->getField('cms_page')->hidden = false;
+        } elseif ($targetType === Models\Redirect::TARGET_TYPE_STATIC_PAGE) {
+            $host->getField('to_url')->hidden = true;
+            $host->getField('static_page')->hidden = false;
+            $host->getField('cms_page')->hidden = true;
+        } else {
+            $host->getField('to_url')->hidden = false;
+            $host->getField('static_page')->hidden = true;
+            $host->getField('cms_page')->hidden = true;
         }
     }
 
