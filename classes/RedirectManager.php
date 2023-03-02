@@ -335,7 +335,7 @@ final class RedirectManager implements RedirectManagerInterface
         if ($this->settings->isRelativePathsEnabled()) {
             $router = new Router(Theme::getActiveTheme());
 
-            return $router->findByFile(
+            return (string) $router->findByFile(
                 $rule->getCmsPage(),
                 array_merge($router->getParameters(), $parameters)
             );
