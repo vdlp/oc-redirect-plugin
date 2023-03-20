@@ -200,7 +200,7 @@ final class RedirectManager implements RedirectManagerInterface
 
                 // Check if $toUrl is a relative path, if so, we need to add the base path to it.
                 if (
-                    $toUrl[0] !== '/'
+                    !str_starts_with($toUrl, '/')
                     && strncmp($toUrl, 'http://', 7) !== 0
                     && strncmp($toUrl, 'https://', 8) !== 0
                 ) {
@@ -335,7 +335,7 @@ final class RedirectManager implements RedirectManagerInterface
         if ($this->settings->isRelativePathsEnabled()) {
             $router = new Router(Theme::getActiveTheme());
 
-            return $router->findByFile(
+            return (string) $router->findByFile(
                 $rule->getCmsPage(),
                 array_merge($router->getParameters(), $parameters)
             );
