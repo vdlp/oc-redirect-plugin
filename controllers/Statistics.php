@@ -6,11 +6,11 @@ namespace Vdlp\Redirect\Controllers;
 
 use Backend\Classes\Controller;
 use Backend\Classes\NavigationManager;
-use Backend\Models\BrandSetting;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use JsonException;
 use SystemException;
+use Vdlp\Redirect\Classes\BrandHelper;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
 /**
@@ -159,11 +159,7 @@ final class Statistics extends Controller
 
         ksort($data);
 
-        $brandSettings = new BrandSetting();
-
-        $color = $crawler
-            ? $brandSettings->get('primary_color')
-            : $brandSettings->get('secondary_color');
+        $color = BrandHelper::instance()->getPrimaryOrSecondaryColor($crawler);
 
         [$r, $g, $b] = sscanf($color, "#%02x%02x%02x");
 

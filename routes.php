@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 use Backend\Facades\BackendAuth;
-use Backend\Models\BrandSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Vdlp\Redirect\Classes\BrandHelper;
 use Vdlp\Redirect\Classes\Sparkline;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
-Route::group(['middleware' => ['web']], static function () {
+Route::group(['middleware' => ['web']], static function (): void {
     Route::get('vdlp/redirect/sparkline/{redirectId}', static function ($redirectId) {
         if (!BackendAuth::check()) {
             return response('Forbidden', 403);
@@ -45,10 +45,8 @@ Route::group(['middleware' => ['web']], static function () {
 
         // TODO: Generate fallback image data if generating image fails.
         $imageData = Cache::remember($cacheKey . '_image', 5 * 60, static function () use ($crawler, $data, $properties) {
-            $primaryColor = BrandSetting::get(
-                $crawler ? 'primary_color' : 'secondary_color',
-                $crawler ? BrandSetting::PRIMARY_COLOR : BrandSetting::SECONDARY_COLOR
-            );
+            $primaryColor = BrandHelper::instance()
+                ->getPrimaryOrSecondaryColor($crawler);
 
             $sparkline = new Sparkline();
             $sparkline->setFormat($properties['format']);
