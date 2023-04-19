@@ -23,8 +23,8 @@ final class BrandHelper
             $colorPalette = BrandSetting::get('color_palette');
             $colorMode = BrandSetting::getColorMode();
 
-            $this->primaryColor = $colorPalette[$colorMode]['primary'] ?? BrandSetting::PRIMARY_COLOR;
-            $this->secondaryColor = $colorPalette[$colorMode]['secondary'] ?? BrandSetting::SECONDARY_COLOR;
+            $this->primaryColor = $colorPalette[$colorMode]['primary'] ?? '#6a6cf7';
+            $this->secondaryColor = $colorPalette[$colorMode]['secondary'] ?? '#72809d';
         // October CMS <3.2
         } else {
             $this->primaryColor = $brandSettings->get('primary_color');
