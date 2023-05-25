@@ -81,3 +81,4 @@ v3.1.4: "Fix target field not loading properly. See: https://github.com/vdlp/oc-
 v3.1.5: "Minor improvements. See: https://github.com/vdlp/oc-redirect-plugin/releases/tag/3.1.5"
 v3.1.6: "Add support for October CMS 3.3."
 v3.1.7: "Remove use of old BrandSetting constants."
+v3.1.8: "Add German translation."
