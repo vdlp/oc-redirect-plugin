@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * `VDLP_REDIRECT_SHOW_EXPORT`
   * `VDLP_REDIRECT_SHOW_SETTINGS`
   * `VDLP_REDIRECT_SHOW_EXTENSION`
+* UI optimizations
 
 ## [3.1.8] - 2023-05-25
 
