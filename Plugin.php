@@ -73,6 +73,75 @@ final class Plugin extends PluginBase
             'vdlp/redirect/' . (Settings::isStatisticsEnabled() ? 'statistics' : 'redirects')
         );
 
+        $sideMenu = [
+            'redirects' => [
+                'icon' => 'icon-list',
+                'label' => 'vdlp.redirect::lang.navigation.menu_label',
+                'url' => Backend::url('vdlp/redirect/redirects'),
+                'order' => 20,
+                'permissions' => [
+                    'vdlp.redirect.access_redirects',
+                ],
+            ],
+            'categories' => [
+                'label' => 'vdlp.redirect::lang.buttons.categories',
+                'url' => Backend::url('vdlp/redirect/categories'),
+                'icon' => 'icon-tag',
+                'order' => 60,
+                'permissions' => [
+                    'vdlp.redirect.access_redirects',
+                ],
+            ],
+        ];
+
+        if ((bool) config('vdlp.redirect::navigation.show_import', true) === true) {
+            $sideMenu['import'] = [
+                'label' => 'vdlp.redirect::lang.buttons.import',
+                'url' => Backend::url('vdlp/redirect/redirects/import'),
+                'icon' => 'icon-download',
+                'order' => 70,
+                'permissions' => [
+                    'vdlp.redirect.access_redirects',
+                ],
+            ];
+        }
+
+        if ((bool) config('vdlp.redirect::navigation.show_export', true) === true) {
+            $sideMenu['export'] = [
+                'label' => 'vdlp.redirect::lang.buttons.export',
+                'url' => Backend::url('vdlp/redirect/redirects/export'),
+                'icon' => 'icon-upload',
+                'order' => 80,
+                'permissions' => [
+                    'vdlp.redirect.access_redirects',
+                ],
+            ];
+        }
+
+        if ((bool) config('vdlp.redirect::navigation.show_settings', true) === true) {
+            $sideMenu['settings'] = [
+                'label' => 'vdlp.redirect::lang.buttons.settings',
+                'url' => Backend::url('system/settings/update/vdlp/redirect/config'),
+                'icon' => 'icon-cogs',
+                'order' => 90,
+                'permissions' => [
+                    'vdlp.redirect.access_redirects',
+                ],
+            ];
+        }
+
+        if ((bool) config('vdlp.redirect::navigation.show_extensions', true) === true) {
+            $sideMenu['extensions'] = [
+                'label' => 'vdlp.redirect::lang.buttons.extensions',
+                'url' => Backend::url('vdlp/redirect/extensions'),
+                'icon' => 'icon-cubes',
+                'order' => 100,
+                'permissions' => [
+                    'vdlp.redirect.access_redirects',
+                ],
+            ];
+        }
+
         $navigation = [
             'redirect' => [
                 'label' => 'vdlp.redirect::lang.navigation.menu_label',
@@ -83,62 +152,7 @@ final class Plugin extends PluginBase
                 'permissions' => [
                     'vdlp.redirect.access_redirects',
                 ],
-                'sideMenu' => [
-                    'redirects' => [
-                        'icon' => 'icon-list',
-                        'label' => 'vdlp.redirect::lang.navigation.menu_label',
-                        'url' => Backend::url('vdlp/redirect/redirects'),
-                        'order' => 20,
-                        'permissions' => [
-                            'vdlp.redirect.access_redirects',
-                        ],
-                    ],
-                    'categories' => [
-                        'label' => 'vdlp.redirect::lang.buttons.categories',
-                        'url' => Backend::url('vdlp/redirect/categories'),
-                        'icon' => 'icon-tag',
-                        'order' => 60,
-                        'permissions' => [
-                            'vdlp.redirect.access_redirects',
-                        ],
-                    ],
-                    'import' => [
-                        'label' => 'vdlp.redirect::lang.buttons.import',
-                        'url' => Backend::url('vdlp/redirect/redirects/import'),
-                        'icon' => 'icon-download',
-                        'order' => 70,
-                        'permissions' => [
-                            'vdlp.redirect.access_redirects',
-                        ],
-                    ],
-                    'export' => [
-                        'label' => 'vdlp.redirect::lang.buttons.export',
-                        'url' => Backend::url('vdlp/redirect/redirects/export'),
-                        'icon' => 'icon-upload',
-                        'order' => 80,
-                        'permissions' => [
-                            'vdlp.redirect.access_redirects',
-                        ],
-                    ],
-                    'settings' => [
-                        'label' => 'vdlp.redirect::lang.buttons.settings',
-                        'url' => Backend::url('system/settings/update/vdlp/redirect/config'),
-                        'icon' => 'icon-cogs',
-                        'order' => 90,
-                        'permissions' => [
-                            'vdlp.redirect.access_redirects',
-                        ],
-                    ],
-                    'extensions' => [
-                        'label' => 'vdlp.redirect::lang.buttons.extensions',
-                        'url' => Backend::url('vdlp/redirect/extensions'),
-                        'icon' => 'icon-cubes',
-                        'order' => 100,
-                        'permissions' => [
-                            'vdlp.redirect.access_redirects',
-                        ],
-                    ],
-                ],
+                'sideMenu' => $sideMenu,
             ],
         ];
 

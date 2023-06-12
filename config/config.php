@@ -42,4 +42,17 @@ return [
 
     'rules_path' => env('VDLP_REDIRECT_RULES_PATH', storage_path('app/redirects.csv')),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Navigation
+    |--------------------------------------------------------------------------
+    */
+
+    'navigation' => [
+        'show_import' => env('VDLP_REDIRECT_SHOW_IMPORT', true),
+        'show_export' => env('VDLP_REDIRECT_SHOW_EXPORT', true),
+        'show_settings' => env('VDLP_REDIRECT_SHOW_SETTINGS', true),
+        'show_extensions' => env('VDLP_REDIRECT_SHOW_EXTENSION', true),
+    ],
+
 ];
