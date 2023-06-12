@@ -11,13 +11,10 @@ use Vdlp\Redirect\Classes\Sparkline;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
 Route::group(['middleware' => ['web']], static function (): void {
-    Route::get('vdlp/redirect/sparkline/{redirectId}', static function ($redirectId) {
+    Route::get('vdlp/redirect/sparkline/{redirectId}', static function (Request $request, $redirectId) {
         if (!BackendAuth::check()) {
             return response('Forbidden', 403);
         }
-
-        /** @var Request $request */
-        $request = resolve(Request::class);
 
         $crawler = $request->has('crawler');
 
