@@ -34,9 +34,7 @@
         "exclude": [
             ".gitattributes",
             ".github",
-            ".gitignore",
-            "tests",
-            "phpunit.xml"
+            ".gitignore"
         ]
     },
     "config": {
