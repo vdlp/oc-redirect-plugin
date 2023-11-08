@@ -84,3 +84,6 @@ v3.1.7: "Remove use of old BrandSetting constants."
 v3.1.8: "Add German translation."
 v3.1.9: "Added environment variables for manipulating the navigation."
 v3.1.10: "Fixed backend filtering for MySQL >= 8.0.3."
+v3.1.11:
+    - "Added feature to keep the querystring when redirecting"
+    - 20231108_0013_add_keep_querystring_to_redirects_table.php

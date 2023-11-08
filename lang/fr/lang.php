@@ -114,6 +114,8 @@ return [
         'ignore_case_comment' => 'The redirect engine will do case-insensitive matching.', // TODO
         'ignore_trailing_slash' => 'Ignore trailing slash', // TODO
         'ignore_trailing_slash_comment' => 'The redirect engine will ignore trailing slashes.', // TODO
+        'keep_querystring' => 'Hériter de la chaîne de requête',
+        'keep_querystring_comment' => 'Tous les paramètres de requête présents sont transmis au chemin ou à l\'URL cible.',
         'last_used_at' => 'Last hit', // TODO
         'updated_at' => 'Updated at', // TODO
         'invalid_regex' => 'Invalid regular expression.', // TODO

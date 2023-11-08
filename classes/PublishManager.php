@@ -40,6 +40,7 @@ final class PublishManager implements PublishManagerInterface
             'ignore_query_parameters',
             'ignore_case',
             'ignore_trailing_slash',
+            'keep_querystring',
         ];
 
         /** @var Collection $redirects */

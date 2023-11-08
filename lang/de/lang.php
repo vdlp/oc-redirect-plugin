@@ -112,6 +112,8 @@ return [
         'ignore_case_comment' => 'Gross-/Kleinschreibung wird für die Weiterleitung nicht beachtet.',
         'ignore_trailing_slash' => 'Schrägstrich am Ende ignorieren',
         'ignore_trailing_slash_comment' => 'Pfade mit und ohne Schrägstrich am Schluss werden umgeleitet.',
+        'keep_querystring' => 'Abfragezeichenfolge erben',
+        'keep_querystring_comment' => 'Eventuell vorhandene Abfrageparameter werden an den Zielpfad bzw. die Ziel-URL übergeben.',
         'last_used_at' => 'Letzter Treffer',
         'updated_at' => 'Aktualisiert',
         'invalid_regex' => 'Ungültiger Regulärer Ausdruck.',
