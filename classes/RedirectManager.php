@@ -175,6 +175,14 @@ final class RedirectManager implements RedirectManagerInterface
             return;
         }
 
+        if ($rule->isKeepQuerystring()) {
+            $parsedUrl = parse_url($requestUri);
+
+            if (isset($parsedUrl['query'])) {
+                $toUrl .= '?' . $parsedUrl['query'];
+            }
+        }
+
         $this->addLogEntry($rule, $requestUri, $toUrl);
 
         header(self::$headers[$statusCode], true, $statusCode);

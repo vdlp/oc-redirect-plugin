@@ -93,6 +93,17 @@ tabs:
             span: left
             default: false
             comment: vdlp.redirect::lang.redirect.ignore_query_parameters_comment
+        keep_querystring:
+            label: vdlp.redirect::lang.redirect.keep_querystring
+            type: checkbox
+            span: left
+            cssClass: field-indent
+            default: false
+            trigger:
+                action: show
+                field: ignore_query_parameters
+                condition: checked
+            comment: vdlp.redirect::lang.redirect.keep_querystring_comment
         description:
             label: vdlp.redirect::lang.redirect.description
             span: right

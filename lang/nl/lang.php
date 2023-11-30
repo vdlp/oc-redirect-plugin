@@ -112,6 +112,8 @@ return [
         'ignore_case_comment' => 'Het matching-algoritme is niet hoofdlettergevoelig.',
         'ignore_trailing_slash' => 'Negeer slashes aan het einde van het bronpad.',
         'ignore_trailing_slash_comment' => '',
+        'keep_querystring' => 'Neem querystring over',
+        'keep_querystring_comment' => 'Aanwezige query parameters worden meegegeven aan het doelpad of URL.',
         'last_used_at' => 'Laatste treffer',
         'updated_at' => 'Bijgewerkt op',
         'invalid_regex' => 'Ongeldige reguliere expressie.',

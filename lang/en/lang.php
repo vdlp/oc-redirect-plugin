@@ -112,6 +112,8 @@ return [
         'ignore_case_comment' => 'The redirect engine will do case-insensitive matching.',
         'ignore_trailing_slash' => 'Ignore trailing slash',
         'ignore_trailing_slash_comment' => 'The redirect engine will ignore trailing slashes.',
+        'keep_querystring' => 'Inherit querystring',
+        'keep_querystring_comment' => 'Any query parameters present are passed to the target path or URL.',
         'last_used_at' => 'Last hit',
         'updated_at' => 'Updated at',
         'invalid_regex' => 'Invalid regular expression.',
