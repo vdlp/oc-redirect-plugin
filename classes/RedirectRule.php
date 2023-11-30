@@ -93,7 +93,7 @@ final class RedirectRule
             }
         }
 
-        if($attributes['ignore_query_parameters'] === false) {
+        if ($attributes['ignore_query_parameters'] === false) {
             $this->keepQuerystring = false;
         } else {
             $this->keepQuerystring = (bool) ($attributes['keep_querystring'] ?? false);
