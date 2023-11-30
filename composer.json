@@ -30,13 +30,6 @@
             "url": "https://gateway.octobercms.com"
         }
     ],
-    "archive": {
-        "exclude": [
-            ".gitattributes",
-            ".github",
-            ".gitignore"
-        ]
-    },
     "config": {
         "allow-plugins": {
             "composer/installers": true
