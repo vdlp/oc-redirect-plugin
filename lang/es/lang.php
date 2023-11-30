@@ -114,6 +114,8 @@ return [
         'ignore_case_comment' => 'El motor de redirección hará coincidir las mayúsculas y minúsculas.',
         'ignore_trailing_slash' => 'Ignoren la barra de arrastre',
         'ignore_trailing_slash_comment' => 'El motor de redireccionamiento ignorará las barras de arrastre.',
+        'keep_querystring' => 'Heredar cadena de consulta',
+        'keep_querystring_comment' => 'Todos los parámetros de consulta presentes se pasan a la ruta o URL de destino.',
         'last_used_at' => 'Último resultado',
         'updated_at' => 'Actualizado en',
         'invalid_regex' => 'Expresión regular inválida.',

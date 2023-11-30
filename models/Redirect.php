@@ -151,6 +151,7 @@ final class Redirect extends Model
         'is_enabled' => 'boolean',
         'test_lab' => 'boolean',
         'system' => 'boolean',
+        'keep_querystring' => 'boolean',
     ];
 
     protected static function makeValidator(

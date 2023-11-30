@@ -29,6 +29,7 @@ final class RedirectRule
     private bool $ignoreQueryParameters;
     private bool $ignoreCase;
     private bool $ignoreTrailingSlash;
+    private bool $keepQuerystring;
 
     public function __construct(array $attributes)
     {
@@ -90,6 +91,12 @@ final class RedirectRule
                 // @ignoreException
                 $this->toDate = null;
             }
+        }
+
+        if ($attributes['ignore_query_parameters'] === false) {
+            $this->keepQuerystring = false;
+        } else {
+            $this->keepQuerystring = (bool) ($attributes['keep_querystring'] ?? false);
         }
 
         $this->ignoreQueryParameters = (bool) ($attributes['ignore_query_parameters'] ?? false);
@@ -233,5 +240,10 @@ final class RedirectRule
     public function isIgnoreTrailingSlash(): bool
     {
         return $this->ignoreTrailingSlash;
+    }
+
+    public function isKeepQuerystring(): bool
+    {
+        return $this->keepQuerystring;
     }
 }
