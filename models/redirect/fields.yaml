@@ -15,7 +15,7 @@ fields:
             404: vdlp.redirect::lang.redirect.not_found
             410: vdlp.redirect::lang.redirect.gone
         commentHtml: true
-        commentAbove: '<label>HTTP Status Code <span class="status-code-info icon-question-circle"data-control="popup" data-handler="onShowStatusCodeInfo" data-keyboard="true" data-size="huge"></span></label>'
+        commentAbove: vdlp.redirect::lang.html_lang.status_code_comment
     match_type:
         label: vdlp.redirect::lang.redirect.match_type
         type: dropdown
