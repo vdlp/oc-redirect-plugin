@@ -622,6 +622,11 @@ final class RedirectManager implements RedirectManagerInterface
         try {
             $fromToHash = sha1($requestUri . $toUrl);
 
+            $record = Models\RedirectLog::query()
+                ->where('redirect_id', $rule->getId())
+                ->where('from_to_hash', $fromToHash)
+                ->first();
+            
             Models\RedirectLog::query()->updateOrCreate([
                 'redirect_id' => $rule->getId(),
                 'from_to_hash' => $fromToHash,
@@ -631,7 +636,7 @@ final class RedirectManager implements RedirectManagerInterface
                 'from_url' => $requestUri,
                 'to_url' => $toUrl,
                 'status_code' => $rule->getStatusCode(),
-                'hits' => DB::raw('hits + 1'),
+                'hits' => ($record ? ($record->hits + 1) : 1),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
         } catch (Throwable) {
