@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\ReportWidgets;
 
 use Backend\Classes\Controller;
-use Backend\Classes\ReportWidgetBase;
+use Dashboard\Classes\DashReport;
+use Dashboard\Classes\ReportWidgetBase;
 use Backend\Helpers\Backend;
 use Backend\Widgets\Form;
 use Illuminate\Http\RedirectResponse;
@@ -19,13 +20,26 @@ final class CreateRedirect extends ReportWidgetBase
 {
     private Redirector $redirect;
 
-    public function __construct(Controller $controller, array $properties = [])
+    public function __construct(Controller $controller, DashReport $dashReport, array $properties = [])
     {
         $this->alias = 'redirectCreateRedirect';
 
         parent::__construct($controller, $properties);
 
         $this->redirect = resolve(Redirector::class);
+    }
+
+    public function defineProperties()
+    {
+        return [
+            'title' => [
+                'title' => 'backend::lang.dashboard.widget_title_label',
+                'default' => 'backend::lang.dashboard.welcome.widget_title_default',
+                'type' => 'string',
+                'validationPattern' => '^.+$',
+                'validationMessage' => 'backend::lang.dashboard.widget_title_error',
+            ],
+        ];
     }
 
     /**
