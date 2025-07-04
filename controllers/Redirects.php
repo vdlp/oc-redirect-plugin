@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use October\Rain\Database\Builder;
 use October\Rain\Database\Model;
+use October\Rain\Element\ElementHolder;
 use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\SystemException;
 use October\Rain\Flash\FlashBag;
@@ -302,7 +303,7 @@ final class Redirects extends Controller
         }
     }
 
-    public function formExtendFields(Form $host, array $fields = []): void
+    public function formExtendFields(Form $host, ElementHolder|array $fields = []): void
     {
         $disableFields = [
             'from_url',
@@ -330,7 +331,7 @@ final class Redirects extends Controller
         }
     }
 
-    public function formExtendRefreshFields(Form $host, array $fields): void
+    public function formExtendRefreshFields(Form $host, ElementHolder|array $fields): void
     {
         /** @var Models\Redirect $model */
         $model = $host->model;
