@@ -38,6 +38,7 @@ return [
         'from_url' => 'Исходный путь',
         'from_url_placeholder' => '/source/path',
         'from_url_comment' => 'Исходный путь относительно корня сайта.',
+        'from_url_required_if' => 'The source path is required', // TODO
         'from_scheme' => 'Исходный протокол',
         'from_scheme_comment' => 'Принудительное совпадение протоколов. Если выбранное HTTP путь: <u>http://domain.com/path</u> '
             . 'не совпадет с <u>https://domain.com/path</u>.',

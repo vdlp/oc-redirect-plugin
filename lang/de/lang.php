@@ -38,6 +38,7 @@ return [
         'from_url' => 'Ursprungs-Pfad',
         'from_url_placeholder' => '/von/beispiel',
         'from_url_comment' => 'Ursprungs-Pfad für die Weiterleitung.',
+        'from_url_required_if' => 'The source path is required', // TODO
         'from_scheme' => 'Ursprungs-Schema',
         'from_scheme_comment' => 'Wenn http oder https ausgewählt ist, muss das Schema übereinstimmen: Bei http wird z. B. nur <u>http://domain.com/path</u> weitergeleitet, '
             . '<u>https://domain.com/path</u> hingegen nicht.',

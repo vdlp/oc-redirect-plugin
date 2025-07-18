@@ -38,6 +38,7 @@ return [
         'from_url' => 'Bronpad',
         'from_url_placeholder' => '/bron/pad',
         'from_url_comment' => 'Het bronpad welke overeenkomt.',
+        'from_url_required_if' => 'Het bronpad is verplicht',
         'from_scheme' => 'Bron protocol',
         'from_scheme_comment' => 'Forceer overeenkomst met protocol. Als HTTP geselecteerd is zal <u>http://domeinnaam.com/pad</u> '
             . 'overeenkomen en <u>https://domeinnaam.com/pad</u> zal niet overeenkomen.',

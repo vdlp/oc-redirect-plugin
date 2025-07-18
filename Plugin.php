@@ -217,8 +217,10 @@ final class Plugin extends PluginBase
         /** @var Translator $translator */
         $translator = resolve(Translator::class);
 
-        $reportWidgets[ReportWidgets\CreateRedirect::class] = [
-            'label' => 'vdlp.redirect::lang.buttons.create_redirect',
+        $reportWidgets[VueComponents\CreateRedirect::class] = [
+            'label' => e($translator->trans(
+                'vdlp.redirect::lang.buttons.create_redirect'
+            )),
             'context' => 'dashboard',
         ];
 
