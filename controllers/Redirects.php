@@ -38,7 +38,6 @@ use Vdlp\Redirect\Models;
 /**
  * @mixin Behaviors\FormController
  * @mixin Behaviors\ListController
- * @mixin Behaviors\ReorderController
  * @mixin Behaviors\ImportExportController
  * @mixin Behaviors\RelationController
  */
@@ -47,7 +46,6 @@ final class Redirects extends Controller
     public $implement = [
         Behaviors\FormController::class,
         Behaviors\ListController::class,
-        Behaviors\ReorderController::class,
         Behaviors\ImportExportController::class,
         Behaviors\RelationController::class,
     ];
@@ -59,7 +57,6 @@ final class Redirects extends Controller
         'requestLog' => 'request-log/config_list.yaml',
     ];
 
-    public $reorderConfig = 'config_reorder.yaml';
     public $importExportConfig = 'config_import_export.yaml';
     public $relationConfig = 'config_relation.yaml';
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
