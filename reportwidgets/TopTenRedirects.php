@@ -18,7 +18,7 @@ final class TopTenRedirects extends ReportWidgetBase
     {
         $this->alias = 'redirectTopTenRedirects';
 
-        parent::__construct($controller, $properties);
+        parent::__construct($controller, $dashReport, $properties);
     }
 
     public function defineProperties()
