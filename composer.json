@@ -7,10 +7,6 @@
         {
             "name": "Van der Let & Partners",
             "email": "octobercms@vdlp.nl"
-        },
-        {
-            "name": "Alwin Drenth",
-            "email": "adrenth@gmail.com"
         }
     ],
     "require": {
