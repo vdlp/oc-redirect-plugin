@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Controllers;
 
 use Backend\Classes\Controller;
-use Backend\Models\BrandSetting;
-use BackendMenu;
+use Backend\Classes\NavigationManager;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use JsonException;
 use SystemException;
+use Vdlp\Redirect\Classes\BrandHelper;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
 /**
@@ -25,7 +25,7 @@ final class Statistics extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'statistics');
+        NavigationManager::instance()->setContext('Vdlp.Redirect', 'redirect', 'statistics');
 
         $this->pageTitle = 'vdlp.redirect::lang.title.statistics';
 
@@ -64,7 +64,9 @@ final class Statistics extends Controller
     }
 
     /**
-     * @throws SystemException|JsonException
+     * @throws InvalidFormatException
+     * @throws JsonException
+     * @throws SystemException
      */
     public function onSelectPeriodMonthYear(): array
     {
@@ -129,7 +131,11 @@ final class Statistics extends Controller
     {
         $labels = [];
 
-        foreach (Carbon::create($year, $month)->firstOfMonth()->daysUntil(Carbon::create($year, $month)->endOfMonth()) as $date) {
+        $dates = Carbon::create($year, $month)
+            ->firstOfMonth()
+            ->daysUntil(Carbon::create($year, $month)->endOfMonth());
+
+        foreach ($dates as $date) {
             $labels[] = $date->isoFormat('LL');
         }
 
@@ -153,11 +159,7 @@ final class Statistics extends Controller
 
         ksort($data);
 
-        $brandSettings = new BrandSetting();
-
-        $color = $crawler
-            ? $brandSettings->get('primary_color')
-            : $brandSettings->get('secondary_color');
+        $color = BrandHelper::instance()->getPrimaryOrSecondaryColor($crawler);
 
         [$r, $g, $b] = sscanf($color, "#%02x%02x%02x");
 

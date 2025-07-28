@@ -110,6 +110,8 @@ return [
         'ignore_case_comment' => 'The redirect engine will do case-insensitive matching.', // TODO
         'ignore_trailing_slash' => 'Ignore trailing slash', // TODO
         'ignore_trailing_slash_comment' => 'The redirect engine will ignore trailing slashes.', // TODO
+        'keep_querystring' => 'Ärv frågesträng',
+        'keep_querystring_comment' => 'Alla frågeparametrar som finns skickas till målsökvägen eller webbadressen.',
         'last_used_at' => 'Användes senast',
         'updated_at' => 'Updated at', // TODO
         'invalid_regex' => 'Invalid regular expression.', // TODO

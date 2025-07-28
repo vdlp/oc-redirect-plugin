@@ -10,8 +10,6 @@ use Vdlp\Redirect\Classes\PublishManager;
 
 final class RedirectImport extends ImportModel
 {
-    public $table = 'vdlp_redirect_redirects';
-
     /**
      * Basic validation rules.
      * More (conditional) rules will be applied when importing.
@@ -35,6 +33,8 @@ final class RedirectImport extends ImportModel
         'requirements',
         'test_lab_path',
     ];
+
+    protected $table = 'vdlp_redirect_redirects';
 
     public function importData($results, $sessionKey = null)
     {

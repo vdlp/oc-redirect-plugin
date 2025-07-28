@@ -15,13 +15,10 @@ use Vdlp\Redirect\Models\Redirect;
 
 final class PublishManager implements PublishManagerInterface
 {
-    private LoggerInterface $log;
-    private CacheManagerInterface $cacheManager;
-
-    public function __construct(LoggerInterface $log, CacheManagerInterface $cacheManager)
-    {
-        $this->log = $log;
-        $this->cacheManager = $cacheManager;
+    public function __construct(
+        private LoggerInterface $log,
+        private CacheManagerInterface $cacheManager
+    ) {
     }
 
     public function publish(): int
@@ -43,11 +40,12 @@ final class PublishManager implements PublishManagerInterface
             'ignore_query_parameters',
             'ignore_case',
             'ignore_trailing_slash',
+            'keep_querystring',
         ];
 
         /** @var Collection $redirects */
         $redirects = Redirect::query()
-            ->where('is_enabled', '=', 1)
+            ->where('is_enabled', 1)
             ->orderBy('sort_order')
             ->get($columns);
 
@@ -98,12 +96,14 @@ final class PublishManager implements PublishManagerInterface
     private function publishToCache(array $redirects): void
     {
         foreach ($redirects as &$redirect) {
-            if (isset($redirect['requirements'])) {
-                try {
-                    $redirect['requirements'] = json_encode($redirect['requirements'], JSON_THROW_ON_ERROR);
-                } catch (JsonException $exception) {
-                    // @ignoreException
-                }
+            if (!isset($redirect['requirements'])) {
+                continue;
+            }
+
+            try {
+                $redirect['requirements'] = json_encode($redirect['requirements'], JSON_THROW_ON_ERROR);
+            } catch (JsonException) {
+                // @ignoreException
             }
         }
 

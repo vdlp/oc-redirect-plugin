@@ -8,7 +8,7 @@ use Backend\Models\ExportModel;
 
 final class RedirectExport extends ExportModel
 {
-    public $table = 'vdlp_redirect_redirects';
+    protected $table = 'vdlp_redirect_redirects';
 
     public function exportData($columns, $sessionKey = null)
     {

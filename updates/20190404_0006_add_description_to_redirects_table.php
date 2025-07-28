@@ -1,8 +1,5 @@
 <?php
 
-/** @noinspection PhpUnused */
-/** @noinspection AutoloadingIssuesInspection */
-
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Updates;
@@ -17,7 +14,7 @@ class AddDescriptionToRedirectsTable extends Migration
 {
     public function up(): void
     {
-        Schema::table('vdlp_redirect_redirects', static function (Blueprint $table) {
+        Schema::table('vdlp_redirect_redirects', static function (Blueprint $table): void {
             $table->string('description')
                 ->nullable()
                 ->after('system');
@@ -27,11 +24,13 @@ class AddDescriptionToRedirectsTable extends Migration
     public function down(): void
     {
         try {
-            Schema::table('vdlp_redirect_redirects', static function (Blueprint $table) {
+            Schema::table('vdlp_redirect_redirects', static function (Blueprint $table): void {
                 $table->dropColumn('description');
             });
         } catch (Throwable $e) {
-            resolve(LoggerInterface::class)->error(sprintf(
+            /** @var LoggerInterface $logger */
+            $logger = resolve(LoggerInterface::class);
+            $logger->error(sprintf(
                 'Vdlp.Redirect: Unable to drop index `%s` from table `%s`: %s',
                 'description',
                 'vdlp_redirect_redirects',

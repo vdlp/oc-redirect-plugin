@@ -9,19 +9,17 @@ use Vdlp\Redirect\Classes\Contracts\PublishManagerInterface;
 
 final class SettingsObserver
 {
-    private $publishManager;
-
-    public function __construct(PublishManagerInterface $publishManager)
-    {
-        $this->publishManager = $publishManager;
+    public function __construct(
+        private PublishManagerInterface $publishManager
+    ) {
     }
 
     public function saving(): void
     {
         try {
             $this->publishManager->publish();
-        } catch (Throwable $e) {
-            // ..
+        } catch (Throwable) {
+            // @ignoreException
         }
     }
 }

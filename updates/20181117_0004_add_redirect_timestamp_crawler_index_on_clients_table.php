@@ -1,8 +1,5 @@
 <?php
 
-/** @noinspection PhpUnused */
-/** @noinspection AutoloadingIssuesInspection */
-
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Updates;
@@ -17,12 +14,12 @@ class AddRedirectTimestampCrawlerIndexOnClientsTable extends Migration
 {
     public function up(): void
     {
-        Schema::table('vdlp_redirect_clients', static function (Blueprint $table) {
+        Schema::table('vdlp_redirect_clients', static function (Blueprint $table): void {
             $table->index(
                 [
                     'redirect_id',
                     'timestamp',
-                    'crawler'
+                    'crawler',
                 ],
                 'redirect_timestamp_crawler'
             );
@@ -32,11 +29,13 @@ class AddRedirectTimestampCrawlerIndexOnClientsTable extends Migration
     public function down(): void
     {
         try {
-            Schema::table('vdlp_redirect_clients', static function (Blueprint $table) {
+            Schema::table('vdlp_redirect_clients', static function (Blueprint $table): void {
                 $table->dropIndex('redirect_timestamp_crawler');
             });
         } catch (Throwable $e) {
-            resolve(LoggerInterface::class)->error(sprintf(
+            /** @var LoggerInterface $logger */
+            $logger = resolve(LoggerInterface::class);
+            $logger->error(sprintf(
                 'Vdlp.Redirect: Unable to drop index `%s` from table `%s`: %s',
                 'redirect_timestamp_crawler',
                 'vdlp_redirect_clients',

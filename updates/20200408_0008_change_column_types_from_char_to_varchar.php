@@ -1,8 +1,5 @@
 <?php
 
-/** @noinspection PhpUnused */
-/** @noinspection AutoloadingIssuesInspection */
-
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Updates;

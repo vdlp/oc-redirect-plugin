@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes;
 
-use InvalidArgumentException;
+use CurlHandle;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
 use Vdlp\Redirect\Classes\Contracts\TesterInterface;
@@ -23,12 +23,12 @@ abstract class TesterBase implements TesterInterface
     public const CONNECTION_TIMEOUT = 10;
 
     protected string $testUrl;
-    protected string $testPath;
 
-    public function __construct(string $testPath)
-    {
-        $this->testPath = $testPath;
-        $this->testUrl = url($testPath);
+    public function __construct(
+        protected string $testPath,
+        protected bool $secure = true
+    ) {
+        $this->testUrl = url($testPath, [], $secure);
     }
 
     final public function execute(): TesterResult
@@ -58,15 +58,8 @@ abstract class TesterBase implements TesterInterface
 
     abstract protected function test(): TesterResult;
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    protected function setDefaultCurlOptions($curlHandle): void
+    protected function setDefaultCurlOptions(CurlHandle $curlHandle): void
     {
-        if (!is_resource($curlHandle)) {
-            throw new InvalidArgumentException('Argument must be a valid resource type.');
-        }
-
         curl_setopt($curlHandle, CURLOPT_MAXREDIRS, self::MAX_REDIRECTS);
         curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, self::CONNECTION_TIMEOUT);
         curl_setopt($curlHandle, CURLOPT_AUTOREFERER, true);
@@ -94,6 +87,7 @@ abstract class TesterBase implements TesterInterface
     {
         /** @var RedirectManagerInterface $manager */
         $manager = resolve(RedirectManagerInterface::class);
+
         return $manager->setSettings(new RedirectManagerSettings(
             false,
             false,

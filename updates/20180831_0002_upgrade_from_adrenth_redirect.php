@@ -1,8 +1,5 @@
 <?php
 
-/** @noinspection PhpUnused */
-/** @noinspection AutoloadingIssuesInspection */
-
 declare(strict_types=1);
 
 namespace Vdlp\Redirect\Updates;
@@ -31,11 +28,12 @@ class UpgradeFromAdrenthRedirect extends Migration
         if (!$schema->hasTable('adrenth_redirect_redirects')) {
             // Skip upgrade migration.
             $log->info('No upgrade of Vdlp.Redirect needed. Fresh installation.');
+
             return;
         }
 
         try {
-            $database->transaction(function () use ($database) {
+            $database->transaction(function () use ($database): void {
                 $this->disableForeignKeyCheck($database);
 
                 $mapping = [
@@ -82,10 +80,6 @@ class UpgradeFromAdrenthRedirect extends Migration
         // No migrations to reverse.
     }
 
-    /**
-     * @param DatabaseManager $database
-     * @return void
-     */
     private function disableForeignKeyCheck(DatabaseManager $database): void
     {
         if ($database->getDriverName() === 'sqlite') {
@@ -101,10 +95,6 @@ class UpgradeFromAdrenthRedirect extends Migration
         }
     }
 
-    /**
-     * @param DatabaseManager $database
-     * @return void
-     */
     private function enableForeignKeyCheck(DatabaseManager $database): void
     {
         if ($database->getDriverName() === 'sqlite') {

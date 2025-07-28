@@ -6,14 +6,12 @@ namespace Vdlp\Redirect\Classes;
 
 final class TesterResult
 {
-    private bool $passed;
-    private string $message;
     private int $duration;
 
-    public function __construct(bool $passed, string $message)
-    {
-        $this->passed = $passed;
-        $this->message = $message;
+    public function __construct(
+        private bool $passed,
+        private string $message
+    ) {
         $this->duration = 0;
     }
 

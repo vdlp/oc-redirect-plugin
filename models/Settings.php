@@ -35,7 +35,7 @@ final class Settings extends Model
     {
         try {
             return (bool) (new self())->get('logging_enabled', false);
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return false;
         }
     }
@@ -44,7 +44,7 @@ final class Settings extends Model
     {
         try {
             return (bool) (new self())->get('statistics_enabled', false);
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return false;
         }
     }
@@ -53,7 +53,7 @@ final class Settings extends Model
     {
         try {
             return (bool) (new self())->get('test_lab_enabled', false);
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return false;
         }
     }
@@ -62,7 +62,7 @@ final class Settings extends Model
     {
         try {
             return (bool) (new self())->get('caching_enabled', false);
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return false;
         }
     }
@@ -71,7 +71,7 @@ final class Settings extends Model
     {
         try {
             return (bool) (new self())->get('relative_paths_enabled', true);
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return true;
         }
     }

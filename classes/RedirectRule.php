@@ -29,6 +29,7 @@ final class RedirectRule
     private bool $ignoreQueryParameters;
     private bool $ignoreCase;
     private bool $ignoreTrailingSlash;
+    private bool $keepQuerystring;
 
     public function __construct(array $attributes)
     {
@@ -51,7 +52,8 @@ final class RedirectRule
             }
 
             $this->requirements = json_decode($requirements, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
+        } catch (JsonException) {
+            // @ignoreException
             $this->requirements = [];
         }
 
@@ -67,7 +69,7 @@ final class RedirectRule
                 );
 
                 $this->fromDate = $date === false ? null : $date;
-            } catch (InvalidFormatException $exception) {
+            } catch (InvalidFormatException) {
                 // @ignoreException
                 $this->fromDate = null;
             }
@@ -85,10 +87,16 @@ final class RedirectRule
                 );
 
                 $this->toDate = $date === false ? null : $date;
-            } catch (InvalidFormatException $exception) {
+            } catch (InvalidFormatException) {
                 // @ignoreException
                 $this->toDate = null;
             }
+        }
+
+        if ($attributes['ignore_query_parameters'] === false) {
+            $this->keepQuerystring = false;
+        } else {
+            $this->keepQuerystring = (bool) ($attributes['keep_querystring'] ?? false);
         }
 
         $this->ignoreQueryParameters = (bool) ($attributes['ignore_query_parameters'] ?? false);
@@ -107,7 +115,7 @@ final class RedirectRule
 
         try {
             $attributes['requirements'] = json_encode($requirements, JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
+        } catch (JsonException) {
             // @ignoreException
             $attributes['requirements'] = '[]';
         }
@@ -232,5 +240,10 @@ final class RedirectRule
     public function isIgnoreTrailingSlash(): bool
     {
         return $this->ignoreTrailingSlash;
+    }
+
+    public function isKeepQuerystring(): bool
+    {
+        return $this->keepQuerystring;
     }
 }

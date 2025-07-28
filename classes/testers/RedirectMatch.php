@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Classes\Testers;
 
 use Backend;
-use Request;
 use Vdlp\Redirect\Classes\Exceptions\InvalidScheme;
 use Vdlp\Redirect\Classes\Exceptions\NoMatchForRequest;
+use Vdlp\Redirect\Classes\Exceptions\UnableToLoadRules;
 use Vdlp\Redirect\Classes\TesterBase;
 use Vdlp\Redirect\Classes\TesterResult;
+use Vdlp\Redirect\Models\Redirect;
 
 final class RedirectMatch extends TesterBase
 {
@@ -17,10 +18,12 @@ final class RedirectMatch extends TesterBase
     {
         $manager = $this->getRedirectManager();
 
-        // TODO: Add scheme.
         try {
-            $match = $manager->match($this->testPath, Request::getScheme());
-        } catch (NoMatchForRequest | InvalidScheme $e) {
+            $match = $manager->match(
+                $this->testPath,
+                $this->secure ? Redirect::SCHEME_HTTPS : Redirect::SCHEME_HTTP
+            );
+        } catch (NoMatchForRequest | InvalidScheme | UnableToLoadRules) {
             $match = false;
         }
 

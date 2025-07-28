@@ -4,6 +4,63 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.11] - 2023-11-30
+
+* Add option to keep query string when redirecting.
+
+## [3.1.10] - 2023-09-28
+
+* Fixed backend filtering for MySQL >= 8.0.3.
+
+## [3.1.9] - 2023-06-12
+
+* Added environment variables for manipulating the navigation:
+  * `VDLP_REDIRECT_SHOW_IMPORT`
+  * `VDLP_REDIRECT_SHOW_EXPORT`
+  * `VDLP_REDIRECT_SHOW_SETTINGS`
+  * `VDLP_REDIRECT_SHOW_EXTENSION`
+* UI optimizations
+
+## [3.1.8] - 2023-05-25
+
+* Add German translation (#104).
+
+## [3.1.7] - 2023-04-19
+
+* Remove use of old BrandSetting constants (#103).
+
+## [3.1.6] - 2023-03-28
+
+* Add support for October CMS 3.3
+* UI optimizations
+
+## [3.1.5] - 2023-03-20
+
+* Prevent 'Uninitialized string offset 0' error.
+* Updated Chart.js library to v4.2.1
+
+## [3.1.4] - 2023-02-14
+
+* Fix target field not loading properly.
+
+## [3.1.3] - 2023-01-27
+
+* Minor code improvements.
+
+## [3.1.2] - 2022-12-09
+
+* Fix daily stats labels when selecting month/year.
+
+## [3.1.1] - 2022-06-24
+
+* Add description column to Redirects overview.
+
+## [3.1.0] - 2022-06-11
+
+* Add support for October CMS 3.x.
+* Drop support for October CMS 2.x.
+* Minimum required PHP version is now 8.0.2
+
 ## [3.0.7] - 2022-12-09
 
 * Fix daily stats labels when selecting month/year.

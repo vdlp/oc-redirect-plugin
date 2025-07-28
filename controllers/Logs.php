@@ -8,7 +8,7 @@ namespace Vdlp\Redirect\Controllers;
 
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
-use BackendMenu;
+use Backend\Classes\NavigationManager;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Http\Request;
 use October\Rain\Flash\FlashBag;
@@ -22,28 +22,23 @@ use Vdlp\Redirect\Models\RedirectLog;
 final class Logs extends Controller
 {
     public $implement = [
-        ListController::class
+        ListController::class,
     ];
 
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
     public $listConfig = 'config_list.yaml';
-    private Request $request;
-    private Translator $translator;
-    private FlashBag $flash;
-    private LoggerInterface $log;
 
-    public function __construct(Request $request, Translator $translator, LoggerInterface $log)
-    {
+    public function __construct(
+        private Request $request,
+        private Translator $translator,
+        private LoggerInterface $log,
+        private FlashBag $flash
+    ) {
         parent::__construct();
 
-        BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'logs');
+        NavigationManager::instance()->setContext('Vdlp.Redirect', 'redirect', 'logs');
 
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
-
-        $this->request = $request;
-        $this->translator = $translator;
-        $this->flash = resolve('flash');
-        $this->log = $log;
     }
 
     public function onRefresh(): array

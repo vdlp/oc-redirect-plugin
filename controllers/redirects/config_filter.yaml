@@ -3,8 +3,8 @@ scopes:
         label: vdlp.redirect::lang.list.switch_system
         type: switch
         conditions:
-            - system <> true
-            - system = true
+            - "`system` <> true"
+            - "`system` = true"
     is_enabled:
         label: vdlp.redirect::lang.list.switch_is_enabled
         type: switch

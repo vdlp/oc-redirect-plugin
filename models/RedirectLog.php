@@ -8,11 +8,11 @@ use October\Rain\Database\Model;
 
 final class RedirectLog extends Model
 {
-    public $table = 'vdlp_redirect_redirect_logs';
-
     public $belongsTo = [
         'redirect' => Redirect::class,
     ];
+
+    protected $table = 'vdlp_redirect_redirect_logs';
 
     protected $guarded = [];
 }

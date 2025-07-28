@@ -14,15 +14,15 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.0.2",
         "ext-curl": "*",
         "ext-json": "*",
         "composer/installers": "^1.0 || ^2.0",
         "davaxi/sparkline": "^2.0",
         "jaybizzle/crawler-detect": "^1.2",
         "league/csv": "^9.0",
-        "october/system": "^2.1",
-        "symfony/stopwatch": "^4.0 || ^5.0 || ^6.0"
+        "october/rain": "^3.0",
+        "symfony/stopwatch": "^6.0"
     },
     "repositories": [
         {
@@ -30,13 +30,9 @@
             "url": "https://gateway.octobercms.com"
         }
     ],
-    "archive": {
-        "exclude": [
-            ".gitattributes",
-            ".github",
-            ".gitignore",
-            "tests",
-            "phpunit.xml"
-        ]
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
     }
 }

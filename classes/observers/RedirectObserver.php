@@ -14,22 +14,10 @@ final class RedirectObserver
 {
     use CanBeDisabled;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
-
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-
     public function __construct(
-        Dispatcher $dispatcher,
-        LoggerInterface $log
+        private Dispatcher $dispatcher,
+        private LoggerInterface $log
     ) {
-        $this->dispatcher = $dispatcher;
-        $this->log = $log;
     }
 
     /**

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Controllers;
 
 use Backend\Classes\Controller;
-use Backend\Facades\BackendMenu;
+use Backend\Classes\NavigationManager;
 use Carbon\Carbon;
-use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use October\Rain\Database\Collection;
 use October\Rain\Flash\FlashBag;
+use SystemException;
 use Throwable;
 use Vdlp\Redirect\Classes\Testers;
 use Vdlp\Redirect\Models\Redirect;
@@ -24,23 +24,18 @@ final class TestLab extends Controller
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
 
     private array $redirects = [];
-    private Request $request;
-    private Translator $translator;
-    private FlashBag $flash;
 
-    public function __construct(Request $request, Translator $translator)
-    {
+    public function __construct(
+        private Request $request,
+        private FlashBag $flash
+    ) {
         $this->bodyClass = 'layout-relative';
 
         parent::__construct();
 
-        BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'test_lab');
+        NavigationManager::instance()->setContext('Vdlp.Redirect', 'redirect', 'test_lab');
 
         $this->loadRedirects();
-
-        $this->request = $request;
-        $this->translator = $translator;
-        $this->flash = resolve('flash');
     }
 
     public function index(): void
@@ -86,7 +81,7 @@ final class TestLab extends Controller
             $partial = (string) $this->makePartial('tester_result', [
                 'redirect' => $redirect,
                 'testPath' => $this->getTestPath($redirect),
-                'testResults' => $this->getTestResults($redirect),
+                'testResults' => $this->getTestResults($redirect, $this->request->secure()),
             ]);
         } catch (Throwable $e) {
             $partial = (string) $this->makePartial('tester_failed', [
@@ -111,13 +106,14 @@ final class TestLab extends Controller
         return [
             '#testerResult' . $redirect->getKey() => $this->makePartial(
                 'tester_result_items',
-                $this->getTestResults($redirect)
+                $this->getTestResults($redirect, $this->request->secure())
             ),
         ];
     }
 
     /**
      * @throws ModelNotFoundException
+     * @throws SystemException
      */
     public function onExclude(): array
     {
@@ -147,16 +143,16 @@ final class TestLab extends Controller
         return $testPath;
     }
 
-    public function getTestResults(Redirect $redirect): array
+    public function getTestResults(Redirect $redirect, bool $secure): array
     {
         $testPath = $this->getTestPath($redirect);
 
         return [
-            'maxRedirectsResult' => (new Testers\RedirectLoop($testPath))->execute(),
-            'matchedRedirectResult' => (new Testers\RedirectMatch($testPath))->execute(),
-            'responseCodeResult' => (new Testers\ResponseCode($testPath))->execute(),
-            'redirectCountResult' => (new Testers\RedirectCount($testPath))->execute(),
-            'finalDestinationResult' => (new Testers\RedirectFinalDestination($testPath))->execute(),
+            'maxRedirectsResult' => (new Testers\RedirectLoop($testPath, $secure))->execute(),
+            'matchedRedirectResult' => (new Testers\RedirectMatch($testPath, $secure))->execute(),
+            'responseCodeResult' => (new Testers\ResponseCode($testPath, $secure))->execute(),
+            'redirectCountResult' => (new Testers\RedirectCount($testPath, $secure))->execute(),
+            'finalDestinationResult' => (new Testers\RedirectFinalDestination($testPath, $secure))->execute(),
         ];
     }
 

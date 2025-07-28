@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Vdlp\Redirect\Classes\Testers;
 
-use InvalidArgumentException;
 use Vdlp\Redirect\Classes\TesterBase;
 use Vdlp\Redirect\Classes\TesterResult;
 
 final class RedirectCount extends TesterBase
 {
-    /**
-     * @throws InvalidArgumentException
-     */
     protected function test(): TesterResult
     {
         $curlHandle = curl_init($this->testUrl);
+
+        if ($curlHandle === false) {
+            return new TesterResult(false, e(trans('vdlp.redirect::lang.test_lab.test_error')));
+        }
 
         $this->setDefaultCurlOptions($curlHandle);
 

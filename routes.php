@@ -3,21 +3,18 @@
 declare(strict_types=1);
 
 use Backend\Facades\BackendAuth;
-use Backend\Models\BrandSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Vdlp\Redirect\Classes\BrandHelper;
 use Vdlp\Redirect\Classes\Sparkline;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
-Route::group(['middleware' => ['web']], static function () {
-    Route::get('vdlp/redirect/sparkline/{redirectId}', static function ($redirectId) {
+Route::group(['middleware' => ['web']], static function (): void {
+    Route::get('vdlp/redirect/sparkline/{redirectId}', static function (Request $request, $redirectId) {
         if (!BackendAuth::check()) {
             return response('Forbidden', 403);
         }
-
-        /** @var Request $request */
-        $request = resolve(Request::class);
 
         $crawler = $request->has('crawler');
 
@@ -45,10 +42,8 @@ Route::group(['middleware' => ['web']], static function () {
 
         // TODO: Generate fallback image data if generating image fails.
         $imageData = Cache::remember($cacheKey . '_image', 5 * 60, static function () use ($crawler, $data, $properties) {
-            $primaryColor = BrandSetting::get(
-                $crawler ? 'primary_color' : 'secondary_color',
-                $crawler ? BrandSetting::PRIMARY_COLOR : BrandSetting::SECONDARY_COLOR
-            );
+            $primaryColor = BrandHelper::instance()
+                ->getPrimaryOrSecondaryColor($crawler);
 
             $sparkline = new Sparkline();
             $sparkline->setFormat($properties['format']);
@@ -67,7 +62,7 @@ Route::group(['middleware' => ['web']], static function () {
         header('Content-Disposition: inline; filename="' . $cacheKey . '.png"');
         header('Accept-Ranges: none');
 
-        echo base64_decode($imageData);
+        echo base64_decode($imageData, true);
 
         exit(0);
     });

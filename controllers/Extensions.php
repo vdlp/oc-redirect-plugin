@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\Controllers;
 
 use Backend\Classes\Controller;
-use Backend\Facades\BackendMenu;
+use Backend\Classes\NavigationManager;
 use System\Classes\PluginManager;
 
 final class Extensions extends Controller
 {
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private static array $extensions = [
         'Vdlp.RedirectConditions',
         'Vdlp.RedirectConditionsDomain',
@@ -23,7 +25,7 @@ final class Extensions extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('Vdlp.Redirect', 'redirect', 'extensions');
+        NavigationManager::instance()->setContext('Vdlp.Redirect', 'redirect', 'extensions');
 
         $this->addCss('/plugins/vdlp/redirect/assets/css/redirect.css');
 

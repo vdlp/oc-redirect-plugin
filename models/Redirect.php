@@ -70,8 +70,6 @@ final class Redirect extends Model
         410 => 'gone',
     ];
 
-    public $table = 'vdlp_redirect_redirects';
-
     /**
      * Validation rules.
      */
@@ -136,6 +134,8 @@ final class Redirect extends Model
         ],
     ];
 
+    protected $table = 'vdlp_redirect_redirects';
+
     protected $guarded = [];
 
     protected $dates = [
@@ -151,6 +151,7 @@ final class Redirect extends Model
         'is_enabled' => 'boolean',
         'test_lab' => 'boolean',
         'system' => 'boolean',
+        'keep_querystring' => 'boolean',
     ];
 
     protected static function makeValidator(

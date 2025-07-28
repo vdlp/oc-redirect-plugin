@@ -1,7 +1,8 @@
-<button class="btn btn-primary btn-block oc-icon-play"
+<button class="btn btn-primary oc-icon-play"
         id="testButton"
         type="button"
         data-control-popup="onPopup"
-        onclick="testerStart($(this));">
+        onclick="testerStart($(this));"
+        style="display:block;width:100%">
     <?= e(trans('vdlp.redirect::lang.test_lab.start_tests')); ?> (<?= $redirectCount ?>)
 </button>
