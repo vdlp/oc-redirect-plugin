@@ -87,3 +87,4 @@ v3.1.10: "Fixed backend filtering for MySQL >= 8.0.3."
 v3.1.11:
     - "Add option to keep query string when redirecting."
     - 20231108_0013_add_keep_querystring_to_redirects_table.php
+v4.0.0: "Add support for October CMS 4.x. Drop support for October CMS 3.x."

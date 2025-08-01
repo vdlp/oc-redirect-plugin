@@ -38,6 +38,7 @@ return [
         'from_url' => 'Chemin source',
         'from_url_placeholder' => '/source/path',
         'from_url_comment' => 'Le chemin source à trouver',
+        'from_url_required_if' => 'The source path is required', // TODO
         'from_scheme' => 'Protocole source',
         'from_scheme_comment' => 'Force la correspondance. Si HTTP est selectionné. <u>http://domain.com/path</u> va être selectionner mais'
             . 'pas <u>https://domain.com/path</u>',

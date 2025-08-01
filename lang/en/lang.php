@@ -38,6 +38,7 @@ return [
         'from_url' => 'Source Path',
         'from_url_placeholder' => '/source/path',
         'from_url_comment' => 'The source path to match.',
+        'from_url_required_if' => 'The source path is required',
         'from_scheme' => 'Source scheme',
         'from_scheme_comment' => 'Force match on scheme. If HTTP is selected <u>http://domain.com/path</u> will '
             . 'match and <u>https://domain.com/path</u> does not match.',

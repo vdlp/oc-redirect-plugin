@@ -217,12 +217,18 @@ final class Plugin extends PluginBase
         /** @var Translator $translator */
         $translator = resolve(Translator::class);
 
-        $reportWidgets[ReportWidgets\CreateRedirect::class] = [
-            'label' => 'vdlp.redirect::lang.buttons.create_redirect',
-            'context' => 'dashboard',
-        ];
+        $reportWidgets = [];
 
-        if (Settings::isStatisticsEnabled()) {
+        if (class_exists('Dashboard\Classes\VueReportWidgetBase')) {
+            $reportWidgets[VueComponents\CreateRedirect::class] = [
+                'label' => e($translator->trans(
+                    'vdlp.redirect::lang.buttons.create_redirect'
+                )),
+                'context' => 'dashboard',
+            ];
+        }
+
+        if (class_exists('Dashboard\Classes\ReportWidgetBase') && Settings::isStatisticsEnabled()) {
             $reportWidgets[ReportWidgets\TopTenRedirects::class] = [
                 'label' => e($translator->trans(
                     'vdlp.redirect::lang.statistics.top_redirects_this_month',

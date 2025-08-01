@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use October\Rain\Database\Builder;
 use October\Rain\Database\Model;
+use October\Rain\Element\ElementHolder;
 use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\SystemException;
 use October\Rain\Flash\FlashBag;
@@ -37,7 +38,6 @@ use Vdlp\Redirect\Models;
 /**
  * @mixin Behaviors\FormController
  * @mixin Behaviors\ListController
- * @mixin Behaviors\ReorderController
  * @mixin Behaviors\ImportExportController
  * @mixin Behaviors\RelationController
  */
@@ -46,7 +46,6 @@ final class Redirects extends Controller
     public $implement = [
         Behaviors\FormController::class,
         Behaviors\ListController::class,
-        Behaviors\ReorderController::class,
         Behaviors\ImportExportController::class,
         Behaviors\RelationController::class,
     ];
@@ -58,7 +57,6 @@ final class Redirects extends Controller
         'requestLog' => 'request-log/config_list.yaml',
     ];
 
-    public $reorderConfig = 'config_reorder.yaml';
     public $importExportConfig = 'config_import_export.yaml';
     public $relationConfig = 'config_relation.yaml';
     public $requiredPermissions = ['vdlp.redirect.access_redirects'];
@@ -302,7 +300,7 @@ final class Redirects extends Controller
         }
     }
 
-    public function formExtendFields(Form $host, array $fields = []): void
+    public function formExtendFields(Form $host, ElementHolder|array $fields = []): void
     {
         $disableFields = [
             'from_url',
@@ -330,7 +328,7 @@ final class Redirects extends Controller
         }
     }
 
-    public function formExtendRefreshFields(Form $host, array $fields): void
+    public function formExtendRefreshFields(Form $host, ElementHolder|array $fields): void
     {
         /** @var Models\Redirect $model */
         $model = $host->model;
