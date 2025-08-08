@@ -87,6 +87,8 @@ v3.1.10: "Fixed backend filtering for MySQL >= 8.0.3."
 v3.1.11:
     - "Add option to keep query string when redirecting."
     - 20231108_0013_add_keep_querystring_to_redirects_table.php
-v3.2.0:
-    - "Add support for a new statistics permission."
-    - 20240506_0014_add_new_statistics_permission_to_current_users_and_roles.php
+v4.0.0: "Add support for October CMS 4.x. Drop support for October CMS 3.x."
+v4.0.1: "Update CHANGELOG"
+v4.1.0:
+  - "Add support for a new statistics permission."
+  - 20240506_0014_add_new_statistics_permission_to_current_users_and_roles.php

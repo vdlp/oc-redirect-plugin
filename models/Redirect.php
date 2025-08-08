@@ -214,7 +214,7 @@ final class Redirect extends Model
         return $this->hasMany(Client::class);
     }
 
-    public function setSortableOrder($itemIds, array $itemOrders = null): void
+    public function setSortableOrder($itemIds, $referencePool = null): void
     {
         $itemIds = array_map(static function ($itemId) {
             return (int) $itemId;
@@ -224,7 +224,7 @@ final class Redirect extends Model
         $dispatcher = resolve(Dispatcher::class);
         $dispatcher->dispatch('vdlp.redirect.changed', ['redirectIds' => $itemIds]);
 
-        $this->traitSetSortableOrder($itemIds, $itemOrders);
+        $this->traitSetSortableOrder($itemIds, $referencePool);
     }
 
     public function setFromUrlAttribute($value): void

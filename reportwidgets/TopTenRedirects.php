@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Vdlp\Redirect\ReportWidgets;
 
 use Backend\Classes\Controller;
-use Backend\Classes\ReportWidgetBase;
+use Dashboard\Classes\DashReport;
+use Dashboard\Classes\ReportWidgetBase;
 use Vdlp\Redirect\Classes\StatisticsHelper;
 
 /**
@@ -13,11 +14,24 @@ use Vdlp\Redirect\Classes\StatisticsHelper;
  */
 final class TopTenRedirects extends ReportWidgetBase
 {
-    public function __construct(Controller $controller, array $properties = [])
+    public function __construct(Controller $controller, DashReport $dashReport, array $properties = [])
     {
         $this->alias = 'redirectTopTenRedirects';
 
-        parent::__construct($controller, $properties);
+        parent::__construct($controller, $dashReport, $properties);
+    }
+
+    public function defineProperties()
+    {
+        return [
+            'title' => [
+                'title' => 'backend::lang.dashboard.widget_title_label',
+                'default' => 'backend::lang.dashboard.welcome.widget_title_default',
+                'type' => 'string',
+                'validationPattern' => '^.+$',
+                'validationMessage' => 'backend::lang.dashboard.widget_title_error',
+            ],
+        ];
     }
 
     /**

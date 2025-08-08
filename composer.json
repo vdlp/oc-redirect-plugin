@@ -14,15 +14,18 @@
         }
     ],
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.2.0",
         "ext-curl": "*",
         "ext-json": "*",
         "composer/installers": "^1.0 || ^2.0",
         "davaxi/sparkline": "^2.0",
         "jaybizzle/crawler-detect": "^1.2",
         "league/csv": "^9.0",
-        "october/rain": "^3.0",
+        "october/rain": "^4.0",
         "symfony/stopwatch": "^6.0"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.42"
     },
     "repositories": [
         {
@@ -30,9 +33,13 @@
             "url": "https://gateway.octobercms.com"
         }
     ],
+    "suggest": {
+        "october/dashboard": "Allows to add the widgets to the dashboard."
+    },
     "config": {
         "allow-plugins": {
-            "composer/installers": true
+            "composer/installers": true,
+            "ergebnis/composer-normalize": true
         }
     }
 }
