@@ -38,6 +38,7 @@ return [
         'from_url' => 'Anropsadress',
         'from_url_placeholder' => '/source/path',
         'from_url_comment' => 'Anropsadressen att matcha',
+        'from_url_required_if' => 'The source path is required', // TODO
         'from_scheme' => 'Source scheme', // TODO
         'from_scheme_comment' => 'Force match on scheme. If HTTP is selected <u>http://domain.com/path</u> will '
             . 'match and <u>https://domain.com/path</u> does not match.', // TODO

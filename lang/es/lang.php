@@ -38,6 +38,7 @@ return [
         'from_url' => 'Ruta de origen',
         'from_url_placeholder' => '/tu/ruta',
         'from_url_comment' => 'Ruta de origen a coincidir.',
+        'from_url_required_if' => 'The source path is required', // TODO
         'from_scheme' => 'Esquema fuente',
         'from_scheme_comment' => 'Force match on scheme. If HTTP is selected <u>http://domain.com/path</u> will '
             . 'coinciden y <u>https://domain.com/path</u> no coinciden.',

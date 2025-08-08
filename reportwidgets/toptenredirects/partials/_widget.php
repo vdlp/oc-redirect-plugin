@@ -1,6 +1,6 @@
 <div class="report-widget">
-    <h3><?= e(trans('vdlp.redirect::lang.statistics.top_redirects_this_month', ['top' => 10])) ?></h3>
-    <?php if ($topTenRedirectsThisMonth): ?>
+    <h3 class="widget-title"><?= e(trans('vdlp.redirect::lang.statistics.top_redirects_this_month', ['top' => 10])) ?></h3>
+    <?php if (!empty($topTenRedirectsThisMonth)): ?>
         <div class="control-status-list">
             <ul>
                 <?php foreach ($topTenRedirectsThisMonth as $key => $record): ?>

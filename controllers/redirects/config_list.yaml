@@ -44,3 +44,8 @@ toolbar:
         prompt: backend::lang.list.search_prompt
 
 filter: config_filter.yaml
+
+structure:
+    showTree: false
+    showReorder: true
+    dragRow: false
