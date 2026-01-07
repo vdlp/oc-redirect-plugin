@@ -64,6 +64,10 @@ final class Plugin extends PluginBase
                 'label' => 'vdlp.redirect::lang.permission.access_redirects.label',
                 'tab' => 'vdlp.redirect::lang.permission.access_redirects.tab',
             ],
+            'vdlp.redirect.access_redirect_statistics' => [
+                'label' => 'vdlp.redirect::lang.permission.access_redirect_statistics.label',
+                'tab' => 'vdlp.redirect::lang.permission.access_redirects.tab',
+            ],
         ];
     }
 
@@ -150,7 +154,7 @@ final class Plugin extends PluginBase
                 'url' => $defaultBackendUrl,
                 'order' => 201,
                 'permissions' => [
-                    'vdlp.redirect.access_redirects',
+                    'vdlp.redirect.*',
                 ],
                 'sideMenu' => $sideMenu,
             ],
@@ -163,7 +167,7 @@ final class Plugin extends PluginBase
                 'url' => Backend::url('vdlp/redirect/statistics'),
                 'order' => 10,
                 'permissions' => [
-                    'vdlp.redirect.access_redirects',
+                    'vdlp.redirect.access_redirect_statistics',
                 ],
             ];
         }
@@ -225,6 +229,9 @@ final class Plugin extends PluginBase
                     'vdlp.redirect::lang.buttons.create_redirect'
                 )),
                 'context' => 'dashboard',
+                'permissions' => [
+                    'vdlp.redirect.access_redirects',
+                ],
             ];
         }
 
@@ -237,6 +244,9 @@ final class Plugin extends PluginBase
                     ]
                 )),
                 'context' => 'dashboard',
+                'permissions' => [
+                    'vdlp.redirect.access_redirect_statistics',
+                ],
             ];
         }
 
