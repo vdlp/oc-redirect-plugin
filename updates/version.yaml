@@ -90,3 +90,4 @@ v3.1.11:
 v4.0.0: "Add support for October CMS 4.x. Drop support for October CMS 3.x."
 v4.0.1: "Update CHANGELOG"
 v4.1.0: "Add Polish language support."
+v5.0.0: "Add support for October CMS 4.2."
