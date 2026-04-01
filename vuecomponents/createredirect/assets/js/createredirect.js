@@ -1,5 +1,7 @@
-Vue.component('vdlp-redirect-vuecomponents-createredirect', {
-    extends: Vue.options.components['dashboard-component-dashboard-widget-base'],
+import WidgetBase from '../../../../../../../modules/dashboard/vuecomponents/dashboard/assets/js/widget-base.js';
+
+export default {
+    extends: WidgetBase,
     data: function () {
         return {
             from_url: '',
@@ -14,7 +16,7 @@ Vue.component('vdlp-redirect-vuecomponents-createredirect', {
         },
 
         makeDefaultConfigAndData: function () {
-            Vue.set(this.widget.configuration, 'title', this.widget.configuration.Title);
+            this.widget.configuration.title = this.widget.configuration.Title;
         },
 
         getSettingsConfiguration: function () {
@@ -36,7 +38,5 @@ Vue.component('vdlp-redirect-vuecomponents-createredirect', {
                 });
             }
         }
-    },
-    template: '#vdlp_redirect_vuecomponents_createredirect'
-});
-
+    }
+};

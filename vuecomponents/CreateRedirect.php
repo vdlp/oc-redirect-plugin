@@ -15,6 +15,7 @@ use Vdlp\Redirect\Models\Redirect;
 
 class CreateRedirect extends VueReportWidgetBase
 {
+    protected $componentName = 'vdlp-redirect-vuecomponents-createredirect';
     private Backend $backend;
     private Redirector $redirect;
 
