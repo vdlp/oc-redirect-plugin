@@ -12,6 +12,9 @@ return [
             'label' => 'Redirects',
             'tab' => 'Redirects',
         ],
+        'access_redirect_statistics' => [
+            'label' => 'Redirect Statistics',
+        ],
     ],
     'navigation' => [
         'menu_label' => 'Redirects',
